@@ -21,7 +21,7 @@
 		<!--  로그 출력 드라이버 사용  -->
 		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"></property>
 		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"></property>
-		<property name="username" value="java"></property>
+		<property name="username" value="java11"></property>
 		<property name="password" value="java"></property>
 	</bean>	
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
