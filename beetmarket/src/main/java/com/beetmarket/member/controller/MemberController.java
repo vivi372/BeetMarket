@@ -39,7 +39,7 @@ public class MemberController {
 		return "member/list";
 	}
 	
-	
+	// 바보
 	
 	@GetMapping("/loginForm.do")
 	public String loginForm() {
