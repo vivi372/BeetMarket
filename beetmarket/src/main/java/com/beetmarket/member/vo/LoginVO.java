@@ -11,4 +11,5 @@ public class LoginVO {
 	private Long newMsgCnt;
 	private Integer gradeNo;
 	private String gradeName;
+	private String email;
 }
