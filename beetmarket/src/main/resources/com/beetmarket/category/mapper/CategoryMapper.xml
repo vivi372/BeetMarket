@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.zerock.category.mapper.CategoryMapper">
+
+	<!-- 카테고리 리스트 -->
+	<select id="list" resultType="org.zerock.category.vo.CategoryVO">
+		select cate_code1, cate_code2, cate_name 
+		from category
+		where 
+		<if test="cate_code1 == 0">
+		<!-- 대분류만 가져오기 -->
+			cate_code2 = 0
+		</if>
+		<if test="cate_code1 > 0">
+		<!-- 중분류만 가져오기 -->
+			cate_code1 = #{cate_code1} and cate_code2 != 0
+		</if>
+		order by cate_code1, cate_code2
+	</select>
+
+	<!-- 카테고리 대분류 등록 -->
+	<insert id="writeBig">
+	    INSERT INTO category(cate_code1, cate_name)
+	    VALUES(
+	    	(select NVL(max(cate_code1),0) + 1 from category),
+	    	#{cate_name}
+	    )
+ 	</insert>
+
+	<!-- 카테고리 중분류 등록 -->
+	<insert id="writeMid">
+	    INSERT INTO category(cate_code1, cate_code2, cate_name)
+	    VALUES(
+	    	#{cate_code1},
+	    	(select 
+	    		NVL(max(cate_code2),0) + 1 
+	    	 from category
+	    	 where cate_code1 = #{cate_code1}),
+	    	 #{cate_name})
+ 	</insert>
+
+	<!-- 카테고리 수정 -->
+	<update id="update">
+	<![CDATA[
+		update category
+		set cate_name = #{cate_name}
+		where cate_code1 = #{cate_code1} and cate_code2 = #{cate_code2}
+	]]>
+	</update>
+
+	<!-- 카테고리 삭제 -->
+	<delete id="delete">
+		delete from category
+		where cate_code1 = #{cate_code1}
+		<if test="cate_code2 != 0">
+			and cate_code2 = #{cate_code2}
+		</if>
+	</delete>
+
+</mapper>
