@@ -6,17 +6,25 @@
 
 	<!-- 회원관리 리스트 -->
 	<select id="list" resultType="com.beetmarket.member.vo.MemberVO">
-		select no, title, writer, writeDate, hit
+		select id, name, email, gender, tel,photo,status,gradeNo,gradeName,shipNo,shipName
 		from (
-			select rownum rnum, no, title, writer, writeDate, hit
+			select rownum rnum, id, name, email, gender, tel,photo,status,gradeNo,gradeName,shipNo,shipName
 			from (
 				select
-					no, title, writer, writeDate, hit
+					m.id, m.name, m.email, m.gender, m.tel,m.photo,m.status,
+					m.gradeNo,g.gradeName,
+					m.shipNo,s.shipName
 				from
-					member
-				<!-- 검색을 달아야 한다. -->
-				<include refid="search" />
-				order by no desc
+					member m, grade g, membership s
+					
+					where (
+						<!-- 검색을 달아야 한다. -->
+						<include refid="search" />
+					)
+					and (
+					m.gradeNo = g.gradeNo and m.shipNo=s.shipNo	
+					)
+				order by id desc
 			)
 		)
 		where rnum between #{startRow} and #{endRow}
@@ -25,9 +33,10 @@
 	<!-- 회원관리 리스트 페이지 처리를 위한 전체 데이터 개수 가져오기 -->
 	<select id="getTotalRow" resultType="Long">
 		select count(*)
-		from member
+		from member m, grade g, membership s
 		<!-- 검색을 달아야한다. -->
 		<include refid="search" />
+		and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
 	
 	<!-- 회원관리 리스트의 검색 처리 -->
