@@ -12,4 +12,6 @@ public class LoginVO {
 	private Integer gradeNo;
 	private String gradeName;
 	private String email;
+	private Integer shipNo;
+	private String shipName;
 }
