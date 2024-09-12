@@ -12,10 +12,10 @@ public interface ReviewMapper {
 	//1-1 list
 	public List<ReviewVO> list(
 			@Param("pageObject") PageObject pageObject,
-			@Param("no") Long no);
+			@Param("reviewNo") Long reviewNo);
 	
 	// 1-2. 전체 데이터 개수
 	public Long getTotalRow(
 			@Param("pageObject") PageObject pageObject,
-			@Param("no") Long no);
+			@Param("reviewNo") Long reviewNo);
 }
