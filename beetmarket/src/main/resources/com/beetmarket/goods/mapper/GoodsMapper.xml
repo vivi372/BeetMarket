@@ -8,37 +8,33 @@
 	<select id="list" resultType="com.beetmarket.goods.vo.GoodsVO">
 		<!-- 상품 코드, 상품명, 대표이미지, 최종판매가, 조회수 -->
 		select
-		goodsNo, goodsName, goodsMainImage, goodsPricem, goodsHit
-		from (
-		select
-		rownum rnum, goodsNo,
-		goodsName, goodsMainImage, goodsPricem,
-		goodsHit
-		from (
-		select
-		goodsNo,
-		goodsName, goodsMainImage, goodsPricem,
-		goodsHit
-		from
-		goods
-		where
-		(
-		<!-- 검색을 달아야 한다. -->
-		<include refid="search" />
-		)
-		order by goodsNo desc
-		)
-		)
-		where rnum between
-		#{pageObject.startRow} and
-		#{pageObject.endRow}
+		goodsNo, goodsName, goodsMainImage, goodsPrice, goodsHit
+			from (
+				select
+				rownum rnum, goodsNo, goodsName, goodsMainImage, goodsPrice, goodsHit
+					from (
+						select
+						goodsNo,	goodsName, goodsMainImage, goodsPrice, goodsHit
+						from
+						goods
+						where
+						( 1=1
+							<!-- 검색을 달아야 한다. -->
+							<include refid="search" />
+						)
+						order by goodsNo desc
+					)
+			)
+			where rnum between
+			#{pageObject.startRow} and
+			#{pageObject.endRow}
 	</select>
 
 	<!-- 상품 리스트 페이지 처리를 위한 전체 데이터 개수 가져오기 -->
 	<select id="getTotalRow" resultType="Long">
 		select count(*)
 		from goods
-		<!-- 검색을 달아야한다. -->
+		<!-- 검색을 달아야 한다. -->
 		where (1=1)
 		<include refid="search" />
 	</select>
@@ -52,26 +48,25 @@
 				<!-- 대분류 검색 추가 -->
 				<if
 					test="searchVO.cateHighNo != null and searchVO.cateHighNo > 0">
-					and cateHighNo = #{searchVO.cateHighNo}
+					cateHighNo = #{searchVO.cateHighNo}
 				</if>
 				<!-- 중분류 검색 추가 -->
 				<if test="searchVO.cateMidNo != null and searchVO.cateMidNo > 0">
-					and cateMidNo = #{searchVO.cateMidNo}
+					cateMidNo = #{searchVO.cateMidNo}
 				</if>
 				<!-- 소분류 검색 추가 -->
 				<if test="searchVO.cateLowNo != null and searchVO.cateLowNo > 0">
-					and cateLowNo = #{searchVO.cateLowNo}
+					cateLowNo = #{searchVO.cateLowNo}
 				</if>
 				<!-- 상품명 검색 추가 -->
 				<if
-					test="searchVO.goodsName != null and searchVO.goodsName != ''.toString()">
-					and goodsName like '%' || #{searchVO.goodsName} || '%'
+					test="searchVO.goodsName != null and searchVO.goodsName != ''">
+					goodsName like '%' || #{searchVO.goodsName} || '%'
 				</if>
 			</trim>
 			)
 		</if>
 	</sql>
 
-
-
 </mapper>
+
