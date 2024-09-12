@@ -21,7 +21,7 @@ import com.webjjang.util.page.PageObject;
 import lombok.extern.log4j.Log4j;
 
 @Controller
-@RequestMapping("member")
+@RequestMapping("/member")
 @Log4j
 public class MemberController {
 
