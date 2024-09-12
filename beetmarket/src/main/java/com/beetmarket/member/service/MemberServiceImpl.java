@@ -30,9 +30,34 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public List<MemberVO> list(PageObject pageObject) {
-		// TODO Auto-generated method stub
+		log.info("list() 실행");
+		// 전체 데이터 개수 구하기
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
 		return mapper.list(pageObject);
 	}
-
+	// 회원 등급변경
+	@Override
+	public Integer changeGrade(MemberVO vo) {
+		log.info(vo);
+		return mapper.changeGrade(vo);
+	}
+	// 회원 맴버쉽변경
+	@Override
+	public Integer changeMemeberShip(MemberVO vo) {
+		log.info(vo);
+		return mapper.changeMemeberShip(vo);
+	}
+	// 회원 상태변경
+	@Override
+	public Integer changeStatus(MemberVO vo) {
+		log.info(vo);
+		return mapper.changeStatus(vo);
+	}
+	
+	// 회원관리 글보기
+	@Override
+	public MemberVO view(String id) {
+		log.info("view() 실행");
+		return mapper.view(id);
+	}
 }

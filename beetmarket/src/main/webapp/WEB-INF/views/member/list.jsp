@@ -17,16 +17,19 @@
 $(function(){
 	
 	// 회원 한줄을 클릭하면 회원 정보보기로 이동 시키는 처리
-	function dataRowClick(){
-		alert("dataRow click");
+	function dataRowClick(id){
+		console.log(id);
+		location = "view.do?id="+id;
 	}
 	
 	// 이벤트처리
 	$(".dataRow").on("click", function(){
-		dataRowClick();
+		let id = $(this).find(".id").text();
+		console.log(id);
+		dataRowClick(id);
 	});
 	
-	$(".grade, .status").parent()
+	$(".grade, .status .ship").parent()
 	.on("mouseover", function(){
 		// dataRow의 click 이벤트를 없앤다.
 		$(".dataRow").off("click");
@@ -38,7 +41,7 @@ $(function(){
 		});
 	});
 	
-	$(".dataRow").on("change", ".grade, .status", function(){
+	$(".dataRow").on("change", ".grade, .status , .ship ", function(){
 		// alert("값이 바뀜");
 		// this - select 태그 선택 .next() 다음 태그 - div 태그
 		// 변경되었는지 알아내는 것 처리.
@@ -59,32 +62,24 @@ $(function(){
 	<h2>회원 리스트</h2>
 	<table class="table">
 		<thead>
-			<tr>
+			<tr align="center">
 				<th>사진</th>
 				<th>아이디</th>
 				<th>이름</th>
 				<th>성별</th>
-				<th>생년월일</th>
 				<th>연락처</th>
 				<th>등급</th>
+				<th>맴버쉽</th>
 				<th>상태</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:forEach items="${list }" var="vo">
 				<tr class="dataRow">
-					<td>
-						<c:if test="${ !empty vo.photo }">
-							<img src="${vo.photo }" style="width: 30px; height: 30px;">
-						</c:if>
-						<c:if test="${ empty vo.photo }">
-							<i class="fa fa-user-circle-o" style="font-size:30px"></i>
-						</c:if>
-					</td>
+					<td><img src="${vo.photo }" style="width: 30px; height: 30px;"></td>
 					<td class="id">${vo.id }</td>
 					<td>${vo.name }</td>
 					<td>${vo.gender }</td>
-					<td>${vo.birth }</td>
 					<td>${vo.tel }</td>
 					<td>
 						<form action="changeGrade.do">
@@ -93,6 +88,7 @@ $(function(){
 							  <select class="form-control grade" 
 							   name="gradeNo" data-data="${vo.gradeNo }">
 							  	<option value="1" ${(vo.gradeNo == 1)?"selected":"" }>일반회원</option>
+							  	<option value="5" ${(vo.gradeNo == 5)?"selected":"" }>판매자</option>
 							  	<option value="9" ${(vo.gradeNo == 9)?"selected":"" }>관리자</option>
 							  </select>
 							  <div class="input-group-append">
@@ -101,6 +97,24 @@ $(function(){
 							</div>
 						</form>
 					</td>
+					
+				<td>
+						<form action="changeMemeberShip.do">
+							<input name="id" value="${vo.id }" type="hidden">
+							<div class="input-group mb-3">
+							  <select class="form-control ship" 
+							   name="shipNo" data-data="${vo.shipNo }">
+							  	<option value="1" ${(vo.shipNo == 1)?"selected":"" }>Bronze</option>
+							  	<option value="2" ${(vo.shipNo == 2)?"selected":"" }>Gold</option>
+							  	<option value="3" ${(vo.shipNo == 3)?"selected":"" }>Diamond</option>
+							  </select>
+							  <div class="input-group-append">
+							    <button class="btn btn-success" type="submit" disabled>변경</button>
+							  </div>
+							</div>
+						</form>
+				</td>	
+					
 					<td>
 						<form action="changeStatus.do">
 							<input name="id" value="${vo.id }" type="hidden">
