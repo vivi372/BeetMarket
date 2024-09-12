@@ -122,7 +122,7 @@
             
             <!--포인트샵 -->
             <li class="nav-item">
-                <a class="nav-link" id="pointsosh-btn">
+                <a class="nav-link" id="point shop-btn">
                     <span>포인트샵</span>
                 </a>               
             </li>

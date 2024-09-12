@@ -8,7 +8,7 @@
 </head>
 <body>
 <div class="container">
-	<h2>메인입니다.</h2>
+	<h2>환영해유</h2>
 	<form action="main.do" id="searchForm">
 	</form>
 </div>
