@@ -20,6 +20,24 @@
 	margin-left: 50px; 
 	margin-bottom: 10px;
 }
+.blue-button {
+    background-color: #87CEEB; /* 파란색 */
+    color: white; /* 텍스트 색상: 흰색 */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    position: absolute; 
+    top: 10px; 
+    left: 10px;
+}
+
+/* 마우스를 올렸을 때 */
+.blue-button:hover {
+    background-color: #0056b3; /* 조금 더 어두운 파란색 */
+}
 </style>
 
 <script>
@@ -32,6 +50,7 @@
 <div class="container">
 	<div class="card">
 		<div class="card-header" style="display: flex; align-items: center; justify-content: center;">
+		<button class="blue-button" onclick="goBack()" ><i class="fa fa-angle-double-left"></i></button>
 		  <img src="${vo.photo}" style="width: 150px; height: 150px; margin-right: 20px;">
 			  <div style="font-size: 25px;">
 			    ID : ${vo.id} (${vo.name})
@@ -49,7 +68,6 @@
 			</div>
 		</div>
 		<div class="card-footer">
-			<button class="btn" onclick="goBack()" >이전으로</button>
 			<div class="data float-right">
 				최근 접속일 : <fmt:formatDate value="${vo.conDate }" pattern="yyyy-MM-dd"/>
 			</div>
