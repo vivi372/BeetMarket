@@ -53,6 +53,12 @@ public class MemberServiceImpl implements MemberService{
 		log.info(vo);
 		return mapper.changeStatus(vo);
 	}
+	// 회원 최근 접속일 업데이트
+	@Override
+	public Integer ConDateUpdate(LoginVO vo) {
+		log.info(vo);
+		return mapper.ConDateUpdate(vo);
+	}
 	
 	// 회원관리 글보기
 	@Override

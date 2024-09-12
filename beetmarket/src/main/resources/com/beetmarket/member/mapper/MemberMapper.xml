@@ -70,6 +70,14 @@
 		where id = #{id}
 	]]>
 	</update>
+	<!-- 회원 최근 접속일 업데이트 -->
+	<update id="ConDateUpdate">
+	<![CDATA[
+		update member
+		set conDate = sysdate
+		where id = #{id}
+	]]>
+	</update>
 
 	<!-- 회원관리 글보기 -->
 	<select id="view" resultType="com.beetmarket.member.vo.MemberVO">

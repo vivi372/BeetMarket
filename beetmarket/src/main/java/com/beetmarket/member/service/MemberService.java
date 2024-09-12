@@ -8,7 +8,6 @@ import com.webjjang.util.page.PageObject;
 
 public interface MemberService {
 	public LoginVO login(LoginVO vo);
-	
 	// 회원관리 리스트
 	public List<MemberVO> list(PageObject pageObject);
 	// 회원등급변경
@@ -17,6 +16,8 @@ public interface MemberService {
 	public Integer changeMemeberShip(MemberVO vo);
 	// 회원 상태변경
 	public Integer changeStatus(MemberVO vo);
+	// 최근 접속일 업데이트
+	public Integer ConDateUpdate(LoginVO vo);
 	// 회원관리 글보기
 	public MemberVO view(String id);
 }

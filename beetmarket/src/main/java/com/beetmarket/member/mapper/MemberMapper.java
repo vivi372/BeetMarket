@@ -24,6 +24,8 @@ public interface MemberMapper {
 	public Integer changeMemeberShip(MemberVO vo);
 	// 상태 변경
 	public Integer changeStatus(MemberVO vo);
+	// 최근접속일 업데이트
+	public Integer ConDateUpdate(LoginVO vo);
 
 	// 보기
 	public MemberVO view(String id);
