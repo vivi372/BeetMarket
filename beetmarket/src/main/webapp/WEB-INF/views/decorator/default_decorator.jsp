@@ -122,8 +122,8 @@
             
             <!--포인트샵 -->
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="return false;" data-toggle="modal" data-target="#pointShopModal" data-backdrop="static">
-                    
+                <a class="nav-link"
+                data-toggle="modal" data-target="#pointShopModal" data-backdrop="static">
                     <span>포인트샵</span>
                 </a>               
             </li>
@@ -423,7 +423,8 @@
     </div>
 
 
-
+    <jsp:include page="/WEB-INF/views/pointShop/pointShopModal.jsp"/>
+    
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
 
