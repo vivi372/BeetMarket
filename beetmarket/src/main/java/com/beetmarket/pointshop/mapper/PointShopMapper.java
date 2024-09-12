@@ -16,5 +16,8 @@ public interface PointShopMapper {
 	public Integer goodsWrite(PointShopVO vo);
 	//포인트샵 재고 등록
 	public Integer stockWrite(List<PointShopVO> list);
+	//포인트샵 상품 수정
+	public Integer update(PointShopVO vo);
+	
 
 }

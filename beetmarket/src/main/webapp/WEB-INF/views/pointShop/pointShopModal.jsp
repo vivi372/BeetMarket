@@ -134,6 +134,10 @@
 	z-index: 1; /* 버튼을 이미지보다 위로 배치 */
 }
 
+#goodsModal .modal-content {
+  	min-height: 670px; /* 최소 높이 설정 */
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
@@ -150,6 +154,7 @@
 			$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
 		
 		});
+		
 		
 		
 // 		$("#barcodeBtn").click(function() {
@@ -237,7 +242,7 @@
 	        	
 			
 	        	<div class="modal-main">
-	        		<button class="btn btn-primary" data-toggle="modal" data-target="#goodsModal" id="goodsWriteBtn" data-backdrop="static">add</button>
+	        		<button class="btn btn-primary" id="goodsWriteBtn">add</button>
 	        		<!-- 상품 데이터가 출력 -->
 	        		<div id="goodsListDiv">
 						<div class="row">

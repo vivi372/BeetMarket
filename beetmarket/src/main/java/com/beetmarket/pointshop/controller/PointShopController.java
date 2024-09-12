@@ -45,7 +45,6 @@ public class PointShopController {
 	@PostMapping(value = "/write.do", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> write(PointShopVO vo,
 			@RequestPart(name = "goodsImageFile") MultipartFile goodsImageFile,HttpServletRequest request ) throws Exception {
-		log.info("하이");
 		log.info(vo);
 		log.info(goodsImageFile.getOriginalFilename());
 		
@@ -76,6 +75,39 @@ public class PointShopController {
 		
 		
 		return new ResponseEntity<String>("정상적으로 등록되었습니다.", HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/update.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> update(PointShopVO vo,String imageDeleteFile,
+			@RequestPart(name = "goodsImageFile", required = false) MultipartFile goodsImageFile,HttpServletRequest request ) throws Exception {
+		
+		log.info(vo);
+		
+		if(goodsImageFile != null) {
+			log.info(goodsImageFile.getOriginalFilename());
+			imageDeleteFile = imageDeleteFile.substring(imageDeleteFile.indexOf("/upload"));
+			log.info(imageDeleteFile);
+			//파일 업로드 후 파일 경로 받아오기
+			vo.setGoodsImage(FileUtil.upload(path, goodsImageFile, request));			
+		}
+		
+		
+		try {
+			service.update(vo);
+		} catch (Exception e) {
+			if(goodsImageFile != null) {
+				//수정 실패하면 입력한 파일 삭제
+				FileUtil.remove(FileUtil.getRealPath("",vo.getGoodsImage(),request));				
+			}
+			return new ResponseEntity<String>("수정이 실패했습니다.", HttpStatus.BAD_REQUEST);
+		}
+		
+		if(goodsImageFile != null) {
+			//수정 성공시하면 기존 파일 삭제
+			FileUtil.remove(FileUtil.getRealPath("",imageDeleteFile,request));				
+		}
+		
+		return new ResponseEntity<String>("정상적으로 수정되었습니다.", HttpStatus.OK);
 	}
 	
 }

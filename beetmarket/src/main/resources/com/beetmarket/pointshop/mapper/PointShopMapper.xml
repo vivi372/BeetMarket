@@ -62,6 +62,16 @@
 			)
 	</insert>
 	
+	<update id="update">
+		update pointShopGoodsInfo set 
+			category=#{category},goodsName=#{goodsName},
+			<if test="goodsImage != null and goodsImage != ''.toString">
+				goodsImage = #{goodsImage},
+			</if>
+			pointAmount = #{pointAmount},discountRate=#{discountRate,jdbcType=INTEGER},shipNo=#{shipNo}
+		where goodsId = #{goodsId}
+	</update>
+	
 	
 	
 	

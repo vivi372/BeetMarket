@@ -39,5 +39,11 @@ public class PointShopServiceImpl implements PointShopService {
 		}
 		return result;
 	}
+	//포인트샵 상품 수정
+	@Override
+	public Integer update(PointShopVO vo) {
+		
+		return mapper.update(vo);
+	}
 
 }
