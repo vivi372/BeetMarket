@@ -50,28 +50,23 @@
 			<trim prefixOverrides="and">
 				<!-- 대분류 검색 추가 -->
 				<if
-					test="searchVO.cate_code1 != null and searchVO.cate_code1 > 0">
-					and cate_code1 = #{searchVO.cate_code1}
+					test="searchVO.cateHighNo != null and searchVO.cateHighNo > 0">
+					and cateHighNo = #{searchVO.cateHighNo}
 				</if>
 				<!-- 중분류 검색 추가 -->
 				<if
-					test="searchVO.cate_code2 != null and searchVO.cate_code2 > 0">
-					and cate_code2 = #{searchVO.cate_code2}
+					test="searchVO.cateMidNo != null and searchVO.cateMidNo > 0">
+					and cateMidNo = #{searchVO.cateMidNo}
+				</if>
+				<!-- 소분류 검색 추가 -->
+				<if
+					test="searchVO.cateLowNo != null and searchVO.cateLowNo > 0">
+					and cateLowNo = #{searchVO.cateLowNo}
 				</if>
 				<!-- 상품명 검색 추가 -->
 				<if
-					test="searchVO.goods_name != null and searchVO.goods_name != ''.toString()">
-					and goods_name like '%' || #{searchVO.goods_name} || '%'
-				</if>
-				<!-- 최소가 검색 추가 -->
-				<if test="searchVO.min != null and searchVO.min > 0">
-					and sale_price >= #{searchVO.min}
-				</if>
-				<!-- 최대가 검색 추가 -->
-				<if test="searchVO.max != null and searchVO.max > 0">
-				<![CDATA[
-					and sale_price <= #{searchVO.max}
-				]]>
+					test="searchVO.goodsName != null and searchVO.goodsName != ''.toString()">
+					and goodsName like '%' || #{searchVO.goodsName} || '%'
 				</if>
 			</trim>
 			)
@@ -82,8 +77,8 @@
 	<!-- # {obj} 1. 변수의 이름, 2. vo의 getter 이름, 3. Map의 key -->
 	<update id="increase">
 		update goods set hit = hit + 1
-		where goods_no =
-		#{goods_no}
+		where goodsNo =
+		#{goodsNo}
 	</update>
 
 	<!-- 상품 정보 보기 -->

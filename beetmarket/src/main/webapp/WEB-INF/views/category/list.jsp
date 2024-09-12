@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +7,7 @@
 <title>카테고리 관리</title>
 
 <style type="text/css">
-.editDiv{
+.editDiv {
 	display: none;
 }
 </style>
@@ -20,14 +19,11 @@ $(function(){
 	$(".bigCateData")
 	// 대분류 클릭 이벤트
 	.click(function(){
-		// alert("대분류 클릭");
 		// 대분류 번호 가져오기
-		let cate_code1 = $(this).data("cate_code1");
-		// alert("cate_code1 : " + cate_code1);
+		let cateHighNo = $(this).data("cateHighNo");
 		// 현재 대분류(active)가 아닌 경우만 페이지 이동
-		// alert($(this).hasClass("active"));
 		if(!$(this).hasClass("active"))
-			location = "list.do?cate_code1=" + cate_code1;
+			location = "list.do?cateHighNo=" + cateHighNo;
 	});
 	
 	$(".cate_edit").click(function(){
@@ -140,97 +136,93 @@ $(function(){
 </script>
 </head>
 <body>
-<div class="container">
-	<div class="card">
-	  <div class="card-header"><h2>카테로기 관리</h2></div>
-	  <div class="card-body">
-	  	<p>
-	  		대분류 탭을 수정하거나 삭제하려면 오른쪽 마우스 버튼은 클릭하세요.
-	  	</p>
-	  	  <!-- Nav tabs -->
-		  <ul class="nav nav-tabs">
-		  <c:forEach items="${bigList }" var="vo">
-		    <li class="nav-item">
-		      <a class="nav-link bigCateData ${(vo.cate_code1 == param.cate_code1)?'active':'' } "
-		       data-toggle="tab" data-cate_code1 = "${vo.cate_code1 }"
-		       href="#mid_category">
-		       	<span class="cate_name">${vo.cate_name }</span>
-		      	<i class="fa fa-edit cate_edit"></i>
-		      	<div class="editDiv">
-			      	<button class="btn btn-success btn-sm bigUpdateBtn">수정</button>
-			      	<br>
-			      	<button class="btn btn-danger btn-sm bigDeleteBtn">삭제</button>
-		      	</div>
-		      </a>
-		    </li>
-		  </c:forEach>
-		    <li class="nav-item">
-		      <a class="nav-link "
-		       data-toggle="tab" data-cate_code1 = "${vo.cate_code1 }"
-		       href="#mid_category" id="bigWriteBtn">
-			  	<i class="fa fa-plus"></i>
-		      </a>
-		    </li>
-		  </ul>
-		
-		  <!-- Tab panes -->
-		  <div class="tab-content">
-		    <div id="mid_category" class="container tab-pane active"><br>
-		      <h3>
-		      	카테고리 - 중분류
-		      	 <button class="btn btn-primary btn-sm" id = "midWriteBtn"
-		      	  data-cate_code1="${cate_code1 }">add</button>
-		      </h3>
-
-				<ul class="list-group">
-				<c:forEach items="${midList }" var="vo">
-				  <li class="list-group-item" data-cate_code1="${vo.cate_code1 }"
-				    data-cate_code2="${vo.cate_code2 }">
-				  	<span class="cate_name">${vo.cate_name }</span>
-				  	<span class="pull-right">
-				  		<button class="btn btn-success btn-sm midUpdateBtn">수정</button>
-				  		<button class="btn btn-danger btn-sm midDeleteBtn">삭제</button>
-				  	</span>
-				  </li>
-				 </c:forEach>
+	<div class="container">
+		<div class="card">
+			<div class="card-header">
+				<h2>카테로기 관리</h2>
+			</div>
+			<div class="card-body">
+				<p>대분류 탭을 수정하거나 삭제하려면 오른쪽 마우스 버튼은 클릭하세요.</p>
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs">
+					<c:forEach items="${bigList }" var="vo">
+						<li class="nav-item">
+							<a class="nav-link bigCateData ${(vo.cate_code1 == param.cate_code1)?'active':'' } " data-toggle="tab"
+								data-cate_code1="${vo.cate_code1 }" href="#mid_category"
+							>
+								<span class="cate_name">${vo.cate_name }</span>
+								<i class="fa fa-edit cate_edit"></i>
+								<div class="editDiv">
+									<button class="btn btn-success btn-sm bigUpdateBtn">수정</button>
+									<br>
+									<button class="btn btn-danger btn-sm bigDeleteBtn">삭제</button>
+								</div>
+							</a>
+						</li>
+					</c:forEach>
+					<li class="nav-item">
+						<a class="nav-link " data-toggle="tab" data-cate_code1="${vo.cate_code1 }" href="#mid_category" id="bigWriteBtn">
+							<i class="fa fa-plus"></i>
+						</a>
+					</li>
 				</ul>
-				
-		    </div>
-		  </div>
-	  	
-	  </div>
-	  <div class="card-footer">Footer</div>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div id="mid_category" class="container tab-pane active">
+						<br>
+						<h3>
+							카테고리 - 중분류
+							<button class="btn btn-primary btn-sm" id="midWriteBtn" data-cate_code1="${cate_code1 }">add</button>
+						</h3>
+
+						<ul class="list-group">
+							<c:forEach items="${midList }" var="vo">
+								<li class="list-group-item" data-cate_code1="${vo.cate_code1 }" data-cate_code2="${vo.cate_code2 }">
+									<span class="cate_name">${vo.cate_name }</span> <span class="pull-right">
+										<button class="btn btn-success btn-sm midUpdateBtn">수정</button>
+										<button class="btn btn-danger btn-sm midDeleteBtn">삭제</button>
+									</span>
+								</li>
+							</c:forEach>
+						</ul>
+
+					</div>
+				</div>
+
+			</div>
+			<div class="card-footer">Footer</div>
+		</div>
 	</div>
-</div>
 
-<!-- The Modal -->
-<div class="modal" id="categoryModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
+	<!-- The Modal -->
+	<div class="modal" id="categoryModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Modal Heading</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-      </div>
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Modal Heading</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
 
-		<form method="post" id="modalForm">
-			<input name="cate_code1" value="0" type="hidden" id="modalCate_code1">
-			<input name="cate_code2" value="0" type="hidden" id="modalCate_code2">
-		      <!-- Modal body -->
-		      <div class="modal-body">
-		        <input name="cate_name" class="form-control" id="modalCate_name">
-		      </div>
-		
-		      <!-- Modal footer -->
-		      <div class="modal-footer">
-		      	<button class="btn btn-primary" id="submitBtn">전송</button>
-		        <button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
-		      </div>
-		</form>
-    </div>
-  </div>
-</div>
+				<form method="post" id="modalForm">
+					<input name="cate_code1" value="0" type="hidden" id="modalCate_code1">
+					<input name="cate_code2" value="0" type="hidden" id="modalCate_code2">
+					<!-- Modal body -->
+					<div class="modal-body">
+						<input name="cate_name" class="form-control" id="modalCate_name">
+					</div>
+
+					<!-- Modal footer -->
+					<div class="modal-footer">
+						<button class="btn btn-primary" id="submitBtn">전송</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">취소</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
 
 </body>
