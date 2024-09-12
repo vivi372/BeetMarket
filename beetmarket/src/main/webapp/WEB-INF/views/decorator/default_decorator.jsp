@@ -87,22 +87,11 @@
 			<hr class="sidebar-divider my-0">
 
 
-			<!-- 쇼핑 -->
-			<li class="nav-item"><a class="nav-link shopping" href="#"
-				data-toggle="collapse" data-target="#shopping" aria-expanded="true"
-				aria-controls="shopping"> <span>쇼핑</span>
-			</a>
-				<div id="shopping" class="collapse" aria-labelledby="shopping"
-					data-parent="#accordionSidebar">
-					<div class="bg-white py-2 collapse-inner rounded">
-						<h6 class="collapse-header">카테고리</h6>
-						<a class="collapse-item" href="utilities-color.html">Colors</a> <a
-							class="collapse-item" href="/board/list.do">Borders</a> <a
-							class="collapse-item" href="utilities-animation.html">Animations</a>
-						<a class="collapse-item" href="utilities-other.html">Other</a>
-					</div>
-				</div></li>
-
+			
+			<!-- 이벤트 -->
+			<li class="nav-item"><a class="nav-link goods"
+				href="/goods/list.do"> <span>쇼핑</span></a></li>
+			
 
 			<!-- Divider -->
 			<hr class="sidebar-divider my-0">
@@ -110,15 +99,16 @@
 
 			<!-- 이벤트 -->
 			<li class="nav-item"><a class="nav-link event"
-				href="/board/list.do"> <span>이벤트</span></a></li>
+				href="/evnet/list.do"> <span>이벤트</span></a></li>
 
 
+			<!-- Divider -->
 			<hr class="sidebar-divider my-0">
 
 
 			<!-- 공지사항  -->
 			<li class="nav-item"><a class="nav-link notice"
-				href="/board/list.do"> <span>공지사항</span></a></li>
+				href="/notice/list.do"> <span>공지사항</span></a></li>
 
 
 			<!-- Divider -->
@@ -136,7 +126,7 @@
 
 
 			<!-- 주식 -->
-			<li class="nav-item"><a class="nav-link" href="/board/list.do">
+			<li class="nav-item"><a class="nav-link" href="/stock/stockMain.do">
 					<span>주식</span>
 			</a></li>
 
@@ -154,11 +144,6 @@
 			<!-- Divider -->
 			<hr class="sidebar-divider d-none d-md-block">
 
-
-			<!-- Sidebar Toggler (Sidebar) -->
-			<div class="text-center d-none d-md-inline">
-				<button class="rounded-circle border-0" id="sidebarToggle"></button>
-			</div>
 
 		</ul>
 		<!-- End of Sidebar -->
@@ -262,57 +247,59 @@
 									</div>
 								</a> <a class="dropdown-item text-center small text-gray-500"
 									href="#">Show All Alerts</a>
-							</div></li>
+							</div>
+							</li>
 
 
-						<div class="topbar-divider d-none d-sm-block"></div>
 
 
-<!-- 						로그인 안 상태 -->
-<%-- 						<c:if test="${empty login }"> --%>
-<!-- 							<li -->
-<%-- 								${(uri == '/member/loginForm.do')?"class='nav-item dropdown no-arrow'":"class='nav-item'"}> --%>
-<!-- 								<a class="nav-link" href="/member/loginForm.do" id="login" -->
-<!-- 								aria-haspopup="true" aria-expanded="false"> <span -->
-<!-- 									class="mr-2 d-none d-lg-inline text-gray-600 small">로그인</span> -->
-<!-- 							</a> -->
-<!-- 							</li> -->
-						<!-- 회원가입  -->
-<!-- 						<li class="nav-item dropdown no-arrow"><a -->
-<!-- 							class="nav-link dropdown-toggle" href="#" id="userDropdown" -->
-<!-- 							role="button" data-toggle="dropdown" aria-haspopup="true" -->
-<!-- 							aria-expanded="false"> <span -->
-<!-- 								class="mr-2 d-none d-lg-inline text-gray-600 small">회원가입</span> -->
-<!-- 						</a></li> -->
-<%-- 						</c:if> --%>
+						<div class="navbar-nav login">
+						 <c:if test="${ empty login }">
+							<a href="/member/writeForm.do" class="nav-item nav-link">
+								<button class="signup">회원가입</button>
+							</a>
+							<a href="/member/loginForm.do" class="nav-item nav-link">
+								<button>로그인</button>
+							</a>
+						</c:if>
 
-
-						<!-- 로그인 한 상태 -->
-<%-- 						<c:if test="${!empty login }"> --%>
-							<ul class="navbar-nav d-flex align-items-center">
-							    <li class="nav-item">
-							        <div class="rounded-circle mb-1 text-secondary">어서오세요 ${login.id }님</div>
-							    </li>
-							    <li class="nav-item">
-							        <span class="badge badge-light" id="newMsgCnt" style="margin-top: 12px; height: 20px;">${login.newMsgCnt}</span>
-							    </li>
-							    <li class="nav-item">
-							        <a class="nav-link" href="/member/logout.do">
-							            <i class="fa fa-sign-out" style="font-size: 19px"></i> <b>로그아웃</b>
-							        </a>
-							    </li>
-							    <li class="nav-item">
-							        <a class="nav-link" href="/member/view.do">
-							            <i class="fa fa-address-book"></i> <b>마이페이지</b>
-							        </a>
-							    </li>
-							    <li class="nav-item">
-							        <a class="nav-link" href="/cart/list.do">
-							            <i class="fa fa-shopping-basket"></i> <b>장바구니</b>
-							        </a>
-							    </li>
-							</ul>
-<%-- 						</c:if> --%>
+						<!-- 로그인 된 거  -->
+						<c:if test="${!empty login}">
+							<c:if test="${login.gradeNo == 9}">
+								<a href="/member/list.do" class="nav-item nav-link">회원관리</a>
+							</c:if>
+							<div class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#"
+									id="profileDropdown" role="button" data-toggle="dropdown"
+									aria-haspopup="true" aria-expanded="false"> 
+									<c:if test="${empty login.photo}">
+										<i class="fa fa-user-circle-o"></i>
+									</c:if> 
+									<c:if test="${!empty login.photo}">
+										<img src="${login.photo}" class="rounded-circle"
+											style="width: 30px; height: 30px;">
+									</c:if>
+								</a>
+									<div class="dropdown-menu" aria-labelledby="profileDropdown">
+										<a class="dropdown-item" href="/member/view.do">내정보보기</a> <a
+											class="dropdown-item" href="/message/list.do">메세지</a> <a
+											class="dropdown-item" href="/basket/list.do">장바구니</a> <a
+											href="/order/list.do" class="dropdown-item">주문내역</a>
+									</div>
+								</div>
+									<div class="nav-item dropdown d-flex align-items-center">
+										<!-- 메시지 수 (왼쪽) -->
+										<span class="badge badge-pill badge-danger mr-2" id="newMsgCnt">
+											${login.newMsgCnt}
+										</span>
+								
+										<!-- 로그아웃 링크 (오른쪽) -->
+										<a href="/member/logout.do" class="nav-item nav-link">
+											<i class="fa fa-sign-out"></i> Logout
+										</a>
+									</div>
+							</c:if>
+						</div>
 					</ul>
 					<!-- end of Topbar Navbar -->
 				</nav>
