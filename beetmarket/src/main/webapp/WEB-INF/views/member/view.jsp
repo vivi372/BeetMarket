@@ -33,9 +33,9 @@
 	<div class="card">
 		<div class="card-header" style="display: flex; align-items: center; justify-content: center;">
 		  <img src="${vo.photo}" style="width: 150px; height: 150px; margin-right: 20px;">
-		  <div style="font-size: 25px;">
-		    ID : ${vo.id} (${vo.name})
-		  </div>
+			  <div style="font-size: 25px;">
+			    ID : ${vo.id} (${vo.name})
+			  </div>
 		</div>
 		<div class="card-body">
 			<div class="data">

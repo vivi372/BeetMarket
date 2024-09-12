@@ -125,7 +125,7 @@ public class MemberController {
 		rttr.addAttribute("msg","로그인 완료");
 		 
 		
-		return "main/main.do";
+		return "redirect:main/main.do";
 	}
 	
 	// 로그아웃
@@ -135,6 +135,6 @@ public class MemberController {
 		session.removeAttribute("login");
 		
 		rttr.addAttribute("msg","로그아웃 완료");
-	return "main/main.do";	
+	return "redirect:main/main.do";	
 	}
 }

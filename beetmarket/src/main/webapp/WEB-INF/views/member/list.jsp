@@ -29,7 +29,7 @@ $(function(){
 		dataRowClick(id);
 	});
 	
-	$(".grade, .status .ship").parent()
+	$(".grade, .status , .ship").parent()
 	.on("mouseover", function(){
 		// dataRow의 click 이벤트를 없앤다.
 		$(".dataRow").off("click");
