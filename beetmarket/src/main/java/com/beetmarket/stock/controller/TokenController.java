@@ -1,4 +1,4 @@
-package org.zerock.stock.controller;
+package com.beetmarket.stock.controller;
 
 import java.io.IOException;
 import java.util.Map;

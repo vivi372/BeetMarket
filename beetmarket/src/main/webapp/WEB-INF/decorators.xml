@@ -21,6 +21,7 @@
 		<pattern>/notice/*</pattern>
 		<pattern>/event/*</pattern>	
 		<pattern>/showdown/*</pattern>	
+		<pattern>/stock/*</pattern>	
 		
 
 	</decorator>

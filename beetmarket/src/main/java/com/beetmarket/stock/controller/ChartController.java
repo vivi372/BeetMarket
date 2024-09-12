@@ -1,4 +1,4 @@
-package org.zerock.stock.controller;
+package com.beetmarket.stock.controller;
 
 import java.io.IOException;
 
@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.beetmarket.stock.vo.StockVO;
+
 import org.springframework.web.bind.annotation.RequestBody;
-import org.zerock.stock.vo.StockVO;
 
 import lombok.extern.log4j.Log4j;
 import okhttp3.OkHttpClient;
@@ -33,17 +35,20 @@ public class ChartController {
 
     
     @PostMapping(value = "/getChartDate.do", 
-			consumes = "application/json", //no, content
+			consumes = "application/json", 
 			produces = "text/plain; charset=UTF-8"
 			) 
     public ResponseEntity<String> getStockChartData(@RequestBody StockVO vo, HttpSession session) {
         tc.getTokenP(session);
+        
+        log.info("@@@@@@@@@@@@@@@@@ ="+ vo);
+        
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String token = (String) session.getAttribute("token");
         Request request = new Request.Builder()
             .url("https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/"
                 + "inquire-daily-itemchartprice?fid_cond_mrkt_div_code=J"
-                + "&fid_input_iscd=" + String.format("%06d", vo.getCompany_code())
+                + "&fid_input_iscd=" + vo.getCompany_code()
                 + "&fid_input_date_1=" + vo.getStartDate()
                 + "&fid_input_date_2=" + vo.getEndDate()
                 + "&fid_period_div_code=" + vo.getPeriod_div_code()

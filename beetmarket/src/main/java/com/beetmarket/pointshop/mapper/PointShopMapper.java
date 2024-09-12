@@ -12,6 +12,8 @@ public interface PointShopMapper {
 	
 	//포인트샵 상품 리스트
 	public List<PointShopVO> list(PointShopVO vo);
+	//현재 계정 포인트 가져오기
+	public Long getPoint(String id);
 	//포인트샵 상품 등록
 	public Integer goodsWrite(PointShopVO vo);
 	//포인트샵 재고 등록

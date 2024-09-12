@@ -1,4 +1,4 @@
-package org.zerock.stock.vo;
+package com.beetmarket.stock.vo;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ public class StockVO {
 	
 	
 	private Integer company_no; 	// 종목 번호
-	private Integer company_code; 	// 종목 코드
+	private String company_code; 	// 종목 코드
 	private String company_name; 	// 종목 이름
 	private String startDate; 		// 조회할 시작날짜
 	private String endDate; 		// 조회할 종료날짜

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="com.beetmarket.stock.mapper.StockMapper">
+  
+  <select id="stockList" resultType="com.beetmarket.stock.vo.StockVO">
+  		select 
+  			c.company_no, c.company_code, c.company_name, s.prdy_ctrt, s.stck_prpr 
+  		from 
+  			company c, stock_inf s 
+  		where 
+  			c.company_no = s.company_no
+  </select>
+  
+	<insert id="insertStockInfo" parameterType="com.beetmarket.stock.vo.Stock_InfoVO">
+        INSERT INTO stock_price (
+            stck_prpr, prdy_vrss, prdy_ctrt, acml_tr_pbmn, acml_vol,
+            stck_oprc, stck_hgpr, stck_lwpr, stck_mxpr, stck_llam,
+            per, pbr, eps, bps
+        ) VALUES (
+            #{stck_prpr}, #{prdy_vrss}, #{prdy_ctrt}, #{acml_tr_pbmn}, #{acml_vol},
+            #{stck_oprc}, #{stck_hgpr}, #{stck_lwpr}, #{stck_mxpr}, #{stck_llam},
+            #{per}, #{pbr}, #{eps}, #{bps}
+        )
+    </insert>
+  
+  </mapper>
