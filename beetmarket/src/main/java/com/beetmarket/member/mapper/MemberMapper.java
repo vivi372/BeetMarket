@@ -3,11 +3,13 @@ package com.beetmarket.member.mapper;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import com.beetmarket.member.vo.LoginVO;
 import com.beetmarket.member.vo.MemberVO;
 import com.webjjang.util.page.PageObject;
 
+@Repository
 public interface MemberMapper {
 
 	public LoginVO login(LoginVO vo);
