@@ -5,8 +5,9 @@ import lombok.Data;
 @Data
 public class CategoryVO {
 
-	private Integer cate_code1;
-	private Integer cate_code2;
-	private String cate_name;
+	private Integer cateHighNo;
+	private Integer cateMidNo;
+	private Integer cateLowNo;
+	private String categoryName;
 	
 }
