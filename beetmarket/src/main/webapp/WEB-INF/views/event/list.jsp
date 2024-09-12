@@ -34,7 +34,6 @@ $(function() {
 			<select name="key" id="key" class="form-control">
 				<option value="t">제목</option>
 				<option value="c">내용</option>
-				<option value="w">작성자</option>
 			</select>
 		</div>
 		<button id="searchBtn" class="btn btn-primary">검색</button>
@@ -47,10 +46,11 @@ $(function() {
 	   </div>
 	   <div class="card-body">
 	    <strong class="card-title"><span class="float-right">${vo.startDate }~${vo.endDate }</span>
-	     {vo.title}
+	     제목:{vo.title}
 	    </strong>
 	   </div>
 	  </div>
+	<a href="writeForm.do" class="btn btn-primary">등록</a>
  </div>
 </body>
 </html>

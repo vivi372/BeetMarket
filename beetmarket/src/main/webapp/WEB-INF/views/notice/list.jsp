@@ -34,16 +34,16 @@ $(function() {
 				<c:forEach items="${list }" var="vo">
 					<div class="card dataRow" data-no="${vo.no }">
 						<div class="card-header">
-							<span class="${vo.no }"> 번호 </span>
+							<span class="${vo.no }">번호 ${vo.no }</span>
+							<span class="float-right">~종료일: 
+							<fmt:formatDate value="${vo.endDate }" pattern="yyyy-MM-dd"/>
+							</span>
 							<span class="float-right">시작일: 
 							<fmt:formatDate value="${vo.startDate }" pattern="yyyy-MM-dd"/>
 							</span>
 						</div>
 						<div class="card-body">
 							<pre>제목: ${vo.title }</pre>
-						</div>
-						<div class="card=footer">
-							<span class="float-right"></span>
 						</div>
 					</div>
 				</c:forEach>

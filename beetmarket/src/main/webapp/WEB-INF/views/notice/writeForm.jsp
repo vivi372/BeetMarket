@@ -78,7 +78,7 @@ $(function(){
 				</td>
 			</tr>
 			<tr>
-			    <th>게시일</th>
+			    <th>시작일</th>
 			    <td>
 					<input id="startDate" name="startDate" required autocomplete="off"
 						class="form-control datepicker" 
@@ -89,14 +89,6 @@ $(function(){
 			    <th>종료일</th>
 			    <td>
 					<input id="endDate" name="endDate" required autocomplete="off"
-						class="form-control datepicker" 
-					>
-				</td>
-		  	</tr>
-		  	<tr>
-			    <th>작성일</th>
-			    <td>
-					<input id="writeDate" name="writeDate" required autocomplete="off"
 						class="form-control datepicker" 
 					>
 				</td>

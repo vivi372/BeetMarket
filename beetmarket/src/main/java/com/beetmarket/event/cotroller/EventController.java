@@ -18,7 +18,7 @@ import com.webjjang.util.page.PageObject;
 import lombok.extern.log4j.Log4j;
 
 @Controller
-@RequestMapping("/evnet")
+@RequestMapping("/event")
 @Log4j
 public class EventController {
 	@Autowired
@@ -65,13 +65,9 @@ public class EventController {
 		rttr.addAttribute("msg", "이벤트 수정이 되었습니다.");
 		return "redirect:view.do?no=" + no ;
 	}
-//	@PostMapping("/delete.do")
-//	public String delete(EventVO vo, RedirectAttributes rttr) {
-//		if(service.delete(vo)==1) {
-//			rttr.addAttribute("msg", "이벤트 삭제 되었습니다.");
-//			return "redirect:list.do";			
-//		}else
-//			rttr.addAttribute("msg", "이벤트가 삭제가 되지 않았습니다. 비밀번호가 맞지 않습니다. 다시 확인하고 시도해 주세요.");
-//			return "redirect:view.do?no"+vo.getNo();
-//	}
+	@PostMapping("/delete.do")
+	public String delete(EventVO vo, RedirectAttributes rttr) {
+		rttr.addAttribute("msg", "이벤트가 삭제가 되지 않았습니다. 비밀번호가 맞지 않습니다. 다시 확인하고 시도해 주세요.");
+			return "redirect:list.do";
+	}
 }

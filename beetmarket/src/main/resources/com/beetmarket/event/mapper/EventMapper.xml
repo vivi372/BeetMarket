@@ -7,9 +7,9 @@
   	<select id="list" resultType="com.beetmarket.event.vo.EventVO">
   	select title, image, startDate, endDate
   	 from(
-  		select rownum rnum, no, title, image, startDate, endDate
+  		select rownum rnum, title, image, startDate, endDate
   		from(
-	  		SELECT no, title, image, startDate, endDate
+	  		SELECT title, image, startDate, endDate
 	  		From evnet
 	  		<!-- 검색을 달아야한다. -->
 	  		<include refid="search"/>
