@@ -118,22 +118,26 @@ $(function() {
 //data를 포인트샵 리스트로 출력
 function showList(data) {
 	
-	
+			let list = data.list;			
+			let point = data.point;
+			//현재 포인트 출력
+			$("#pointShopPoint").text(point);
+			
 		
 			//상품 리스트 출력할 태그
 			let goodsList = `
 					<div class="row">
 			`;		
 			
-			for(let i=0;i<data.length;i++) {
-				let goodsId = data[i].goodsId;
-				let goodsName = data[i].goodsName;
-				let goodsImage = data[i].goodsImage;				
-				let goodsStock = data[i].goodsStock;
-				let amount = data[i].pointAmount;
-				let category = data[i].category;
-				let discountRate = data[i].discountRate;
-				let shipNo = data[i].shipNo;
+			for(let i=0;i<list.length;i++) {
+				let goodsId = list[i].goodsId;
+				let goodsName = list[i].goodsName;
+				let goodsImage = list[i].goodsImage;				
+				let goodsStock = list[i].goodsStock;
+				let amount = list[i].pointAmount;
+				let category = list[i].category;
+				let discountRate = list[i].discountRate;
+				let shipNo = list[i].shipNo;
 				if(i != 0 && i%3 == 0) {
 					goodsList += `
 					</div>

@@ -2,6 +2,7 @@ package com.beetmarket.pointshop.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -36,10 +37,12 @@ public class PointShopController {
 	
 	String path = "/upload/pointshop";
 	
+	String id = "test";
+	
 	@GetMapping(value = "/list.do",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public ResponseEntity<List<PointShopVO>> list(PointShopVO vo) {		
+	public ResponseEntity<Map<String, Object>> list(PointShopVO vo) {		
 		
-		return new ResponseEntity<List<PointShopVO>>(service.list(vo), HttpStatus.OK);
+		return new ResponseEntity<>(service.list(vo,id), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/write.do", produces = "text/plain;charset=UTF-8")

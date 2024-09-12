@@ -209,7 +209,7 @@
 				
 				<div class="mx-auto" style="font-size: 20px;">
 					<i class="fa fa-bitcoin"></i>
-					<span class="text-primary"><b>1000pt</b></span>
+					<span class="text-primary"><b><span id="pointShopPoint">1000</span>pt</b></span>
 				</div>
 				
 				<button type="button" class="close ml-auto" data-dismiss="modal">&times;</button>

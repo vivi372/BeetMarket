@@ -1,6 +1,8 @@
 package com.beetmarket.pointshop.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,9 +23,18 @@ public class PointShopServiceImpl implements PointShopService {
 	
 	//포인트샵 상품 리스트
 	@Override
-	public List<PointShopVO> list(PointShopVO vo) {
+	public Map<String, Object> list(PointShopVO vo,String id) {
+		//포인트 가져오기
+		Long point = mapper.getPoint(id);
+		//상품 리스트 가져오기
+		List<PointShopVO> list = mapper.list(vo);
 		
-		return mapper.list(vo);
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("list", list);
+		map.put("point", point);
+		
+		return map;
 	}
 	//포인트샵 상품 등록
 	@Override

@@ -16,6 +16,10 @@
 		order by category , goodsId desc
 	</select>  
 	
+	<select id="getPoint" resultType="long">
+		select sum(point_delta) from pointList where id=#{id}
+	</select>
+	
 	<!-- 상품 이름 검색 쿼리 -->
 	<sql id="search">		
 		<if test="goodsName != null and goodsName != ''.toString()">
