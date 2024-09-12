@@ -113,6 +113,7 @@ public class MemberController {
 	@PostMapping("/login.do")
 	public String login(LoginVO vo , HttpSession session , RedirectAttributes rttr) {
 		
+		service.ConDateUpdate(vo);
 		LoginVO loginVO = service.login(vo);
 		
 		if(loginVO == null) {
