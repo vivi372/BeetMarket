@@ -122,8 +122,7 @@
             
             <!--포인트샵 -->
             <li class="nav-item">
-                <a class="nav-link"
-                data-toggle="modal" data-target="#pointShopModal" data-backdrop="static">
+                <a class="nav-link" id="pointsosh-btn">
                     <span>포인트샵</span>
                 </a>               
             </li>
