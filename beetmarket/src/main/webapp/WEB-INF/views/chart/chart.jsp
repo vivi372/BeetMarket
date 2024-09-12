@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>    
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,6 +47,12 @@
         }
         .trade-form button {
             width: 100%;
+        }
+        .trade-form {
+            display: none; /* 기본적으로 매수/매도 폼을 숨김 */
+        }
+        .stock-info {
+            display: none; /* 기본적으로 상단 종목 정보를 숨김 */
         }
     </style>
  
@@ -343,7 +350,7 @@ function drawChart(chartData) {
 $(function() {
     // 차트 데이터를 가져오는 함수
     function getChartData(period_div_code) {
-        let company_id = "000660";  // 회사 ID 설정
+        let company_code = "000660";  // 회사 ID 설정
         
         // 날짜 계산 (오늘 날짜와 10년 전 날짜)
         const today = new Date();
@@ -359,7 +366,7 @@ $(function() {
 
         // 요청할 데이터
         let data = {
-            company_id: company_id,
+        	company_code: company_code,
             period_div_code: period_div_code,  // 일봉(D), 주봉(W), 월봉(M)
             startDate: formatDate(tenYearsAgo),
             endDate: formatDate(today)
@@ -404,6 +411,50 @@ $(function() {
             $(this).css('color', 'black'); // 0%는 검정색
         }
     });
+    
+    
+    // 주식 리스트에서 항목 클릭 시 종목 정보 표시
+    $('.stock-item').on('click', function() {
+        var stockData = $(this).data('stock'); // data-stock 속성에서 주식 데이터 가져오기
+        $('#stockName').text("종목명: " + stockData.name);
+        $('#stockPrice').text(stockData.price);
+        $('#stockPer').text(stockData.per);
+        $('#stockPbr').text(stockData.pbr);
+        $('#stockMarketCap').text(stockData.marketCap.toLocaleString());
+
+        // 종목 정보를 표시하고 매수/매도 폼도 보이게 함
+        $('.stock-info').show();
+        $('.trade-form').show();
+    });
+
+    // 매수 버튼 클릭 시 처리
+    $('#buyBtn').on('click', function() {
+        var quantity = $('#quantity').val();
+        var price = $('#price').val();
+
+        if (!quantity || !price) {
+            alert("수량과 가격을 입력해주세요.");
+            return;
+        }
+
+        alert("매수를 진행합니다.");
+        // 매수 로직 처리 (서버로 전송 등)
+    });
+
+    // 매도 버튼 클릭 시 처리
+    $('#sellBtn').on('click', function() {
+        var quantity = $('#quantity').val();
+        var price = $('#price').val();
+
+        if (!quantity || !price) {
+            alert("수량과 가격을 입력해주세요.");
+            return;
+        }
+
+        alert("매도를 진행합니다.");
+        // 매도 로직 처리 (서버로 전송 등)
+    });
+
 });
 
 
@@ -421,56 +472,18 @@ $(function() {
 <div class="col-md-2 stock-list">
     <h4>주식 리스트</h4>
     <ul class="list-group">
-        <li class="list-group-item d-flex justify-content-between align-items-center">
+    	<c:forEach items="${stockList }" var="vo">
+        <li class="list-group-item d-flex justify-content-between align-items-center ">
             <div>
-                <strong>삼성전자</strong><br>
-                <small class="text-muted">005930</small>  <!-- 주식 코드 -->
+                <strong>${vo.company_name }</strong><br>
+                <small class="text-muted">${vo.company_code }</small>  <!-- 주식 코드 -->
             </div>
             <div class="text-right">
-                <span class="d-block price">70,000원</span> <!-- 현재가 -->
-                <small class="d-block change-rate" data-rate="1.5">1.5%</small> <!-- 전일 대비 수익률 -->
+                <span class="d-block price">${vo.stck_prpr }</span> <!-- 현재가 -->
+                <small class="d-block change-rate" data-rate="${vo.prdy_ctrt }">${vo.prdy_ctrt }</small> <!-- 전일 대비 수익률 -->
             </div>
         </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <strong>현대자동차</strong><br>
-                <small class="text-muted">005380</small>
-            </div>
-            <div class="text-right">
-                <span class="d-block price">180,000원</span>
-                <small class="d-block change-rate" data-rate="-0.8">-0.8%</small>
-            </div>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <strong>SK하이닉스</strong><br>
-                <small class="text-muted">000660</small>
-            </div>
-            <div class="text-right">
-                <span class="d-block price">120,000원</span>
-                <small class="d-block change-rate" data-rate="0.2">0.2%</small>
-            </div>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <strong>LG화학</strong><br>
-                <small class="text-muted">051910</small>
-            </div>
-            <div class="text-right">
-                <span class="d-block price">700,000원</span>
-                <small class="d-block change-rate" data-rate="1.1">1.1%</small>
-            </div>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            <div>
-                <strong>네이버</strong><br>
-                <small class="text-muted">035420</small>
-            </div>
-            <div class="text-right">
-                <span class="d-block price">350,000원</span>
-                <small class="d-block change-rate" data-rate="-0.5">-0.5%</small>
-            </div>
-        </li>
+        </c:forEach>
     </ul>
 </div>
 
@@ -500,26 +513,34 @@ $(function() {
             </div>
 
             <!-- Right: Trade Form -->
-            <div class="col-md-4 trade-form">
-                <h4>매수 / 매도</h4>
-                <form>
-                    <div class="form-group">
-                        <label for="stockName">종목명</label>
-                        <input type="text" class="form-control" id="stockName" placeholder="종목명 입력">
-                    </div>
-                    <div class="form-group">
-                        <label for="quantity">수량</label>
-                        <input type="number" class="form-control" id="quantity" placeholder="수량 입력">
-                    </div>
-                    <div class="form-group">
-                        <label for="price">가격</label>
-                        <input type="number" class="form-control" id="price" placeholder="가격 입력">
-                    </div>
-                    <button type="submit" class="btn btn-success">매수</button>
-                    <button type="submit" class="btn btn-danger mt-2">매도</button>
-                </form>
+            <div class="col-md-4">
+                <!-- 종목 정보 표시 -->
+                <div class="stock-info">
+                    <h4 id="stockName">종목명: 삼성전자</h4>
+                    <p>주가: <span id="stockPrice">70,000</span></p>
+                    <p>PER: <span id="stockPer">12.5</span></p>
+                    <p>PBR: <span id="stockPbr">1.2</span></p>
+                    <p>주가 총액: <span id="stockMarketCap">500,000,000,000</span></p>
+                </div>
+
+                <!-- 매수 / 매도 폼 -->
+                <div class="trade-form">
+                    <h4>매수 / 매도</h4>
+                    <form>
+                        <div class="form-group">
+                            <label for="quantity">수량</label>
+                            <input type="number" class="form-control" id="quantity" placeholder="수량 입력">
+                        </div>
+                        <div class="form-group">
+                            <label for="price">가격</label>
+                            <input type="number" class="form-control" id="price" placeholder="가격 입력">
+                        </div>
+                        <button type="button" class="btn btn-success" id="buyBtn">매수</button>
+                        <button type="button" class="btn btn-danger mt-2" id="sellBtn">매도</button>
+                    </form>
+                </div>
             </div>
-        </div>
+           </div>
   
 
 </body>
