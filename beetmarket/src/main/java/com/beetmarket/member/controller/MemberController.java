@@ -123,7 +123,7 @@ public class MemberController {
 		
 		session.setAttribute("login", loginVO);
 		rttr.addAttribute("msg","로그인 완료");
-		
+		 
 		
 		return "main/main.do";
 	}
