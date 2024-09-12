@@ -11,7 +11,7 @@ public interface ShowdownMapper {
 	// 
 	public long getTotal(PageObject pageObject);
 	// 이벤트 발표 상세 보기
-	public ShowdownVO view(Long[] in);
+	public ShowdownVO view(Long no);
 	// 이벤트 발표 등록
 	public Integer write(ShowdownVO vo);
 	// 이벤트 발표 수정

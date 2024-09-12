@@ -52,8 +52,8 @@ public class ShowdownController {
 	}
 	@GetMapping("/updateForm.do")
 	public String updateForm(Model model, Long no){
-		Long[] in = new Long[] {no};
-		ShowdownVO vo = service.view(in);
+		Long[] hi = new Long[] {no};
+		ShowdownVO vo = service.view(hi);
 		model.addAttribute("vo", vo);
 		return "notice/updateForm";
 	}

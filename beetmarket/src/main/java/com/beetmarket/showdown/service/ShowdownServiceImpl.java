@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j;
 @Service
 @Qualifier("showdownServiceImpl")
 @Log4j
-public class ShowdownServiceImpl {
+public class ShowdownServiceImpl implements ShowdownService {
 	@Inject
 	public ShowdownMapper mapper;
 	// 이벤트 발표 리스트
@@ -24,19 +24,21 @@ public class ShowdownServiceImpl {
 		return mapper.list(pageObject);
 	}
 	// 이벤트 발표 상세 보기
-	public ShowdownVO view(Long[] in){
-		return null;
+	public ShowdownVO view(Long[] hi){
+		Long no = hi[0];
+		return mapper.view(no);
 	}
 	// 이벤트 발표 등록
 	public Integer write(ShowdownVO vo) {
-		return null;
+		Integer result = mapper.write(vo);
+		return result;
 	}
 	// 이벤트 발표 수정
 	public Integer update(ShowdownVO vo) {
-		return null;
+		return mapper.update(vo);
 	}
 	// 이벤트 발표 삭제
 	public Integer delete(ShowdownVO vo) {
-		return null;
+		return mapper.delete(vo);
 	}
 }
