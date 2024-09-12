@@ -20,4 +20,6 @@ public interface MemberService {
 	public Integer ConDateUpdate(LoginVO vo);
 	// 회원관리 글보기
 	public MemberVO view(String id);
+	// My 홈
+	public MemberVO myView(String id);
 }

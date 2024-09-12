@@ -31,6 +31,10 @@ public class MemberVO {
 	private Integer sale_rate; // 등급별 할인율
 	private Long shipNo; // 맴버쉽 번호 1 - bronze ,2 - gold ,3 - diamond
 	private String shipName; 
+	private Long pointlist_no; 
+	private String point_entity; 
+	private Long point_delta; 
+	private String redeemed_date; // 포인트 차감/등록 날짜
 	
 	
 }

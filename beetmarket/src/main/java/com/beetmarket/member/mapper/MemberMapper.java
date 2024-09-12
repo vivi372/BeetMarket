@@ -27,7 +27,9 @@ public interface MemberMapper {
 	// 최근접속일 업데이트
 	public Integer ConDateUpdate(LoginVO vo);
 
-	// 보기
+	// 정보 보기
 	public MemberVO view(String id);
+	// 마이홈
+	public MemberVO myView(String id);
 	
 }

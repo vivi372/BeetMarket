@@ -87,7 +87,10 @@
 		where id = #{id} and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
 	<select id="myView" resultType="com.beetmarket.member.vo.MemberVO">
-		select id , name , photo , gradeNo , shipNo 
+		SELECT m.id, m.name, m.photo, SUM(p.point_delta) as point_delta
+		FROM member m, pointList p
+		where  m.id = #{id} and (m.id=p.id)
+		GROUP BY m.id, m.name, m.photo
 	</select>
 
 

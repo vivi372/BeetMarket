@@ -102,6 +102,17 @@ public class MemberController {
 		return "member/view";
 	}
 	
+	//--- 회원 관리 글보기 ------------------------------------
+	@GetMapping("/myView.do")
+	public String myView(Model model,String id) {
+		log.info("myView.do");
+		
+		model.addAttribute("homeVO", service.myView(id));
+		
+		return "member/myView";
+	}
+	
+	
 	// 로그인 폼
 	@GetMapping("/loginForm.do")
 	public String loginForm() {

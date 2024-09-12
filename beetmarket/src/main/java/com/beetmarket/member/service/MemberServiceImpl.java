@@ -66,4 +66,11 @@ public class MemberServiceImpl implements MemberService{
 		log.info("view() 실행");
 		return mapper.view(id);
 	}
+	
+	// 회원관리 마이홈
+	@Override
+	public MemberVO myView(String id) {
+		log.info("view() 실행");
+		return mapper.myView(id);
+	}
 }
