@@ -21,6 +21,16 @@
     <meta name="author" content="">
 
     <title>비트마켓:</title>
+    
+    
+    <!-- Bootstrap core JavaScript-->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+    
+    
 
     <!-- Custom fonts for this template-->
     <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -37,10 +47,7 @@
 	<!-- icon 라이브러리 등록 - Font Awesome 4 / google -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-	
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.14.0/themes/base/jquery-ui.css">
-	<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.js"></script>
-	
+
 	
     <!-- Custom styles for this template-->
     <link href="/css/sb-admin-2.min.css" rel="stylesheet">
@@ -116,7 +123,7 @@
             <!--포인트샵 -->
             <li class="nav-item">
                 <a class="nav-link" href="#" onclick="return false;" data-toggle="modal" data-target="#pointShopModal" data-backdrop="static">
-                    <i class="fas fa-fw fa-folder"></i>
+                    
                     <span>포인트샵</span>
                 </a>               
             </li>
@@ -415,12 +422,7 @@
         </div>
     </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="/vendor/jquery/jquery.min.js"></script>
-    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="/js/sb-admin-2.min.js"></script>
