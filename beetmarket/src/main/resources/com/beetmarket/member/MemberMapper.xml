@@ -18,8 +18,7 @@
 					member m, grade g, membership s
 					
 					where (
-						<!-- 검색을 달아야 한다. -->
-						<include refid="search" />
+					1=1
 					)
 					and (
 					m.gradeNo = g.gradeNo and m.shipNo=s.shipNo	
@@ -27,37 +26,17 @@
 				order by id desc
 			)
 		)
-		where rnum between #{startRow} and #{endRow}
+		where rnum between #{pageObject.startRow} and #{pageObject.endRow}
 	</select>
 
 	<!-- 회원관리 리스트 페이지 처리를 위한 전체 데이터 개수 가져오기 -->
 	<select id="getTotalRow" resultType="Long">
 		select count(*)
-		from member m, grade g, membership s
-		<!-- 검색을 달아야한다. -->
-		<include refid="search" />
+		from member m, grade g, membership s 
+		where 1=1 
 		and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
 	
-	<!-- 회원관리 리스트의 검색 처리 -->
-<!-- 	<sql id="search"> -->
-<!-- 		<if test="word != null and word != ''.toString()"> -->
-<!-- 			where -->
-			<!-- prefixOverrides="or" - 맨 앞에 or는 제거한다. -->
-<!-- 			<trim prefixOverrides="or"> -->
-				<!-- 'test' : 문자열(String), 't' : 문자(char) -> 문자열 - toString()사용  -->
-<!-- 				<if test="key.indexOf('t') >= 0"> -->
-<!-- 					or title like '%' || #{word} || '%' -->
-<!-- 				</if> -->
-<!-- 				<if test="key.indexOf('c') >= 0"> -->
-<!-- 					or content like '%' || #{word} || '%' -->
-<!-- 				</if> -->
-<!-- 				<if test="key.indexOf('w') >= 0"> -->
-<!-- 					or writer like '%' || #{word} || '%' -->
-<!-- 				</if> -->
-<!-- 			</trim> -->
-<!-- 		</if> -->
-<!-- 	</sql> -->
 
 	<!-- 회원관리 글보기 조회수 1 증가 -->
 	<!-- # {obj} 1. 변수의 이름, 2. vo의 getter 이름, 3. Map의 key -->
@@ -66,20 +45,42 @@
 		where no = #{no}
 	</update>
 
+	<!-- 회원관리 등급 수정 -->
+	<update id="changeGrade">
+	<![CDATA[
+		update member
+		set gradeNo = #{gradeNo}
+		where id = #{id}
+	]]>
+	</update>
+	<!-- 회원관리 맴버쉽 수정 -->
+	<update id="changeMemeberShip">
+	<![CDATA[
+		update member
+		set shipNo = #{shipNo}
+		where id = #{id}
+	]]>
+	</update>
+
+	<!-- 회원관리 상태 수정 -->
+	<update id="changeStatus">
+	<![CDATA[
+		update member
+		set status = #{status}
+		where id = #{id}
+	]]>
+	</update>
+
 	<!-- 회원관리 글보기 -->
-	<select id="view" resultType="org.zerock.member.vo.MemberVO">
-		select no, title, content, writer, writeDate, hit
-		from member
-		where no = #{no}
+	<select id="view" resultType="com.beetmarket.member.vo.MemberVO">
+		select m.id,m.name,m.tel,to_date(m.birth,'yyyy-mm-dd') birth,m.regDate,m.photo,m.conDate,
+		m.email,m.gender,m.status,g.gradeName,s.shipName , g.gradeNo , s.shipNo
+		from member m , grade g , memberShip s
+		where id = #{id} and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
 
 	<!-- 회원관리 글등록 -->
-	<!-- 
-	<insert id="write">
-		insert into member(no, title, content, writer, pw)
-		values(member_seq.nextval, #{title}, #{content}, #{writer}, #{pw})
-	</insert>
-	-->
+
 	<insert id="write">
 		<!-- 먼저 MemberVO의 no에 setter를 이용해서 시퀀스에서 받아온 번호를 세팅해 준다. -->
 		<selectKey keyProperty="no" resultType="Long" order="BEFORE">
@@ -88,15 +89,7 @@
 		insert into member(no, title, content, writer, pw)
 		values(#{no}, #{title}, #{content}, #{writer}, #{pw})
 	</insert>
-
-	<!-- 트랜젝션 처리 테스트를 위한 쿼리 - 같은 no의 데이터를 등록 시도 -->
-	<!-- 
-	<insert id="writeTx">
-		insert into member(no, title, content, writer, pw)
-		values(#{no}, #{title}, #{content}, #{writer}, #{pw})
-	</insert>
-	-->
-
+	
 	<!-- 회원관리 수정 -->
 	<update id="update">
 	<![CDATA[

@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.beetmarket.member.service.MemberService;
 import com.beetmarket.member.vo.LoginVO;
+import com.beetmarket.member.vo.MemberVO;
 import com.webjjang.util.page.PageObject;
 
 import lombok.extern.log4j.Log4j;
@@ -28,25 +29,87 @@ public class MemberController {
 	@Qualifier("memberServiceImpl")
 	private MemberService service; 
 	
-	@GetMapping("list.do")
-	public String list(HttpServletRequest request , Model model) throws Exception{
+	//--- 회원 관리 리스트 ------------------------------------
+	@GetMapping("/list.do")
+	public String list(Model model, HttpServletRequest request , HttpSession session)
+			throws Exception {
+		log.info("list.do");
 		
+		// 페이지 처리를 위한 객체 생겅
 		PageObject pageObject = PageObject.getInstance(request);
 		
-		model.addAttribute("list",service.list(pageObject));
-		model.addAttribute("pageObject",pageObject);
-		
+		// model에 담으로 request에 자동을 담기게 된다. - 처리된 데이터를 Model에 저장
+		model.addAttribute("list", service.list(pageObject));
+		log.info(pageObject);
+		model.addAttribute("pageObject", pageObject);
 		return "member/list";
 	}
 	
-	// 바보
+	//--- 회원 등급변경 처리 ------------------------------------
+	@GetMapping("/changeGrade.do")
+	public String changeGrade(MemberVO vo, RedirectAttributes rttr) {
+		log.info("changeGrade.do.do");
+		log.info(vo);
+		if(service.changeGrade(vo) == 1)
+			// 처리 결과에 대한 메시지 처리
+			rttr.addFlashAttribute("msg", "회원 등급 수정이 되었습니다.");
+		else
+			rttr.addFlashAttribute("msg",
+					"회원 관리 글수정이 되지 않았습니다. "
+					+ "글번호나 비밀번호가 맞지 않습니다. 다시 확인하고 시도해 주세요.");
+		
+		return "redirect:list.do";
+	}
+	// ----------------------[ 회원 맴버쉽 변경 ]------------------------------------
+	@GetMapping("/changeMemeberShip.do")
+	public String changeMemeberShip(MemberVO vo, RedirectAttributes rttr) {
+		log.info("changeGrade.do.do");
+		log.info(vo);
+		if(service.changeMemeberShip(vo) == 1)
+			// 처리 결과에 대한 메시지 처리
+			rttr.addFlashAttribute("msg", "회원 맴버쉽 수정이 되었습니다.");
+		else
+			rttr.addFlashAttribute("msg",
+					"회원 관리 글수정이 되지 않았습니다. "
+							+ "글번호나 비밀번호가 맞지 않습니다. 다시 확인하고 시도해 주세요.");
+		
+		return "redirect:list.do";
+	}
+	// ----------------------[ 회원 맴버쉽 변경 ]------------------------------------
+	@GetMapping("/changeStatus.do")
+	public String changeStatus(MemberVO vo, RedirectAttributes rttr) {
+		log.info("changeGrade.do.do");
+		log.info(vo);
+		if(service.changeStatus(vo) == 1)
+			// 처리 결과에 대한 메시지 처리
+			rttr.addFlashAttribute("msg", "회원 맴버쉽 수정이 되었습니다.");
+		else
+			rttr.addFlashAttribute("msg",
+					"회원 관리 글수정이 되지 않았습니다. "
+							+ "글번호나 비밀번호가 맞지 않습니다. 다시 확인하고 시도해 주세요.");
+		
+		return "redirect:list.do";
+	}
 	
+	
+	//--- 회원 관리 글보기 ------------------------------------
+	@GetMapping("/view.do")
+	public String view(Model model,String id) {
+		log.info("view.do");
+		
+		model.addAttribute("vo", service.view(id));
+		
+		return "member/view";
+	}
+	
+	// 로그인 폼
 	@GetMapping("/loginForm.do")
 	public String loginForm() {
 		log.info("loginForm---------------");
 		return "member/loginForm";
 	}
 	
+	// 로그인 처리
 	@PostMapping("/login.do")
 	public String login(LoginVO vo , HttpSession session , RedirectAttributes rttr) {
 		
@@ -64,6 +127,7 @@ public class MemberController {
 		return null;
 	}
 	
+	// 로그아웃
 	@GetMapping("/logout.do")
 	public String logout(HttpSession session,RedirectAttributes rttr) {
 		log.info("logout-------------------------------");
