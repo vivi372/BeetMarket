@@ -18,6 +18,10 @@
 		<pattern>/room/*</pattern>
 		<pattern>/teacher/*</pattern>
 		<pattern>/schedule/*</pattern>
+		<pattern>/notice/*</pattern>
+		<pattern>/event/*</pattern>	
+		<pattern>/showdown/*</pattern>	
+		
 
 	</decorator>
 	
