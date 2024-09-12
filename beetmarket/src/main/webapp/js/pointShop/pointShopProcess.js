@@ -4,11 +4,12 @@
 $(function() {
 	let service = new pointShopService;
 	
-	$("#pointShopModal").on("shown.bs.modal", function() {
-		$(".modal-sidebar,.modal-right-sidebar,.modal-main").css("height", $(".modal-content").height()-80);
+	$("#pointsosh-btn").on("click", function() {
+		$("#pointShopModal").modal({backdrop: 'static', keyboard: false});	
+		$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
 		//전체 카테고리 선택 시키기
 		$(".modal-sidebar .category").removeClass("cateActive");
-		$(this).find(".category:first").addClass("cateActive");
+		$("#pointShopModal").find(".category:first").addClass("cateActive");
 		$("#pointShopSearch").val("");
 		service.list(showList,"","");
 	});	
@@ -39,36 +40,36 @@ $(function() {
 	
 	//상품 등록 버튼 클릭 이벤트
 	$("#goodsModal #goodsSubmitBtn").click(function() {
-		let formData1 = new FormData();			
-		
-		
-		let goodsImageFile = document.getElementById('goodsImageInput').files[0];
-		//console.log(goodsImageFile);
-		
-		formData1.append("goodsName",$("#goodsNameInput").val());
-		formData1.append("goodsImageFile",goodsImageFile);
-		formData1.append("pointAmount",$("#pointAmountInput").val());
-		formData1.append("goodsStock",$("#goodsStockInput").val());
-		formData1.append("category",$("#cateInput").val());
-		formData1.append("shipNo",$("#goodsGradeInput").val());
-		formData1.append("discountRate",$("#discountRateInput").val());
-		
-		let keys = formData1.values();
-		for(let i of keys) {
-			console.log(i);
-		}
-		//상품을 등록
-		service.write(function(data) {
-			alert(data);			
-			//등록후 리스트 출력
-			service.list(showList,"","");
-			//등록후 모달창 닫기
-			$("#goodsModal").modal("hide");
-		}
-		,formData1);
-	});
-	
-	
+		if($(this).text()=='등록') {
+				let formData1 = new FormData();			
+				
+				
+				let goodsImageFile = document.getElementById('goodsImageInput').files[0];
+				//console.log(goodsImageFile);
+				
+				formData1.append("goodsName",$("#goodsNameInput").val());
+				formData1.append("goodsImageFile",goodsImageFile);
+				formData1.append("pointAmount",$("#pointAmountInput").val());
+				formData1.append("goodsStock",$("#goodsStockInput").val());
+				formData1.append("category",$("#cateInput").val());
+				formData1.append("shipNo",$("#goodsGradeInput").val());
+				formData1.append("discountRate",$("#discountRateInput").val());
+				
+				let keys = formData1.values();
+				for(let i of keys) {
+					console.log(i);
+				}
+				//상품을 등록
+				service.write(function(data) {
+					alert(data);			
+					//등록후 리스트 출력
+					service.list(showList,"","");
+					//등록후 모달창 닫기
+					$("#goodsModal").modal("hide");
+				}
+				,formData1);
+			}
+		});	
 });
 	
 
@@ -90,6 +91,7 @@ function showList(data) {
 				let amount = data[i].pointAmount;
 				let category = data[i].category;
 				let discountRate = data[i].discountRate;
+				let shipNo = data[i].shipNo;
 				if(i != 0 && i%3 == 0) {
 					goodsList += `
 					</div>
@@ -105,7 +107,8 @@ function showList(data) {
 				<div class="col-md-4">
 							
 					<div class="card shadow-sm m-2 d-flex flex-column goodsCard" 
-					data-goodsid="${goodsId}" data-category="${category}" data-discountRate="${discountRate}">						
+					data-goodsid="${goodsId}" data-category="${category}" 
+					data-discountRate="${discountRate}" data-shipNo="${shipNo}">						
 						<img class="card-img-top" src="${goodsImage}" alt="Card image">
 							
 						<button class="btn btn-sm btn-outline-secondary updateBtn float-right" data-toggle="modal" data-target="#goodsModal" data-backdrop="static">

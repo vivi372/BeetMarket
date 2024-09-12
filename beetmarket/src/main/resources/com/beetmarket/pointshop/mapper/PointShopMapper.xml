@@ -5,9 +5,9 @@
 <mapper namespace="com.beetmarket.pointshop.mapper.PointShopMapper"> 
 
 	<select id="list" resultType="com.beetmarket.pointshop.vo.PointShopVO">
-		select g.goodsId,goodsName,goodsImage,pointAmount,category,discountRate,
+		select g.goodsId,goodsName,goodsImage,pointAmount,category,discountRate,shipNo,
 		<!-- 해당 상품의 재고를 구하는 서브쿼리 -->
-		(select count(*) goodsStock from PointShopStock s where goodsState='판매중' and s.goodsId = g.goodsId)
+		(select count(*) goodsStock from PointShopStock s where stockState='판매중' and s.goodsId = g.goodsId)
 		 goodsStock
 		from PointShopGoodsInfo g 
 		where stopSell = 0 
@@ -35,8 +35,9 @@
 			select pointShopGoodsInfo_seq.nextval from dual
 		</selectKey>
 		insert into pointshopgoodsinfo
-		(goodsId,category,goodsName,goodsImage,pointAmount,discountRate)
-		VALUES(#{goodsId},#{category},#{goodsName},#{goodsImage},#{pointAmount},#{discountRate,jdbcType=INTEGER})
+		(goodsId,category,goodsName,goodsImage,pointAmount,discountRate,shipNo)
+		VALUES(#{goodsId},#{category},#{goodsName},#{goodsImage},
+		#{pointAmount},#{discountRate,jdbcType=INTEGER},#{shipNo,jdbcType=INTEGER})
 		
 	</insert>
 	

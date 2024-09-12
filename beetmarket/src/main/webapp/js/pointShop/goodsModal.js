@@ -5,6 +5,11 @@
 $(function() {
 	$("#goodsModal").draggable();
 		
+	$('#goodsModal').on('shown.bs.tab', function () {
+        let maxHeight = Math.max($('#updateMenu').outerHeight(), $('#stockUpdateMenu').outerHeight());
+        $('.modal-dialog').css('min-height', maxHeight + 'px');
+    });
+	
 	$("#goodsImageInput").change( function() {
 		//console.log($(this).val());
 		$("#modalImageNamePrint").text($(this).val());
@@ -52,6 +57,7 @@ $(function() {
 		let goodsStock = goodsCard.find(".goodsStock").data("goodsstock");
 		let category = goodsCard.data("category");
 		let discountRate = goodsCard.data("discountrate");
+		let shipNo = goodsCard.data("shipno");
 		//데이터 세팅
 		$("#goodsIdUpdate").val(goodsId);
 		$("#goodsNameUpdate").val(goodsName);
@@ -59,6 +65,7 @@ $(function() {
 		$("#cateUpdate").val(category);
 		$("#discountRateUpdate").val(discountRate);
 		$("#goodsStockUpdate").val(goodsStock);
+		$("#goodsGradeUpdate").val(shipNo);
 		//상품 등록 폼 보이기
 		$("#goodsModal #goodsWriteDiv").hide();
 		//상품 수정 폼 숨기기

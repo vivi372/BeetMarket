@@ -147,7 +147,7 @@
 		
 		window.addEventListener("resize", function() {			
 			
-			$(".modal-sidebar,.modal-right-sidebar,.modal-main").css("height", $(".modal-content").height()-80);
+			$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
 		
 		});
 		
@@ -161,6 +161,7 @@
 		
 		$("#pointShopModal").draggable();
 		
+				
 		
 		
 		$(".modal #basketBtn").click(function() {
