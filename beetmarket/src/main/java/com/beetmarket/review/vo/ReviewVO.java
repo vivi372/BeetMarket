@@ -14,4 +14,5 @@ public class ReviewVO {
 	private Long starscore;//별점
 	private String reviewImage;//리뷰이미지
 	private String reviewContent;//리뷰내용
+	private String id;
 }
