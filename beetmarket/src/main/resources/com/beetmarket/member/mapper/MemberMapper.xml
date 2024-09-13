@@ -93,13 +93,6 @@
 		GROUP BY m.id, m.name, m.photo
 	</select>
 
-
-
-
-
-
-
-
 	<!-- 회원관리 가입 -->
 	<insert id="write">
 		<!-- 먼저 MemberVO의 no에 setter를 이용해서 시퀀스에서 받아온 번호를 세팅해 준다. -->

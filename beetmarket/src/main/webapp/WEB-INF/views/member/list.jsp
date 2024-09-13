@@ -12,6 +12,9 @@
 	background: #e0e0e0;
 	cursor: pointer;
 }
+.MemberListBtn{
+	background-color: #4B89DC;
+}
 </style>
 <script type="text/javascript">
 $(function(){
@@ -92,7 +95,7 @@ $(function(){
 							  	<option value="9" ${(vo.gradeNo == 9)?"selected":"" }>관리자</option>
 							  </select>
 							  <div class="input-group-append">
-							    <button class="btn btn-success" type="submit" disabled>변경</button>
+							    <button class="MemberListBtn" type="submit" disabled>변경</button>
 							  </div>
 							</div>
 						</form>
@@ -109,7 +112,7 @@ $(function(){
 							  	<option value="3" ${(vo.shipNo == 3)?"selected":"" }>Diamond</option>
 							  </select>
 							  <div class="input-group-append">
-							    <button class="btn btn-success" type="submit" disabled>변경</button>
+							    <button class="MemberListBtn" type="submit" disabled>변경</button>
 							  </div>
 							</div>
 						</form>
@@ -127,7 +130,7 @@ $(function(){
 							  	<option ${(vo.status == "강퇴")?"selected":"" }>강퇴</option>
 							  </select>
 							  <div class="input-group-append">
-							    <button class="btn btn-success" type="submit" disabled>변경</button>
+							    <button class="MemberListBtn" type="submit" disabled>변경</button>
 							  </div>
 							</div>
 						</form>
