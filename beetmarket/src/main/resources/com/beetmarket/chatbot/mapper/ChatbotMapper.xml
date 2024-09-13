@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.beetmarket.chatbot.mapper.ChatbotMapper">
+	<!-- 채팅방 리스트 -->
+	<select id="list" resultType="com.beetmarket.chatbot.vo.ChatbotVO">
+		select r.roomno, c.chatno, c.sender, c.accepter, c.senddate, c.acceptdate, c.content
+		from chatroom r, chatbot c
+		where (c.sender = #{id} OR c.accepter = #{id}) and
+		chatno in(
+			select max(chatno) 
+            from chatbot cb 
+            where cb.roomno=c.roomno
+		) and r.roomno=c.roomno
+	</select>
+	
+	<select id="history" resultType="com.beetmarket.chatbot.vo.ChatbotVO">
+		select c.roomno, chatno, sender, accepter, content, senddate, acceptdate
+		from chatroom r, chatbot c 
+		where (c.roomno=#{roomno}) and r.roomno=c.roomno
+	</select>
+	
+	<update id="updateacceptdate">
+		update chatbot set acceptdate=sysdate 
+		where acceptdate is null and roomno=#{roomno} and accepter=#{id}
+	</update>
+	
+	<insert id="chating">
+		insert into chatbot(chatno, roomno, content, sender, accepter, senddate)
+		values(#{chatno}, #{roomno}, #{content}, #{sender}, #{accepter}, sysdate)
+		<selectKey keyProperty="chatno" resultType="Long" order="BEFORE">
+			select chatbot_seq.nextval from dual
+		</selectKey>
+	</insert>
+	
+</mapper>

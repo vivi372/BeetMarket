@@ -22,7 +22,9 @@
 		<pattern>/event/*</pattern>	
 		<pattern>/showdown/*</pattern>	
 		<pattern>/stock/*</pattern>	
-		<pattern>/review/*</pattern>	
+		<pattern>/review/*</pattern>
+		<pattern>/faq/*</pattern>
+		<pattern>/chatbot/*</pattern>	
 			
 
 	</decorator>
