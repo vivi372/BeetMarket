@@ -7,7 +7,7 @@ import com.webjjang.util.page.PageObject;
 
 public interface ReviewService {
 
-	//리뷰 리스트
-	public List<ReviewVO> list(PageObject pageObject, Long reviewNo);
+	// 1. list
+	public List<ReviewVO> list(PageObject pageObject);
 
 }

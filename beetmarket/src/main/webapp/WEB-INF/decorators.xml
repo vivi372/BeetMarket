@@ -22,7 +22,8 @@
 		<pattern>/event/*</pattern>	
 		<pattern>/showdown/*</pattern>	
 		<pattern>/stock/*</pattern>	
-		
+		<pattern>/review/*</pattern>	
+			
 
 	</decorator>
 	

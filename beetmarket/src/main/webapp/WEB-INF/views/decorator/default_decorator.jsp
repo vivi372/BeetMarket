@@ -73,14 +73,13 @@
 			id="accordionSidebar">
 
 			<!-- 비트마켓로고  -->
-			<a
-				class="sidebar-brand d-flex align-items-center justify-content-center"
-				href="/">
-				<div class="sidebar-brand-icon rotate-n-15"></div> <img
-				class="sidebar-card-illustration mb-2" src="/img/Untitled-2.svg"
+			<a class="sidebar-brand d-flex align-items-center justify-content-center" href="/">
+				<div class="sidebar-brand-icon rotate-n-15"></div> 
+				<img class="sidebar-card-illustration mb-2" src="/img/Untitled-2.svg"
 				alt="..." style="width: 50px; height: auto;">
 				<div class="sidebar-brand-text mx-3">비트마켓</div>
-			</a>
+			</a>	
+			
 
 
 			<!-- Divider -->
@@ -89,8 +88,9 @@
 
 			
 			<!-- 이벤트 -->
-			<li class="nav-item"><a class="nav-link goods"
-				href="/goods/list.do"> <span>쇼핑</span></a></li>
+			<li class="nav-item">
+			<a class="nav-link goods" href="/goods/list.do">
+		     <span>쇼핑</span></a></li>
 			
 
 			<!-- Divider -->
@@ -256,10 +256,10 @@
 						<div class="navbar-nav login">
 						 <c:if test="${ empty login }">
 							<a href="/member/writeForm.do" class="nav-item nav-link">
-								<button class="signup">회원가입</button>
+								<button class="signup btn btn-link">회원가입</button>
 							</a>
 							<a href="/member/loginForm.do" class="nav-item nav-link">
-								<button>로그인</button>
+								<button class="btn btn-link">로그인</button>
 							</a>
 						</c:if>
 
@@ -281,9 +281,8 @@
 									</c:if>
 								</a>
 									<div class="dropdown-menu" aria-labelledby="profileDropdown">
-										<a class="dropdown-item" href="/member/view.do">내정보보기</a> <a
-											class="dropdown-item" href="/message/list.do">메세지</a> <a
-											class="dropdown-item" href="/basket/list.do">장바구니</a> <a
+										<a class="dropdown-item" href="/member/myView.do">내정보보기</a><a
+											class="dropdown-item" href="/basket/list.do">장바구니</a><a
 											href="/order/list.do" class="dropdown-item">주문내역</a>
 									</div>
 								</div>
