@@ -97,7 +97,7 @@ $(function(){
 	  	<c:forEach items="${list }" var="vo">
 			<div class="card dataRow">
 			  <div class="card-header">
-			  글번호 : ${vo.id }
+			  ${vo.id }
 		  	<input type="hidden" value="${vo.reviewNo }" >
 			  </div>
 			  <div class="card-body">
