@@ -35,7 +35,65 @@ $(function() {
 		
 	});
 	
+	//장바구니 +,-버튼 클릭 이벤트
+	$("#pointShopBasketList").on("change",".pointShopBasketAmount", function(){
+		//해당 장바구니의 데이터 가져오기
+		let pointShopBasketItem = $(this).closest(".pointShopBasketItem");
+		let pointShopBasketNo = pointShopBasketItem.data("pointshopbasketno");
+		let amount = $(this).val();			
+		
+		if(amount>0) {
+			let formData = new FormData();
+			formData.append("pointShopBasketNo",pointShopBasketNo);
+			formData.append("amount",amount);
+			
+			basketService.update(function(data) {					
+				oppPoint();
+				alert(data);
+			},formData);
+		}
+		
+	
+	});
+	
+	//장바구니 +,-버튼 클릭 이벤트
+	$("#pointShopBasketList").on("click",".minusBtn , .plusBtn", function(){
+		//해당 장바구니의 데이터 가져오기
+		let pointShopBasketItem = $(this).closest(".pointShopBasketItem");
+		let pointShopBasketNo = pointShopBasketItem.data("pointshopbasketno");
+		let amount = pointShopBasketItem.find(".pointShopBasketAmount").val();
+		//클릭한게 +면 수량에 1을 더하고 -면을 1을 뺀다.
+		if($(this).text()=='+') amount = Number(amount)+1;
+		else amount = Number(amount)-1;
+		
+		if(amount>0) {
+			let formData = new FormData();
+			formData.append("pointShopBasketNo",pointShopBasketNo);
+			formData.append("amount",amount);
+			
+			basketService.update(function(data) {
+				
+				pointShopBasketItem.find(".pointShopBasketAmount").val(amount);
+				oppPoint();
+				alert(data);
+			},formData);
+		}
+		
+	
+	});
+	
 });
+
+function oppPoint() {
+	let totalPoint = 0;
+	
+	$("#pointShopBasketList").find(".pointShopBasketItem").each(function() {
+		let amount = $(this).find(".pointShopBasketAmount").val();				
+		let pointAmount = $(this).data("pointamount");	
+		totalPoint += (+pointAmount)*(+amount);
+	});
+	$("#pointShopBasketTotalPoint").text(totalPoint+"PT");
+}
 
 //data를 포인트샵 장바구니 리스트로 출력
 function showBasketList(list) {			
@@ -62,11 +120,11 @@ function showBasketList(list) {
 
 							<div class="input-group">
 								<div class="input-group-prepend">
-									<button class="btn btn-outline-primary btn-circle" type="button" id="minusBtn">-</button>
+									<button class="btn btn-outline-primary btn-circle minusBtn" type="button">-</button>
 								</div>
-								<input type="text" class="form-control text-center no-border" id="quantityInput" value="${amount}" style="max-width: 50px;">
+								<input type="text" class="form-control text-center no-border pointShopBasketAmount" value="${amount}" style="max-width: 50px;">
 								<div class="input-group-append">
-									<button class="btn btn-outline-primary btn-circle" type="button" id="plusBtn">+</button>
+									<button class="btn btn-outline-primary btn-circle plusBtn" type="button">+</button>
 								</div>
 							</div>
 
@@ -75,7 +133,7 @@ function showBasketList(list) {
 			`;
 		}
 		
-		$("#pointShopBasketTotalPoint").text(totalPoint+"원");
+		$("#pointShopBasketTotalPoint").text(totalPoint+"PT");
 			
 		$("#pointShopBasketList").html(basketList);
 		
