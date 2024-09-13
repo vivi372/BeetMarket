@@ -40,6 +40,7 @@ public class PointShopServiceBasketImpl implements PointShopBasketService {
 		
 		return mapper.update(vo);
 
+
 	}
 	
 	//장바구니 삭제
@@ -47,6 +48,7 @@ public class PointShopServiceBasketImpl implements PointShopBasketService {
 	public Integer delete(Long[] pointShopBasketNos) {
 		
 		return mapper.delete(pointShopBasketNos);
+
 
 	}	
 	

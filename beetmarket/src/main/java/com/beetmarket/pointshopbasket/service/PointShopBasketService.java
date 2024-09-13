@@ -17,4 +17,5 @@ public interface PointShopBasketService {
 	//장바구니 삭제
 	public Integer delete(Long[] pointShopBasketNos);
 
+
 }

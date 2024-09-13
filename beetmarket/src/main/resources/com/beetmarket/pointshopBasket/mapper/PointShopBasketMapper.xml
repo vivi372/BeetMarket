@@ -33,6 +33,7 @@
 	<update id="update">
 		update pointshopbasket set amount=#{amount} where pointShopBasketNo=#{pointShopBasketNo}
 	</update>
+
 	
 	<!-- 장바구니 삭제 -->
 	<delete id="delete">
@@ -42,5 +43,6 @@
 			</foreach>
 		)
 	</delete>
+
 	
 </mapper>

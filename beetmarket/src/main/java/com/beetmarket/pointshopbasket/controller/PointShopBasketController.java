@@ -64,6 +64,7 @@ public class PointShopBasketController {
 	}
 	
 
+
 	@GetMapping(value = "/delete.do", produces = "text/plain;charset=UTF-8")
 	public ResponseEntity<String> delete(Long pointShopBasketNo) {
 		log.info(pointShopBasketNo);				
