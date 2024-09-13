@@ -104,8 +104,11 @@ public class MemberController {
 	
 	//--- 회원 관리 글보기 ------------------------------------
 	@GetMapping("/myView.do")
-	public String myView(Model model,String id) {
+	public String myView(Model model,HttpServletRequest request) {
 		log.info("myView.do");
+		HttpSession session = request.getSession();
+		LoginVO loginId = (LoginVO) session.getAttribute("login");
+		String id = loginId.getId();
 		
 		model.addAttribute("homeVO", service.myView(id));
 		
