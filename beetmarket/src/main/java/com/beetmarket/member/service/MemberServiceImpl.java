@@ -38,7 +38,7 @@ public class MemberServiceImpl implements MemberService{
 	// 회원 리스트
 	@Override
 	public List<MemberVO> pointList(PageObject pageObject) {
-		log.info("list() 실행");
+		log.info("list() 실행asdasd");
 		// 전체 데이터 개수 구하기
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
 		return mapper.pointList(pageObject);
