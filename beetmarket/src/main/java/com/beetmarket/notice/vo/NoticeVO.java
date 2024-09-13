@@ -1,6 +1,6 @@
 package com.beetmarket.notice.vo;
 
-import java.sql.Date;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 

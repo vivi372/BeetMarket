@@ -66,11 +66,13 @@ public class NoticeController {
 	@PostMapping("/update.do")
 	public String update(NoticeVO vo, RedirectAttributes rttr){
 		Long no = vo.getNo();
-		rttr.addFlashAttribute("msg", "공지사항 글등록이 되었습니다.");
+		service.update(vo);
+		rttr.addFlashAttribute("msg", "공지사항 수정 되었습니다.");
 		return "redirect:view.do?no="+no;
 	}
 	@PostMapping("/delete.do")
 	public String delete(NoticeVO vo, RedirectAttributes rttr){
+		service.delete(vo);
 		rttr.addFlashAttribute("msg", "공지사항이 삭제 되었습니다.");
 		return "redirect:list.do";
 	}	
