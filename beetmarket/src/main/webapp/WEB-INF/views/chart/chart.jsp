@@ -54,6 +54,38 @@
         .stock-info {
             display: none; /* 기본적으로 상단 종목 정보를 숨김 */
         }
+            .stock-info-container {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+   		}
+
+	    .table {
+	        margin-top: 20px;
+	    }
+	
+	    .table-hover tbody tr:hover {
+	        background-color: #f1f1f1;
+	    }
+	
+	    .table th, .table td {
+	        vertical-align: middle;
+	    }
+	
+	    /* Highlight colors for stock changes */
+	    .highlight-positive {
+	        color: red;
+	        font-weight: bold;
+	    }
+	
+	    .highlight-negative {
+	        color: blue;
+	        font-weight: bold;
+	    }
+        
     </style>
  
 <script type="text/javascript">
@@ -349,9 +381,17 @@ function drawChart(chartData) {
     
 $(function() {
     // 차트 데이터를 가져오는 함수
-    function getChartData(period_div_code) {
-        let company_code = "000660";  // 회사 ID 설정
+    function getChartData(period_div_code, company_code) {
         
+        // company_code가 0이거나 null이면 기본값 "삼성전자로"로 설정
+        if (!company_code || company_code === 0) {
+            company_code = "005930";
+        }
+        
+        // period_div_code가 0이거나 null이면 기본값 "KOSPI"로 설정
+        if (!period_div_code || period_div_code === 0) {
+        	period_div_code = "M";
+        }
         // 날짜 계산 (오늘 날짜와 10년 전 날짜)
         const today = new Date();
         const tenYearsAgo = new Date();
@@ -391,11 +431,72 @@ $(function() {
             }
         });
     }
+    
+ 
+	// 주식 정보 불러오기
+    function getStockInfo(company_code) {
+        // 요청할 데이터 (쿼리 문자열로 변환)
+        let url = "/stock/getStockInfoData.do?company_code=" + encodeURIComponent(company_code);
+
+        console.log("Request URL: ", url);
+
+        // AJAX 요청으로 데이터 가져오기 (GET 방식)
+        $.ajax({
+            type: "get",  // GET 요청
+            url: url,     // 쿼리 문자열을 포함한 URL
+            contentType: "application/json; charset=UTF-8",  // Content-Type 설정
+            dataType: "json",  // 서버에서 반환되는 데이터를 JSON으로 파싱
+            success: function(result) {
+                console.log("@@@Received data: ", result);  // 이미 JSON으로 파싱된 데이터를 출력
+                updateStockInfo(result);  // 성공적으로 데이터를 받으면 바로 updateStockInfo 함수 호출
+            },
+            error: function(xhr, status, er) {
+                console.error("Error: ", er);
+                alert("@@@요청 중 오류가 발생했습니다.");
+            }
+        });
+    }
+	
+    function updateStockInfo(stockData) {
+        // 주식 데이터를 UI에 반영
+        console.log("@@updateStockInfo에 있는 stockData ", stockData);
+        console.log("@@stockData.stck_prpr", stockData.output.stck_prpr);
+        $('#stockPrice').text(stockData.output.stck_prpr.toLocaleString());
+        $('#stockPer').text(stockData.output.per);
+        $('#stockPbr').text(stockData.output.pbr);
+        $('#stockEps').text(stockData.output.eps.toLocaleString()); // eps는 정수로 처리
+        $('#stockBps').text(stockData.output.bps.toLocaleString()); // bps도 정수로 처리
+        $('#acmlTrPbmn').text(stockData.output.acml_tr_pbmn.toLocaleString());
+        $('#acmlVol').text(stockData.output.acml_vol.toLocaleString());
+        $('#stockOpenPrice').text(stockData.output.stck_oprc.toLocaleString());
+        $('#stockHighPrice').text(stockData.output.stck_hgpr.toLocaleString());
+        $('#stockLowPrice').text(stockData.output.stck_lwpr.toLocaleString());
+        $('#stockMaxPrice').text(stockData.output.stck_mxpr.toLocaleString());
+        $('#stockMinPrice').text(stockData.output.stck_llam.toLocaleString());
+
+        // 전일 대비와 전일 대비율 처리
+        $('#stockChange').text(stockData.output.prdy_vrss > 0 ? "+" + stockData.output.prdy_vrss.toLocaleString() : stockData.output.prdy_vrss.toLocaleString());
+        $('#stockChangeRate').text(stockData.output.prdy_ctrt);
+
+        // 색상 변경 (양수면 빨간색, 음수면 파란색)
+        if (stockData.prdy_vrss > 0) {
+            $('#stockChange').addClass('highlight-positive').removeClass('highlight-negative');
+            $('#stockChangeRate').addClass('highlight-positive').removeClass('highlight-negative');
+        } else if (stockData.prdy_vrss < 0) {
+            $('#stockChange').addClass('highlight-negative').removeClass('highlight-positive');
+            $('#stockChangeRate').addClass('highlight-negative').removeClass('highlight-positive');
+        } else {
+            $('#stockChange').css('color', 'black');
+            $('#stockChangeRate').css('color', 'black');
+        }
+    }
 
     // 라디오 버튼이 클릭될 때마다 차트 종류에 따라 작동
     $('input[name="optradio"]').change(function() {
         let period_div_code = $(this).val();  // 선택된 값(D, W, M)
-        getChartData(period_div_code);  // 차트 데이터 가져오기
+        let company_code = $(this).closest('label').attr('data-company_code');
+        
+        getChartData(period_div_code, company_code);  // 차트 데이터 가져오기
     });
     
     $('.change-rate').each(function() {
@@ -415,14 +516,16 @@ $(function() {
     
     // 주식 리스트에서 항목 클릭 시 종목 정보 표시
     $('.stock-item').on('click', function() {
-        var stockData = $(this).data('stock'); // data-stock 속성에서 주식 데이터 가져오기
-        $('#stockName').text("종목명: " + stockData.name);
-        $('#stockPrice').text(stockData.price);
-        $('#stockPer').text(stockData.per);
-        $('#stockPbr').text(stockData.pbr);
-        $('#stockMarketCap').text(stockData.marketCap.toLocaleString());
-
-        // 종목 정보를 표시하고 매수/매도 폼도 보이게 함
+        var company_code = $(this).data('company_code'); 
+        var company_name = $(this).data('company_name'); 
+        $('#stockName').text("종목명: " + company_name); // 'bstp_kor_isnm'이 '종목명'에 해당
+        // 라디오 버튼의 data-company_no 속성에 해당 값 설정
+        $('label[for="dayChart"]').attr('data-company_code', company_code);
+        $('label[for="weekChart"]').attr('data-company_code', company_code);
+        $('label[for="monthChart"]').attr('data-company_code', company_code);
+        console.log("클릭 메소드 실행시 나오는 company_code: ", company_code);
+        getChartData('M', company_code);  
+        getStockInfo(company_code);// 주식 정보를 가져온 후 바로 업데이트
         $('.stock-info').show();
         $('.trade-form').show();
     });
@@ -469,23 +572,23 @@ $(function() {
    
         <div class="row">
             <!-- Left: Stock List -->
-<div class="col-md-2 stock-list">
-    <h4>주식 리스트</h4>
-    <ul class="list-group">
-    	<c:forEach items="${stockList }" var="vo">
-        <li class="list-group-item d-flex justify-content-between align-items-center ">
-            <div>
-                <strong>${vo.company_name }</strong><br>
-                <small class="text-muted">${vo.company_code }</small>  <!-- 주식 코드 -->
-            </div>
-            <div class="text-right">
-                <span class="d-block price">${vo.stck_prpr }</span> <!-- 현재가 -->
-                <small class="d-block change-rate" data-rate="${vo.prdy_ctrt }">${vo.prdy_ctrt }</small> <!-- 전일 대비 수익률 -->
-            </div>
-        </li>
-        </c:forEach>
-    </ul>
-</div>
+			<div class="col-md-2 stock-list">
+			    <h4>주식 리스트</h4>
+			    <ul class="list-group">
+			    	<c:forEach items="${stockList }" var="vo">
+			        <li class="list-group-item d-flex justify-content-between align-items-center stock-item" data-company_code="${vo.company_code }" data-company_name="${vo.company_name }">
+			            <div>
+			                <strong>${vo.company_name }</strong><br>
+			                <small class="text-muted">${vo.company_code }</small>  <!-- 주식 코드 -->
+			            </div>
+			            <div class="text-right">
+			                <span class="d-block price">${vo.stck_prpr }</span> <!-- 현재가 -->
+			                <small class="d-block change-rate" data-rate="${vo.prdy_ctrt }">${vo.prdy_ctrt }</small> <!-- 전일 대비 수익률 -->
+			            </div>
+			        </li>
+			        </c:forEach>
+			    </ul>
+			</div>
 
 
             <!-- Center: Chart -->
@@ -496,17 +599,17 @@ $(function() {
 
                 <!-- Chart Type Selection -->
                 <div class="form-check">
-                    <label class="form-check-label">
+                    <label class="form-check-label" for="dayChart" data-company_code="">
                         <input type="radio" class="form-check-input" name="optradio" value="D" id="dayChart">일봉
                     </label>
                 </div>
                 <div class="form-check">
-                    <label class="form-check-label">
+                    <label class="form-check-label" for="weekChart" data-company_code="">
                         <input type="radio" class="form-check-input" name="optradio" value="W" id="weekChart">주봉
                     </label>
                 </div>
                 <div class="form-check">
-                    <label class="form-check-label">
+                    <label class="form-check-label" for="monthChart" data-company_code="">
                         <input type="radio" class="form-check-input" name="optradio" value="M" id="monthChart">월봉
                     </label>
                 </div>
@@ -515,13 +618,75 @@ $(function() {
             <!-- Right: Trade Form -->
             <div class="col-md-4">
                 <!-- 종목 정보 표시 -->
-                <div class="stock-info">
-                    <h4 id="stockName">종목명: 삼성전자</h4>
-                    <p>주가: <span id="stockPrice">70,000</span></p>
-                    <p>PER: <span id="stockPer">12.5</span></p>
-                    <p>PBR: <span id="stockPbr">1.2</span></p>
-                    <p>주가 총액: <span id="stockMarketCap">500,000,000,000</span></p>
-                </div>
+                <div class="container stock-info-container">
+				    <h4 class="text-center my-4" id="stockName">종목명: </h4>
+				    <table class="table table-bordered table-hover table-striped text-center">
+				        <thead class="thead-light">
+				            <tr>
+				                <th>항목</th>
+				                <th>내용</th>
+				            </tr>
+				        </thead>
+				        <tbody>
+				            <tr>
+				                <td>주가</td>
+				                <td><span id="stockPrice"></span> 원</td>
+				            </tr>
+				            <tr>
+				                <td>PER</td>
+				                <td><span id="stockPer"></span></td>
+				            </tr>
+				            <tr>
+				                <td>PBR</td>
+				                <td><span id="stockPbr"></span></td>
+				            </tr>
+				            <tr>
+				                <td>EPS</td>
+				                <td><span id="stockEps"></span></td>
+				            </tr>
+				            <tr>
+				                <td>BPS</td>
+				                <td><span id="stockBps"></span></td>
+				            </tr>
+				            <tr>
+				                <td>전일 대비</td>
+				                <td><span id="stockChange"></span></td>
+				            </tr>
+				            <tr>
+				                <td>전일 대비율</td>
+				                <td><span id="stockChangeRate"></span>%</td>
+				            </tr>
+				            <tr>
+				                <td>누적 거래 대금</td>
+				                <td><span id="acmlTrPbmn"></span> 원</td>
+				            </tr>
+				            <tr>
+				                <td>누적 거래량</td>
+				                <td><span id="acmlVol"></span></td>
+				            </tr>
+				            <tr>
+				                <td>시가</td>
+				                <td><span id="stockOpenPrice"></span> 원</td>
+				            </tr>
+				            <tr>
+				                <td>고가</td>
+				                <td><span id="stockHighPrice"></span> 원</td>
+				            </tr>
+				            <tr>
+				                <td>저가</td>
+				                <td><span id="stockLowPrice"></span> 원</td>
+				            </tr>
+				            <tr>
+				                <td>최고가</td>
+				                <td><span id="stockMaxPrice"></span> 원</td>
+				            </tr>
+				            <tr>
+				                <td>최저가</td>
+				                <td><span id="stockMinPrice"></span> 원</td>
+				            </tr>
+				        </tbody>
+				    </table>
+				</div>
 
                 <!-- 매수 / 매도 폼 -->
                 <div class="trade-form">

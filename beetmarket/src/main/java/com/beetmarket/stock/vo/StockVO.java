@@ -1,5 +1,7 @@
 package com.beetmarket.stock.vo;
 
+import java.util.Date;
+
 import lombok.Data;
 
 @Data

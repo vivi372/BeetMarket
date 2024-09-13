@@ -23,14 +23,15 @@ public class StockServiceImpl implements StockService {
 	
 	@Override
 	public List<StockVO> stockList(){
-		log.info("list() 실행");
 	
 		return mapper.stockList();
 	}
 
 	@Override
-	public String insertStockInfo(Stock_InfoVO vo) {
-		// TODO Auto-generated method stub
-		return null;
+	public Integer insertStockInfo(Stock_InfoVO vo) {
+		
+		Integer result = mapper.insertStockInfo(vo);
+		
+		return result;
 	}
 }

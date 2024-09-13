@@ -12,5 +12,5 @@ public interface StockService {
 	//종목 리스트
 	public List<StockVO> stockList();
 	
-	public String insertStockInfo(Stock_InfoVO vo);
+	public Integer insertStockInfo(Stock_InfoVO vo);
 }

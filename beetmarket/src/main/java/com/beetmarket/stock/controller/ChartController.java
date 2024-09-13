@@ -41,10 +41,9 @@ public class ChartController {
     public ResponseEntity<String> getStockChartData(@RequestBody StockVO vo, HttpSession session) {
         tc.getTokenP(session);
         
-        log.info("@@@@@@@@@@@@@@@@@ ="+ vo);
-        
         OkHttpClient client = new OkHttpClient().newBuilder().build();
         String token = (String) session.getAttribute("token");
+        
         Request request = new Request.Builder()
             .url("https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/"
                 + "inquire-daily-itemchartprice?fid_cond_mrkt_div_code=J"
@@ -74,6 +73,8 @@ public class ChartController {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.OK);
         }
     }
+    
+
 }
 
 

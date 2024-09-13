@@ -101,6 +101,7 @@ public class TokenController {
                 JsonNode rootNode = mapper.readTree(responseBody);
                 String accessToken = rootNode.path("access_token").asText();
                 session.setAttribute("token", accessToken);
+                log.info(accessToken);
                 response.close();
                 return accessToken;  // access_token 값 반환
             } else {
