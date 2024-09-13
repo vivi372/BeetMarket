@@ -35,14 +35,13 @@ public class PointShopController {
 	@Qualifier("PointShopServiceImpl")
 	private PointShopService service;
 	
-	String path = "/upload/pointshop";
+	String path = "/upload/pointshop";	
 	
-	String id = "test";
 	
 	@GetMapping(value = "/list.do",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public ResponseEntity<Map<String, Object>> list(PointShopVO vo) {		
+	public ResponseEntity<Map<String, Object>> list(PointShopVO vo,String id,Integer gradeNo) {		
 		
-		return new ResponseEntity<>(service.list(vo,id), HttpStatus.OK);
+		return new ResponseEntity<>(service.list(vo,id,gradeNo), HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/write.do", produces = "text/plain;charset=UTF-8")
@@ -71,6 +70,7 @@ public class PointShopController {
 		try {
 			service.write(list);
 		} catch (Exception e) {
+			e.printStackTrace();
 			//등록 실패하면 파일 삭제
 			FileUtil.remove(FileUtil.getRealPath("",vo.getGoodsImage(),request));
 			return new ResponseEntity<String>("등록이 실패했습니다.", HttpStatus.BAD_REQUEST);
@@ -99,6 +99,7 @@ public class PointShopController {
 			service.update(vo);
 		} catch (Exception e) {
 			if(goodsImageFile != null) {
+				e.printStackTrace();
 				//수정 실패하면 입력한 파일 삭제
 				FileUtil.remove(FileUtil.getRealPath("",vo.getGoodsImage(),request));				
 			}
@@ -110,7 +111,37 @@ public class PointShopController {
 			FileUtil.remove(FileUtil.getRealPath("",imageDeleteFile,request));				
 		}
 		
-		return new ResponseEntity<String>("정상적으로 수정되었습니다.", HttpStatus.OK);
+		return new ResponseEntity<String>(vo.getGoodsId()+"번 상품이 정상적으로 수정되었습니다.", HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/updateStock.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> updateStock(PointShopVO vo,Long currentStock) throws Exception {
+		
+		log.info(vo);		
+		log.info(currentStock);
+		
+		try {
+			service.updateStock(vo,currentStock);
+		} catch (Exception e) {		
+			e.printStackTrace();
+			return new ResponseEntity<String>("재고 수정이 실패했습니다.", HttpStatus.BAD_REQUEST);
+		}
+		
+		
+		return new ResponseEntity<String>(vo.getGoodsId()+"번 상품의 재고가 정상적으로 수정되었습니다.", HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/delete.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> delete(PointShopVO vo) throws Exception {
+		
+		log.info(vo);		
+		
+		
+		service.delete(vo);	
+		
+		
+		return new ResponseEntity<String>(vo.getGoodsId()+"번 상품이 "
+		+((vo.getStopSell()==0)?"판매중지":"판매중지가 해제")+"되었습니다.", HttpStatus.OK);
 	}
 	
 }

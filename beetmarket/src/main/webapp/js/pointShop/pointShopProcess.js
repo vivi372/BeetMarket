@@ -2,17 +2,7 @@
  * 포인트 샵 서비스 처리
  */
 $(function() {
-	let service = new pointShopService;
 	
-	$("#pointshop-btn").on("click", function() {
-		$("#pointShopModal").modal({backdrop: 'static', keyboard: false});	
-		$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
-		//전체 카테고리 선택 시키기
-		$(".modal-sidebar .category").removeClass("cateActive");
-		$("#pointShopModal").find(".category:first").addClass("cateActive");
-		$("#pointShopSearch").val("");
-		service.list(showList,"","");
-	});	
 	//검색 버튼 클릭 이벤트
 	$("#searchBtn").click(function() {
 		let goodsName =  $("#pointShopSearch").val();
@@ -101,6 +91,37 @@ $(function() {
 			}
 			//상품을 수정
 			service.update(function(data) {
+				
+				//등록후 리스트 출력
+				let goodsName =  $("#pointShopSearch").val();
+				let category = $(".modal-sidebar .cateActive").data("category");
+				service.list(showList,goodsName,category);									
+				alert(data);				
+				//등록후 모달창 닫기
+				$("#goodsModal").modal("hide");
+			}
+			,formData1);
+		}
+	});	
+	
+	//상품 수정 버튼 클릭 이벤트
+	$("#goodsModal #goodsSubmitBtn").click(function() {
+		if($(this).text()=='수정' && $("#goodsModal .nav-tabs").find(".active").text() == '재고 수정' ) {			
+			
+			let formData1 = new FormData();			
+			
+			
+			formData1.append("goodsId",$("#goodsIdUpdate").val());			
+			formData1.append("goodsStock",$("#goodsStockUpdate").val());			
+			formData1.append("currentStock",$("#currentStock").text());			
+			
+			
+			let keys = formData1.values();
+			for(let i of keys) {
+				console.log(i);
+			}
+			//상품의 재고를 수정
+			service.updateStock(function(data) {
 				alert(data);				
 				//등록후 리스트 출력
 				let goodsName =  $("#pointShopSearch").val();
@@ -112,6 +133,28 @@ $(function() {
 			,formData1);
 		}
 	});	
+	
+	//상품 삭제 버튼 클릭
+	$("#goodsListDiv").on("click",".deleteBtn",function() {			
+		
+		let goodsId = $(this).closest(".goodsCard").data("goodsid");			
+		let stopSell = $(this).data("stopsell");		
+		
+		//상품의 재고를 수정
+		service.delete(function(data) {
+			alert(data);				
+			//등록후 리스트 출력
+			let goodsName =  $("#pointShopSearch").val();
+			let category = $(".modal-sidebar .cateActive").data("category");
+			service.list(showList,goodsName,category);
+			//등록후 모달창 닫기
+			$("#goodsModal").modal("hide");
+		}
+		,goodsId,stopSell);
+		
+		//부모 이벤트 막기
+		e.stopPropagation();
+	});
 });
 	
 
@@ -138,33 +181,41 @@ function showList(data) {
 				let category = list[i].category;
 				let discountRate = list[i].discountRate;
 				let shipNo = list[i].shipNo;
+				let stopSell = list[i].stopSell;
 				if(i != 0 && i%3 == 0) {
 					goodsList += `
 					</div>
 					<div class="row">
 				`;
 			}
-			/*<div class="card-img-overlay ml-2">
-				<button class="btn btn-sm btn-outline-secondary updateBtn float-right" data-toggle="modal" data-target="#goodsModal" data-backdrop="static">
-					<i class="material-icons">edit</i>
-				</button>
-			</div>*/
 			goodsList += `
 				<div class="col-md-4">
 							
 					<div class="card shadow-sm m-2 d-flex flex-column goodsCard" 
 					data-goodsid="${goodsId}" data-category="${category}" 
 					data-discountRate="${discountRate}" data-shipNo="${shipNo}">						
-						<img class="card-img-top" src="${goodsImage}" alt="Card image">
+						<img class="card-img-top" src="${goodsImage}" alt="Card image">`;
+			
+			if(stopSell == 0) {
+				goodsList += `<button class="btn btn-sm btn-outline-danger deleteBtn float-right" data-stopSell=${stopSell}>
+					<i class="material-icons">close</i>
+					</button>`;				
+			} else {
+				goodsList += `<button class="btn btn-sm btn-outline-warning deleteBtn float-right" data-stopSell=${stopSell}>
+					<i class="material-icons">cancel</i>
+					</button>`;
+			}						
 							
-						<button class="btn btn-sm btn-outline-secondary updateBtn float-right">
+			goodsList += `<button class="btn btn-sm btn-outline-secondary updateBtn float-right">
 							<i class="material-icons">edit</i>
 						</button>
 						
 						<div class="card-body d-flex flex-column justify-content-between">
 							<div class="card-title mt-2">
-								<b style="font-size: 25px;" class="goodsName">${goodsName}</b>
-							</div>					
+								<b style="font-size: 25px;" class="goodsName">${goodsName}</b>`;
+			if(stopSell == 1)
+				goodsList += `<b class="text-danger">(판매중지)</b>`					
+			goodsList +=		`</div>					
 							<div class="mt-auto d-flex justify-content-between align-items-center">
         						<span class="card-text"><span class="amount">${amount}</span>pt <span class="goodsStock" data-goodsstock=${goodsStock}>`;
 			if(goodsStock == 0) {
@@ -184,7 +235,8 @@ function showList(data) {
 			}		
 			
 			goodsList += `</div>`;
-		
+			
 		$("#goodsListDiv").html(goodsList);
+		
 		
 	}
