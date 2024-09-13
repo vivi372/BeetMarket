@@ -161,6 +161,53 @@ $(function() {
 		
 	});
 	
+	//장바구니 +,-버튼 클릭 이벤트
+	$("#pointShopBasketList").on("change",".pointShopBasketAmount", function(){
+		//해당 장바구니의 데이터 가져오기
+		let pointShopBasketItem = $(this).closest(".pointShopBasketItem");
+		let pointShopBasketNo = pointShopBasketItem.data("pointshopbasketno");
+		let amount = $(this).val();			
+		
+		if(amount>0) {
+			let formData = new FormData();
+			formData.append("pointShopBasketNo",pointShopBasketNo);
+			formData.append("amount",amount);
+			
+			basketService.update(function(data) {					
+				oppPoint();
+				alert(data);
+			},formData);
+		}
+		
+	
+	});
+	
+	//장바구니 +,-버튼 클릭 이벤트
+	$("#pointShopBasketList").on("click",".minusBtn , .plusBtn", function(){
+		//해당 장바구니의 데이터 가져오기
+		let pointShopBasketItem = $(this).closest(".pointShopBasketItem");
+		let pointShopBasketNo = pointShopBasketItem.data("pointshopbasketno");
+		let amount = pointShopBasketItem.find(".pointShopBasketAmount").val();
+		//클릭한게 +면 수량에 1을 더하고 -면을 1을 뺀다.
+		if($(this).text()=='+') amount = Number(amount)+1;
+		else amount = Number(amount)-1;
+		
+		if(amount>0) {
+			let formData = new FormData();
+			formData.append("pointShopBasketNo",pointShopBasketNo);
+			formData.append("amount",amount);
+			
+			basketService.update(function(data) {
+				
+				pointShopBasketItem.find(".pointShopBasketAmount").val(amount);
+				oppPoint();
+				alert(data);
+			},formData);
+		}
+		
+	
+	});
+	
 });
 //장바구니 열리는 함수
 function toggleBasket(open) {
@@ -187,6 +234,17 @@ function toggleBasket(open) {
         basket.animate({width: "0",padding: "0"}, 500);  // 0px로 축소 (시간은 500ms)
     }
 
+}
+
+function oppPoint() {
+	let totalPoint = 0;
+	
+	$("#pointShopBasketList").find(".pointShopBasketItem").each(function() {
+		let amount = $(this).find(".pointShopBasketAmount").val();				
+		let pointAmount = $(this).data("pointamount");	
+		totalPoint += (+pointAmount)*(+amount);
+	});
+	$("#pointShopBasketTotalPoint").text(totalPoint+"PT");
 }
 
 function oppPoint() {
