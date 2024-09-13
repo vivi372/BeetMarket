@@ -19,4 +19,9 @@ public interface ReviewMapper {
 	
 	// 2. 등록
 	public Integer write(ReviewVO vo);
+	
+	
+	
+	// 글수정
+	public Integer update(ReviewVO vo);
 }

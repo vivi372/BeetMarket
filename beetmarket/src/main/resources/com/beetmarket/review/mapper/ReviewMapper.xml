@@ -41,7 +41,20 @@
 	<selectKey keyProperty="reviewNo" resultType="Long" order="BEFORE">
 		select review_seq.nextval from dual
 	</selectKey>
-		insert into review(reviewNo, reviewContent, reviewImage, goodsNo, starscore, orderNo )
-		values(#{reviewNo}, #{reviewContent}, #{reviewImage}, #{goodsNo}, #{starscore}, #{orderNo},;
+		insert into review(reviewNo, reviewContent, reviewImage, starscore, orderNo )
+		values(#{reviewNo}, #{reviewContent}, #{reviewImage}, #{starscore}, #{orderNo})
 </insert>
+
+
+
+<!-- 수정 -->
+<update id="update">
+<![CDATA[
+	update review
+	set 
+]]>
+</update>
+
+
+
 </mapper>

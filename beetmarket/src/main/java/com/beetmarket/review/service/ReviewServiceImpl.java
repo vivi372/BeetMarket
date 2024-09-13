@@ -11,8 +11,10 @@ import com.beetmarket.review.vo.ReviewVO;
 import com.webjjang.util.page.PageObject;
 
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 @Service
+@Log4j
 @Qualifier("ReviewServiceImpl")
 public class ReviewServiceImpl implements ReviewService {
 	
@@ -29,11 +31,20 @@ public class ReviewServiceImpl implements ReviewService {
 	
 	
 	
-	// 글등록
+	// 등록
 	@Override
 	public Integer write(ReviewVO vo) {
 		Integer result = mapper.write(vo);
 		return result;
+	}
+	
+	
+	
+	// 수정
+	@Override
+	public Integer update(ReviewVO vo) {
+		log.info(vo);
+		return mapper.update(vo);
 	}
 
 }

@@ -24,6 +24,11 @@ $(function(){
 	
 	// 이벤트 처리
 	
+	// 모달창
+	$("#reviewWriteBtn").click(function(){
+		$("#reviewModal").modal("show");
+	});
+	
 	// perPageNum 처리
 	$("#perPageNum").change(function(){
 		// alert("change perPageNum");
@@ -116,9 +121,16 @@ $(function(){
 	  	<div>
 	  		<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
 	  	</div>
-		<a href="writeForm.do" class="btn btn-primary">글등록</a>
+	  <!-- 리뷰 등록 버튼 -->
+	  <button type="button" class="btn btn-primary" id="reviewWriteBtn">
+	    리뷰 등록
+	  </button>
+	  
+	  <button class="btn btn-primary" id="updateBtn">수정</button>
+	  
 	  </div>
 	</div>
+	<jsp:include page="writeForm.jsp" />
 </div>
 </body>
 </html>
