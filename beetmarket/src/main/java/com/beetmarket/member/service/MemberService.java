@@ -10,6 +10,7 @@ public interface MemberService {
 	public LoginVO login(LoginVO vo);
 	// 회원관리 리스트
 	public List<MemberVO> list(PageObject pageObject);
+	public List<MemberVO> pointList(PageObject pageObject);
 	// 회원등급변경
 	public Integer changeGrade(MemberVO vo);
 	// 회원 맴버쉽 변경
