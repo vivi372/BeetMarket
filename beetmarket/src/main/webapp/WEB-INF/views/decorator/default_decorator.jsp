@@ -99,7 +99,7 @@
 
 			<!-- 이벤트 -->
 			<li class="nav-item"><a class="nav-link event"
-				href="/evnet/list.do"> <span>이벤트</span></a></li>
+				href="/event/list.do"> <span>이벤트</span></a></li>
 
 
 			<!-- Divider -->

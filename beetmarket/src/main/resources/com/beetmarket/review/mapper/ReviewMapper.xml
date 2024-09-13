@@ -4,6 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.beetmarket.review.mapper.ReviewMapper">
 
+
+
 <!-- 리뷰 리스트 -->
 <select id="list" resultType="com.beetmarket.review.vo.ReviewVO">
 	select reviewNo, WriteDate, starscore, reviewImage,  
@@ -24,10 +26,22 @@
 	) where rnum between  #{startRow} and #{endRow}
 </select>
 
+
+
 <!-- 리뷰 총개수 -->
 <select id="getTotalRow" resultType="Long">
 	select count(*)
 	from review
 </select>
 
+
+
+<!-- 등록 -->
+<insert id="write">
+	<selectKey keyProperty="reviewNo" resultType="Long" order="BEFORE">
+		select review_seq.nextval from dual
+	</selectKey>
+		insert into review(reviewNo, reviewContent, reviewImage, goodsNo, starscore, orderNo )
+		values(#{reviewNo}, #{reviewContent}, #{reviewImage}, #{goodsNo}, #{starscore}, #{orderNo},;
+</insert>
 </mapper>

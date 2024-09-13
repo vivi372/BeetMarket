@@ -7,7 +7,10 @@ import com.webjjang.util.page.PageObject;
 
 public interface ReviewService {
 
-	// 1. list
+	// 1. 리스트
 	public List<ReviewVO> list(PageObject pageObject);
+	
+	// 2. 등록
+	public Integer write(ReviewVO vo);
 
 }

@@ -19,10 +19,21 @@ public class ReviewServiceImpl implements ReviewService {
 	@Setter(onMethod_ = @Autowired)
 	private ReviewMapper mapper;
 	
+	
+	// 리스트
 	@Override
 	public List<ReviewVO> list(PageObject pageObject){
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
 		return mapper.list(pageObject);
+	}
+	
+	
+	
+	// 글등록
+	@Override
+	public Integer write(ReviewVO vo) {
+		Integer result = mapper.write(vo);
+		return result;
 	}
 
 }
