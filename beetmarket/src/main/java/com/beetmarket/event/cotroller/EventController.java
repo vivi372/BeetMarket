@@ -67,6 +67,7 @@ public class EventController {
 	}
 	@PostMapping("/delete.do")
 	public String delete(EventVO vo, RedirectAttributes rttr) {
+		service.delete(vo);
 		rttr.addAttribute("msg", "이벤트가 삭제가 되지 않았습니다. 비밀번호가 맞지 않습니다. 다시 확인하고 시도해 주세요.");
 			return "redirect:list.do";
 	}

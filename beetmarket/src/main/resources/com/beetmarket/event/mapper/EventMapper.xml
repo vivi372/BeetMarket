@@ -10,7 +10,7 @@
   		select rownum rnum, title, image, startDate, endDate
   		from(
 	  		SELECT title, image, startDate, endDate
-	  		From evnet
+	  		From event
 	  		<!-- 검색을 달아야한다. -->
 	  		<include refid="search"/>
 	  		order by no desc
@@ -20,7 +20,7 @@
   	</select>
   	<!-- 이벤트 리스트 페이지 처리를 위한 전테 데이터 개수 가져오기 -->
   	<select id="getTotal" resultType="Long">
-  		select count(*) from evnet 
+  		select count(*) from event 
   		<!-- 검색을 달아야한다. -->
   		<include refid="search" />
   	</select>
@@ -37,9 +37,6 @@
   				<if test="key.indexOf('c')>=0">
   					or content like '%' || #{word} || '%'
   				</if>
-  				<if test="key.indexOf('s')>=0">
-  					or startDate like '%' || #{word} || '%'
-  				</if>
   			</trim>
   		</if>
   	</sql>
@@ -54,20 +51,20 @@
  		<selectKey keyProperty="no" resultType="Long" order="BEFORE">
  			select evnet_seq.nextval from dual
  		</selectKey>
- 		insert into evnet(no, title, content, startDate, endDate, image)
- 		values(#{no}, #{title}, #{content}, #{startDate}, #{endDate}, #{image})
+ 		insert into event(no, title, content, startDate, endDate, image, pw)
+ 		values(#{no}, #{title}, #{content}, #{startDate}, #{endDate}, #{image}, #{pw})
  	</insert>
  	<!-- 이벤트 글수정 -->
  	<update id="update">
  	<![CDATA[
- 		update evnet set title=#{title}, content=#{content}, startDate=#{startDate}, endDate=#{endDate}, image=#{image} where pw=#{pw} and no=#{no}
+ 		update event set title=#{title}, content=#{content}, startDate=#{startDate}, endDate=#{endDate}, image=#{image} where pw=#{pw} and no=#{no}
  	]]>
  	</update>
  	
  	<!-- 이벤트 글 -->
  	<delete id="delete">
  	<![CDATA[
- 		delete from evnet where pw=#{pw} and no=#{no}
+ 		delete from event where pw=#{pw} and no=#{no}
  	]]>
  	</delete>
  	

@@ -33,11 +33,9 @@ public class NoticeServiceImpl implements NoticeService{
 		return result;
 	}
 	public Integer update(NoticeVO vo) {
-		// TODO Auto-generated method stub
 		return mapper.update(vo);
 	}
 	public Integer delete(NoticeVO vo) {
-		// TODO Auto-generated method stub
 		return mapper.delete(vo);
 	}
 }

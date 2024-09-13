@@ -18,29 +18,22 @@ import lombok.extern.log4j.Log4j;
 public class EventServiceImpl implements EventService{
 	@Inject
 	public EventMapper mapper;
-	@Override
 	public List<EventVO> list(PageObject pageObject){
 		pageObject.setTotalRow(mapper.getTotal(pageObject));
 		return mapper.list(pageObject);
 	}
-	@Override
 	public EventVO view(Long[] in) {
 		Long no=in[0];
 		return mapper.view(no);
 	}
-	@Override
 	public Integer write(EventVO vo) {
 		Integer result = mapper.write(vo);
 		return result;
 	}
-	@Override
 	public Integer update(EventVO vo) {
-		// TODO Auto-generated method stub
 		return mapper.update(vo);
 	}
-	@Override
 	public Integer delete(EventVO vo) {
-		// TODO Auto-generated method stub
 		return mapper.delete(vo);
 	}
 }

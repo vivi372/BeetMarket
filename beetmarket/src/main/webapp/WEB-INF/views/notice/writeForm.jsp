@@ -56,52 +56,41 @@ $(function(){
 	<h1>공지사항 글등록</h1>
 	<form action="write.do" method="post">
 		<input name="perPageNum" value = "${param.perPageNum }" type="hidden">
-		<table class="table">
-			<!-- tr : table row - 테이블 한줄 -->
-			<!-- 게시판 데이터의 제목 -->
-			<tr>
-				<th>제목</th>
-				<td>
-					<input id="title" name="title" required 
+			<div class="form-group">
+				<label for="title">제목</label>
+				  <input id="title" name="title" required 
 						class="form-control" maxlength="100"
 						pattern="^[^ .].{2,99}$"
 						title="맨앞에 공백문자 불가. 3~100자 입력"
-						placeholder="제목 입력 : 3자 이상 100자 이내"
-					>
-				</td>
-			</tr>
-			<tr>
-				<th>내용</th>
-				<td>
-					<textarea class="form-control" id="content" name="content"  required
+						placeholder="제목 입력 : 3자 이상 100자 이내">
+			</div> 
+			 <div class="form-group">
+				<label for="content">내용</label>
+				 <textarea class="form-control" id="content" name="content"  required
 					rows="7" placeholder="첫글자는 공백문자나 줄바꿈을 입력할 수 없습니다."></textarea>
-				</td>
-			</tr>
-			<tr>
-			    <th>시작일</th>
-			    <td>
-					<input id="startDate" name="startDate" required autocomplete="off"
-						class="form-control datepicker" 
-					>
-				</td>
-		  	</tr>
-		  	<tr>
-			    <th>종료일</th>
-			    <td>
-					<input id="endDate" name="endDate" required autocomplete="off"
-						class="form-control datepicker" 
-					>
-				</td>
-		  	</tr>
-			<tr>
-				<td colspan="2">
+			</div> 
+			 <div class="form-group">
+				<label for="startDate">시작일</label>
+				  <input id="startDate" name="startDate" required autocomplete="off" class="form-control datepicker">
+			</div>
+			 <div class="form-group">
+				<label for="endDate">종료일</label>
+				  <input id="endDate" name="endDate" required autocomplete="off" class="form-control datepicker">
+			</div>
+			<div class="form-group">
+				<label for="pw">비밀번호</label>
+				  <input class="form-control" name="pw" id="pw" required type="password">
+			</div>
+			 <div class="form-group">
+				<label for="pw2">비밀번호 확인</label>
+				  <input class="form-control" id="pw2" required  type="password">
+			</div>
+			 <div class="form-group">
 					<!-- a tag : 데이터를 클릭하면 href의 정보를 가져와서 페이지 이동시킨다. -->
 					<button class="btn btn-primary">등록</button>
 					<button type="reset" class="btn btn-secondary">다시입력</button>
 					<button type="button" onclick="history.back();" class="btn btn-warning">취소</button>
-				</td>
-			</tr>
-		</table>
+			</div>
 	</form>
 </div>
 </body>

@@ -1,5 +1,7 @@
 package com.beetmarket.event.vo;
 
+import java.util.Date;
+
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
@@ -13,12 +15,11 @@ public class EventVO {
 	private String pw;
 	private String id;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Long startDate;
+	private Date startDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Long endDate;
+	private Date endDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Long updateDate;
+	private Date updateDate;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Long writeDate;
-	private String status;
+	private Date writeDate;
 }
