@@ -67,8 +67,16 @@
 		</div>
 	</div>
 	
-	<div id="stockUpdateMenu" class="container tab-pane fade mt-2">		
-		<label for="goodsStockUpdate">상품 재고:</label>
+	<div id="stockUpdateMenu" class="container tab-pane fade mt-2">	
+		<div class="media shadow-sm p-4 my-3">
+			<img src="" class="mr-3 mt-3 img-thumbnail" id="goodsImageStock" style="width:60px;">
+			<div class="media-body">
+				<h5 id="goodsNameStock"></h5>
+				현재 재고:<span id="currentStock"></span>
+			</div>
+		</div>
+		
+		<label for="goodsStockUpdate">추가 재고:</label>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<button class="btn btn-primary minusBtn" type="button">

@@ -12,5 +12,6 @@ public class PointShopVO {
 	private String category;
 	private Integer discountRate;
 	private Integer shipNo;
+	private Integer stopSell;
 
 }

@@ -64,6 +64,8 @@
 #pointShopModal .modal-right-sidebar {	
 	width: 0; /* 모달 너비의 20% 차지 */
 	
+	
+	
 	overflow: hidden;
 	background-color: white; /* 사이드바 배경색 */  
 	padding: 0;
@@ -134,8 +136,37 @@
 	z-index: 1; /* 버튼을 이미지보다 위로 배치 */
 }
 
+#pointShopModal .deleteBtn {
+	position: absolute;
+	top: 5;
+	right: 5;
+	z-index: 1; /* 버튼을 이미지보다 위로 배치 */
+}
+
 #goodsModal .modal-content {
   	min-height: 670px; /* 최소 높이 설정 */
+}
+
+#pointShopModal .modal-right-sidebar .btn-circle {
+	width: 40px;
+	height: 40px;
+	padding: 6px 0;
+	border-radius: 50%;
+	text-align: center;
+	font-size: 18px;
+	line-height: 1.5;
+}
+
+#pointShopModal .modal-right-sidebar .no-border {
+	border: none;
+	outline: none;  /* 클릭 시 외곽선도 제거 */
+	font-weight: bold;  /* 글자를 두껍게 설정 */
+}
+
+#pointShopModal .modal-right-sidebar img {
+	object-fit: cover;
+	width: 80px;
+	height: 80px;
 }
 
 </style>
@@ -143,11 +174,38 @@
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
 
 <script src="/js/pointShop/pointShop.js"></script>
+<script src="/js/pointShopBasket/pointShopBasket.js"></script>
 <script src="/js/pointShop/pointShopProcess.js"></script>
+<script src="/js/pointShopBasket/pointShopBasketProcess.js"></script>
 <script src="/js/pointShop/goodsModal.js"></script>
 
 <script type="text/javascript">
+	
+	let service = new pointShopService();
+	let basketService = new pointShopBasketService();
+	
+	
+	
 	$(function() {	
+		
+		$("#pointshop-btn").on("click", function() {
+			let pointShopId = 'test';
+			let pointShopGradeNo = 9;
+			service.id = pointShopId;
+			basketService.id = pointShopId;
+			service.gradeNo = pointShopGradeNo;
+			service.gradeNo = pointShopGradeNo;
+			
+			
+			$("#pointShopModal").modal({backdrop: 'static', keyboard: false});	
+			$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
+			//전체 카테고리 선택 시키기
+			$(".modal-sidebar .category").removeClass("cateActive");
+			$("#pointShopModal").find(".category:first").addClass("cateActive");
+			$("#pointShopSearch").val("");
+			service.list(showList,"","");
+		});	
+		
 		
 		window.addEventListener("resize", function() {			
 			
@@ -169,18 +227,6 @@
 				
 		
 		
-		$(".modal #basketBtn").click(function() {
-			console.log("11");
-			let basket = $(".modal-right-sidebar");
-			console.log(basket);
-	        if (basket.width() === 0) {
-	            // 패널이 닫혀 있을 때 (오른쪽에서 나오는 애니메이션)
-	            basket.animate({width: "30%",padding: "20px"}, 500);  // 250px로 확장 (시간은 500ms)
-	        } else {
-	            // 패널이 열려 있을 때 (왼쪽으로 사라지는 애니메이션)
-	            basket.animate({width: "0",padding: "0"}, 500);  // 0px로 축소 (시간은 500ms)
-	        }
-		});
 	});
 </script>
 
@@ -263,13 +309,22 @@
 				
 				
 				<!-- 오른쪽 20% 사이드바 -->
-	        	<div class="modal-right-sidebar left-shadow">
-	        		<div class="ml-1 my-3 py-2">
-	          			<h4><b>장바구니</b></h4>	 
-	          		    		
-	        		</div> 	        			        		
-	        			          			          		
-	        	</div>
+				<div class="modal-right-sidebar left-shadow" style="display: flex; flex-direction: column; justify-content: space-between;">
+				    <div class="ml-1 my-3 py-2">
+				        <h4><b>장바구니</b></h4>
+				        <div id="pointShopBasketList"></div>
+				    </div>
+
+				    <!-- 하단 총 가격과 구매 버튼 영역 -->
+				    <div class="mt-auto">
+				        <div class="row" style="font-size: 20px;">
+				            <div class="col-md-3">총 가격</div>
+				            <div class="col-md-9 text-primary font-weight-bold" id="pointShopBasketTotalPoint"></div>
+				        </div>
+				        <button class="btn btn-primary btn-block mt-3">구매하기</button>
+				    </div>
+				</div>
+	        	
 			</div>
 		</div>
 	</div>

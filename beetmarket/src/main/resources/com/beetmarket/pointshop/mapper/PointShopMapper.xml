@@ -5,12 +5,15 @@
 <mapper namespace="com.beetmarket.pointshop.mapper.PointShopMapper"> 
 
 	<select id="list" resultType="com.beetmarket.pointshop.vo.PointShopVO">
-		select g.goodsId,goodsName,goodsImage,pointAmount,category,discountRate,shipNo,
+		select g.goodsId,goodsName,goodsImage,pointAmount,category,discountRate,shipNo,stopSell,
 		<!-- 해당 상품의 재고를 구하는 서브쿼리 -->
 		(select count(*) goodsStock from PointShopStock s where stockState='판매중' and s.goodsId = g.goodsId)
 		 goodsStock
 		from PointShopGoodsInfo g 
-		where stopSell = 0 
+		where 1=1 
+		<if test="gradeNo == null or gradeNo != 9">
+			and stopSell = 0 		
+		</if>
 		<include refid="search"/>
 		<include refid="cateSelect"/>
 		order by category , goodsId desc
@@ -22,15 +25,15 @@
 	
 	<!-- 상품 이름 검색 쿼리 -->
 	<sql id="search">		
-		<if test="goodsName != null and goodsName != ''.toString()">
-			and goodsName like '%' || #{goodsName} || '%'
+		<if test="vo.goodsName != null and vo.goodsName != ''.toString()">
+			and goodsName like '%' || #{vo.goodsName} || '%'
 		</if>	
 	</sql>
 	
 	<!-- 카테고리 검색 쿼리 -->
 	<sql id="cateSelect">
-		<if test="category != null and category != ''.toString()">
-			and category = #{category}
+		<if test="vo.category != null and vo.category != ''.toString()">
+			and category = #{vo.category}
 		</if>
 	</sql>
 	
@@ -45,7 +48,11 @@
 		
 	</insert>
 	
-	<insert id="stockWrite">
+	<insert id="stockWrite" parameterType="hashMap">
+		<selectKey order="BEFORE" resultType="String" keyProperty="category">
+			select category from pointshopgoodsinfo where goodsId=#{list[0].goodsId}
+		</selectKey>
+	
 		insert into PointShopStock
 			(StockNo,goodsId)
 			select value.* from(    
@@ -53,12 +60,12 @@
 			    	<foreach collection="list" item="vo" separator="union all" index="i" >
 			        	select (
 			        		select nvl(max(StockNo),
-			        			<if test="vo.category == '쿠폰'">0</if>
-			        			<if test="vo.category == '상품권'">100000000000</if>
-			        			<if test="vo.category == '음식'">1000000000000000</if>
+			        			<if test="category == '쿠폰'">0</if>
+			        			<if test="category == '상품권'">100000000000</if>
+			        			<if test="category == '음식'">1000000000000000</if>
 			        		)+1+#{i}  
 			        		from PointShopStock s,pointShopGoodsInfo g
-			        		where g.category = #{vo.category} and (s.goodsId = g.goodsId)
+			        		where g.category = #{category} and (s.goodsId = g.goodsId)
 			        	) StockNo ,#{vo.goodsId}  goodsId from dual			    	
 			    	</foreach>        	
 			       
@@ -73,6 +80,24 @@
 				goodsImage = #{goodsImage},
 			</if>
 			pointAmount = #{pointAmount},discountRate=#{discountRate,jdbcType=INTEGER},shipNo=#{shipNo}
+		where goodsId = #{goodsId}
+	</update>
+	
+	<!-- 재고를 삭제 -->
+	<delete id="deleteStock">
+		delete from pointshopstock where stockno in(
+			select stockNo from(
+    			select rownum rnum,stockNo from(
+        			select stockNo  from pointshopstock WHERE goodsId=#{goodsId} order by stockno
+    			)
+			) where <![CDATA[rnum <= #{goodsStock} ]]> 
+		)
+	</delete>
+	
+	<update id="delete">
+		update pointShopGoodsInfo set stopSell = 
+		<if test="stopSell == 0">1</if>
+		<if test="stopSell == 1">0</if>
 		where goodsId = #{goodsId}
 	</update>
 	

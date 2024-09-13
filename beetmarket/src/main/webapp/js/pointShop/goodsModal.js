@@ -38,6 +38,7 @@ $(function() {
 		$("#goodsModal #goodsUpdateDiv").hide();
 		//할인율 div 숨기기
 		$("#discountRateInput").closest(".form-group").hide();
+		
 	});
 	//포인트샵 상품 수정 모달 등장 이벤트
 	$("#goodsListDiv").on("click",".updateBtn", function() {		
@@ -71,6 +72,9 @@ $(function() {
 		$("#updateMenu").find(".goodsImageDiv").hide();
 		$("#updateMenu").find("#imageCheckBox").prop("checked",false);
 		$("#imageDeleteFile").val(goodsImage);
+		$("#goodsImageStock").attr("src",goodsImage);
+		$("#goodsNameStock").text(goodsName);
+		$("#currentStock").text(goodsStock);
 		//상품 등록 폼 보이기
 		$("#goodsModal #goodsWriteDiv").hide();
 		//상품 수정 폼 숨기기
@@ -80,6 +84,8 @@ $(function() {
 			$("#discountRateUpdate").closest(".form-group").hide();
 		else 
 			$("#discountRateUpdate").closest(".form-group").show();
+		//부모 이벤트 막기
+		e.stopPropagation();
 	});
 	
 	//상품 이미지 수정 체크 이벤트
@@ -91,6 +97,21 @@ $(function() {
 			$(this).parent().next().hide();
 		}
 		
+	});
+	
+	//재고 +,- 버튼 클릭
+	$("#stockUpdateMenu .plusBtn").click(function() {
+		let stock = Number($("#stockUpdateMenu #goodsStockUpdate").val());
+		$("#stockUpdateMenu #goodsStockUpdate").val(stock+1);
+	});
+	
+	//재고 +,- 버튼 클릭
+	$("#stockUpdateMenu .minusBtn").click(function() {
+		let stock = Number($("#stockUpdateMenu #goodsStockUpdate").val());
+		if(stock-1 < 0)
+			$("#stockUpdateMenu #goodsStockUpdate").val(0);
+		else
+			$("#stockUpdateMenu #goodsStockUpdate").val(stock-1);
 	});
 	
 });
