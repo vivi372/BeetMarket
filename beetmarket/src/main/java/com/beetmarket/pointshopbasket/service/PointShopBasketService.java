@@ -14,5 +14,7 @@ public interface PointShopBasketService {
 	public Integer write(PointShopBasketVO vo);
 	//장바구니 수정
 	public Integer update(PointShopBasketVO vo);
+	//장바구니 삭제
+	public Integer delete(Long[] pointShopBasketNos);
 
 }

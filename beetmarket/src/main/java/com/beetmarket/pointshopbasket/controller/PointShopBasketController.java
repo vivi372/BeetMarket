@@ -63,6 +63,16 @@ public class PointShopBasketController {
 		return new ResponseEntity<String>("장바구니의 수량이 수정되었습니다.", HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/delete.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> delete(Long pointShopBasketNo) {
+		log.info(pointShopBasketNo);				
+		
+		
+		service.delete(new Long[] {pointShopBasketNo});
+		
+		return new ResponseEntity<String>("장바구니가 삭제되었습니다.", HttpStatus.OK);
+	}
+	
 	
 	
 }

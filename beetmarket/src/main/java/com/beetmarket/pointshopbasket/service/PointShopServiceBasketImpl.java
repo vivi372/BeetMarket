@@ -39,6 +39,13 @@ public class PointShopServiceBasketImpl implements PointShopBasketService {
 	public Integer update(PointShopBasketVO vo) {
 		
 		return mapper.update(vo);
+	}
+	
+	//장바구니 삭제
+	@Override
+	public Integer delete(Long[] pointShopBasketNos) {
+		
+		return mapper.delete(pointShopBasketNos);
 	}	
 	
 	

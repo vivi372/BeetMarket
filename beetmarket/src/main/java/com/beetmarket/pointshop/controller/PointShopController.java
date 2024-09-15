@@ -41,6 +41,9 @@ public class PointShopController {
 	@GetMapping(value = "/list.do",produces = {MediaType.APPLICATION_XML_VALUE,MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public ResponseEntity<Map<String, Object>> list(PointShopVO vo,String id,Integer gradeNo) {		
 		
+		log.info(gradeNo);
+		log.info(id);
+		
 		return new ResponseEntity<>(service.list(vo,id,gradeNo), HttpStatus.OK);
 	}
 	
@@ -88,7 +91,7 @@ public class PointShopController {
 		
 		if(goodsImageFile != null) {
 			log.info(goodsImageFile.getOriginalFilename());
-			imageDeleteFile = imageDeleteFile.substring(imageDeleteFile.indexOf("/upload"));
+			imageDeleteFile = imageDeleteFile.substring(imageDeleteFile.indexOf("/upload"),imageDeleteFile.indexOf("?"));
 			log.info(imageDeleteFile);
 			//파일 업로드 후 파일 경로 받아오기
 			vo.setGoodsImage(FileUtil.upload(path, goodsImageFile, request));			
@@ -142,6 +145,32 @@ public class PointShopController {
 		
 		return new ResponseEntity<String>(vo.getGoodsId()+"번 상품이 "
 		+((vo.getStopSell()==0)?"판매중지":"판매중지가 해제")+"되었습니다.", HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/realDelete.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> realDelete(Long goodsId,String goodsImage,HttpServletRequest request) throws Exception {
+		
+		log.info(goodsId);		
+		log.info(goodsImage);		
+		
+		
+		
+		try {
+			service.realDelete(goodsId);
+		} catch (Exception e) {
+			//상품이 이미 팔린 경우 삭제가 불가능해 에러가 발생
+			//상품이 삭제가 안 되었기 때문에 이미지를 삭제 x
+			return new ResponseEntity<String>("삭제가 불가능한 물건입니다.", HttpStatus.OK);
+		}
+		
+		//삭제된 경우 이미지도 같이 삭제한다.
+		
+		goodsImage = goodsImage.substring(goodsImage.indexOf("/upload"),goodsImage.indexOf("?"));
+		
+		FileUtil.remove(FileUtil.getRealPath("",goodsImage,request));
+		
+		
+		return new ResponseEntity<String>(goodsId+"번 상품이 삭제 되었습니다.", HttpStatus.OK);
 	}
 	
 }

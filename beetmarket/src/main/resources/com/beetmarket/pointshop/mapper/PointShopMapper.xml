@@ -5,7 +5,7 @@
 <mapper namespace="com.beetmarket.pointshop.mapper.PointShopMapper"> 
 
 	<select id="list" resultType="com.beetmarket.pointshop.vo.PointShopVO">
-		select g.goodsId,goodsName,goodsImage,pointAmount,category,discountRate,shipNo,stopSell,
+		select g.goodsId,goodsName,goodsImage,pointAmount,category,discountRate,nvl(shipNo,0) shipNo,stopSell,
 		<!-- 해당 상품의 재고를 구하는 서브쿼리 -->
 		(select count(*) goodsStock from PointShopStock s where stockState='판매중' and s.goodsId = g.goodsId)
 		 goodsStock
@@ -16,11 +16,11 @@
 		</if>
 		<include refid="search"/>
 		<include refid="cateSelect"/>
-		order by category , goodsId desc
+		order by shipNo,category desc, goodsId desc
 	</select>  
 	
 	<select id="getPoint" resultType="long">
-		select sum(point_delta) from pointList where id=#{id}
+		select nvl(sum(point_delta),0) from pointList where id=#{id}
 	</select>
 	
 	<!-- 상품 이름 검색 쿼리 -->
@@ -88,7 +88,7 @@
 		delete from pointshopstock where stockno in(
 			select stockNo from(
     			select rownum rnum,stockNo from(
-        			select stockNo  from pointshopstock WHERE goodsId=#{goodsId} order by stockno
+        			select stockNo  from pointshopstock WHERE goodsId=#{goodsId} and stockState='판매중' order by stockno
     			)
 			) where <![CDATA[rnum <= #{goodsStock} ]]> 
 		)
@@ -100,6 +100,10 @@
 		<if test="stopSell == 1">0</if>
 		where goodsId = #{goodsId}
 	</update>
+	
+	<delete id="realDelete">
+		delete from pointShopGoodsInfo where goodsId = #{goodsId}
+	</delete>
 	
 	
 	

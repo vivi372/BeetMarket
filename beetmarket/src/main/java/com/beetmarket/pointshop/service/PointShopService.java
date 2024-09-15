@@ -17,5 +17,7 @@ public interface PointShopService {
 	public Integer updateStock(PointShopVO vo, Long currentStock);
 	//포인트샵 판매 중지
 	public Integer delete(PointShopVO vo);
+	//포인트샵 판매 중지
+	public Integer realDelete(Long goodsId);
 
 }

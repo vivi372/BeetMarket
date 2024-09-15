@@ -14,7 +14,7 @@
 	
 	<!-- 장바구니 등록 -->
 	<update id="write">
-		<selectKey keyProperty="pointShopBasketno" order="BEFORE" resultType="Long" >
+		<selectKey keyProperty="pointShopBasketNo" order="BEFORE" resultType="Long" >
 			select nvl(max(pointShopBasketno),0) from pointshopbasket where goodsid=#{goodsId} and id=#{id}
 		</selectKey>
 	
@@ -33,5 +33,14 @@
 	<update id="update">
 		update pointshopbasket set amount=#{amount} where pointShopBasketNo=#{pointShopBasketNo}
 	</update>
+	
+	<!-- 장바구니 삭제 -->
+	<delete id="delete">
+		delete from pointshopbasket where pointShopBasketNo in(
+			<foreach collection="array" item="pointShopBasketNo" separator=",">
+				 #{pointShopBasketNo}			
+			</foreach>
+		)
+	</delete>
 	
 </mapper>
