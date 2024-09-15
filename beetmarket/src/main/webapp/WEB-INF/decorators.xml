@@ -22,10 +22,16 @@
 		<pattern>/event/*</pattern>	
 		<pattern>/showdown/*</pattern>	
 		<pattern>/stock/*</pattern>	
+<<<<<<< HEAD
 		<pattern>/review/*</pattern>	
 		<pattern>/pointShopOrder/*</pattern>	
 		<pattern>/basket/*</pattern>	
 		<pattern>/order/*</pattern>	
+=======
+		<pattern>/review/*</pattern>
+		<pattern>/faq/*</pattern>
+		<pattern>/chatbot/*</pattern>	
+>>>>>>> branch 'main' of https://github.com/vivi372/BeetMarket.git
 			
 
 	</decorator>
