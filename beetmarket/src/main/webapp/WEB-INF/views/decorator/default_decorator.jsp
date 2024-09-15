@@ -135,10 +135,12 @@
 			<hr class="sidebar-divider my-0">
 
 
-			<!-- 고객센터 -->
-			<li class="nav-item"><a class="nav-link" href="/goods/list.do">
-					<span>고객센터</span>
+			<!-- faq -->
+			<li class="nav-item">
+			<a class="nav-link" href="/faq/list.do">
+				<span>faq</span>
 			</a></li>
+			
 
 
 			<!-- Divider -->
