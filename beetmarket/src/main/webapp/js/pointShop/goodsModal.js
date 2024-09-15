@@ -41,7 +41,7 @@ $(function() {
 		
 	});
 	//포인트샵 상품 수정 모달 등장 이벤트
-	$("#goodsListDiv").on("click",".updateBtn", function() {		
+	$("#goodsListDiv").on("click",".updateBtn", function(e) {		
 		$("#goodsModal").modal({backdrop: 'static', keyboard: false});
 		//모달 제목 바꾸기
 		$("#goodsModal .modal-title").text("상품 수정");

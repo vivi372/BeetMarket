@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 public class PointShopBasketVO {
-	private Long pointShopBasketno;
+	private Long pointShopBasketNo;
 	private Long goodsId;
 	private String goodsName;
 	private String goodsImage;

@@ -91,14 +91,17 @@ $(function() {
 			}
 			//상품을 수정
 			service.update(function(data) {
+				//등록후 모달창 닫기
+				$("#goodsModal").modal("hide");
 				
 				//등록후 리스트 출력
 				let goodsName =  $("#pointShopSearch").val();
 				let category = $(".modal-sidebar .cateActive").data("category");
 				service.list(showList,goodsName,category);									
-				alert(data);				
-				//등록후 모달창 닫기
-				$("#goodsModal").modal("hide");
+				alert(data);	
+				
+				
+				
 			}
 			,formData1);
 		}
@@ -122,7 +125,8 @@ $(function() {
 			}
 			//상품의 재고를 수정
 			service.updateStock(function(data) {
-				alert(data);				
+				alert(data);		
+				
 				//등록후 리스트 출력
 				let goodsName =  $("#pointShopSearch").val();
 				let category = $(".modal-sidebar .cateActive").data("category");
@@ -134,8 +138,8 @@ $(function() {
 		}
 	});	
 	
-	//상품 삭제 버튼 클릭
-	$("#goodsListDiv").on("click",".deleteBtn",function() {			
+	//상품 판매 중지 버튼 클릭
+	$("#goodsListDiv").on("click",".stopSaleBtn",function(e) {			
 		
 		let goodsId = $(this).closest(".goodsCard").data("goodsid");			
 		let stopSell = $(this).data("stopsell");		
@@ -147,10 +151,27 @@ $(function() {
 			let goodsName =  $("#pointShopSearch").val();
 			let category = $(".modal-sidebar .cateActive").data("category");
 			service.list(showList,goodsName,category);
-			//등록후 모달창 닫기
-			$("#goodsModal").modal("hide");
+			
 		}
 		,goodsId,stopSell);
+		
+		//부모 이벤트 막기
+		e.stopPropagation();
+	});
+	
+	//상품 삭제 버튼 클릭
+	$("#goodsListDiv").on("click",".goodsDeleteBtn",function(e) {			
+		
+		let goodsId = $(this).closest(".goodsCard").data("goodsid");
+		let goodsImage = $(this).closest(".goodsCard").find(".card-img-top").prop("src");
+		
+		//상품의 재고를 수정
+		if(confirm("해당 상품을 정말로 삭제 하시겠습니까?\n(이미 구매된 상품을 삭제가 불가능합니다.)")){
+			service.realDelete(function(data) {				
+				service.list(showList,"","");				
+			}
+			,goodsId,goodsImage);			
+		}
 		
 		//부모 이벤트 막기
 		e.stopPropagation();
@@ -166,11 +187,12 @@ function showList(data) {
 			//현재 포인트 출력
 			$("#pointShopPoint").text(point);
 			
-		
+			retryCount = 0;
+			
+			let rowCnt = 0;
+			
 			//상품 리스트 출력할 태그
-			let goodsList = `
-					<div class="row">
-			`;		
+			let goodsList =``;
 			
 			for(let i=0;i<list.length;i++) {
 				let goodsId = list[i].goodsId;
@@ -182,48 +204,86 @@ function showList(data) {
 				let discountRate = list[i].discountRate;
 				let shipNo = list[i].shipNo;
 				let stopSell = list[i].stopSell;
-				if(i != 0 && i%3 == 0) {
+				if(i == 0) {
+					let borderClass = "";
+					if(shipNo == '3') borderClass = "diamond-border";
+					else if(shipNo == '2') borderClass = "gold-border";
+					else if(shipNo == '1') borderClass = "bronze-border";
+					else borderClass = "no-grade-border";
+					goodsList = `
+						<div class="${borderClass}">
+							<div class="row">
+					`;
+				}
+				
+				if(i != 0 && shipNo != list[i-1].shipNo) {
+					let borderClass = "";
+					if(shipNo == '3') borderClass = "diamond-border";
+					else if(shipNo == '2') borderClass = "gold-border";
+					else if(shipNo == '1') borderClass = "bronze-border";
+					else borderClass = "no-grade-border";
+					rowCnt = 0;
+					goodsList += `
+							</div>
+						</div>
+						<div class="${borderClass}">
+							<div class="row">
+					`;
+				}
+				
+				if(rowCnt != 0 && rowCnt%3 == 0) {
 					goodsList += `
 					</div>
 					<div class="row">
-				`;
-			}
-			goodsList += `
-				<div class="col-md-4">
+					`;
+				}
+				let time = new Date().getTime();
+				goodsList += `
+				<div class="col-lg-4">
 							
 					<div class="card shadow-sm m-2 d-flex flex-column goodsCard" 
 					data-goodsid="${goodsId}" data-category="${category}" 
 					data-discountRate="${discountRate}" data-shipNo="${shipNo}">						
-						<img class="card-img-top" src="${goodsImage}" alt="Card image">`;
-			
-			if(stopSell == 0) {
-				goodsList += `<button class="btn btn-sm btn-outline-danger deleteBtn float-right" data-stopSell=${stopSell}>
-					<i class="material-icons">close</i>
-					</button>`;				
-			} else {
-				goodsList += `<button class="btn btn-sm btn-outline-warning deleteBtn float-right" data-stopSell=${stopSell}>
-					<i class="material-icons">cancel</i>
-					</button>`;
-			}						
-							
-			goodsList += `<button class="btn btn-sm btn-outline-secondary updateBtn float-right">
-							<i class="material-icons">edit</i>
-						</button>
+						<img class="card-img-top" src="${goodsImage}?t=${time}" alt="Card image"
+						 onerror="if (retryCount < maxRetries) {
+								retryCount++; 
+								setTimeout(() => { 
+									this.src='${goodsImage}?t=${new Date().getTime()}'; 
+								}, 1000); 
+								} else { 
+									console.error('Image load failed after maximum retries'); 
+								}">`;
+				if(pointShopGradeNo == '9') {
+					if(stopSell == 0) {
+						goodsList += `<button class="btn btn-sm btn-outline-danger stopSaleBtn float-right" data-stopSell=${stopSell}>
+						<i class="fa fa-ban"></i>
+						</button>`;				
+					} else {
+						goodsList += `<button class="btn btn-sm btn-outline-success stopSaleBtn float-right" data-stopSell=${stopSell}>
+						<i class="fa fa-check-circle"></i>
+						</button>`;
+					}						
+									
+					goodsList += `<button class="btn btn-sm btn-outline-secondary updateBtn float-right">
+								<i class="fa fa-edit"></i>
+							</button>`;
+				}
 						
-						<div class="card-body d-flex flex-column justify-content-between">
+						
+				goodsList += `<div class="card-body d-flex flex-column justify-content-between">
 							<div class="card-title mt-2">
 								<b style="font-size: 25px;" class="goodsName">${goodsName}</b>`;
-			if(stopSell == 1)
-				goodsList += `<b class="text-danger">(판매중지)</b>`					
-			goodsList +=		`</div>					
+				if(stopSell == 1)
+					goodsList += `<b class="text-danger">(판매중지)</b> <button class="btn btn-danger btn-sm mb-2 goodsDeleteBtn"><i class="fa fa-trash"></i></button>`					
+				goodsList +=		`</div>					
 							<div class="mt-auto d-flex justify-content-between align-items-center">
-        						<span class="card-text"><span class="amount">${amount}</span>pt <span class="goodsStock" data-goodsstock=${goodsStock}>`;
-			if(goodsStock == 0) {
-				goodsList += `(품절)</span></span>`;
-			} else {
-				goodsList += `(${goodsStock}개 남음)</span></span>`;				
-			}
-			goodsList += `
+        						<span class="card-text"><span class="amount">${amount}</span>pt `;
+				if(goodsStock == 0) {
+					goodsList += `<span class="goodsStock text-danger" data-goodsstock=${goodsStock}>(품절)</span></span>`;
+				} else {
+					goodsList += `<span class="goodsStock" data-goodsstock=${goodsStock}>(${goodsStock}개 남음)</span></span>`;				
+				}
+				goodsList += `
 							
       						</div>
       						
@@ -231,12 +291,18 @@ function showList(data) {
 					</div>
 								
 				</div>
-			`;
+				`;
+				rowCnt++;
+				
 			}		
 			
-			goodsList += `</div>`;
-			
-		$("#goodsListDiv").html(goodsList);
+		goodsList += `
+						</div>
+					</div>
+					`;		
+		
+		$("#goodsListDiv").html(goodsList);		
+
 		
 		
 	}

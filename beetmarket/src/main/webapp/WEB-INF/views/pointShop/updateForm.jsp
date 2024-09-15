@@ -76,7 +76,7 @@
 			</div>
 		</div>
 		
-		<label for="goodsStockUpdate">추가 재고:</label>
+		<label for="goodsStockUpdate">재고:</label>
 		<div class="input-group mb-3">
 			<div class="input-group-prepend">
 				<button class="btn btn-primary minusBtn" type="button">

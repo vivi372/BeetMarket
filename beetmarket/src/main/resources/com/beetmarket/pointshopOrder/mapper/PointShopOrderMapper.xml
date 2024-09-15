@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beetmarket.pointshoporder.mapper.PointShopOrderMapper"> 
+	
+	<!-- 재고 번호 가져오기 -->
+	<select id="getStockNo" resultType="com.beetmarket.pointshoporder.vo.PointShopOrderVO">
+		select pointShopOrder_SEQ.nextval pointShopOrderNo,stockNo,orderPoint,goodsId from(
+			<foreach collection="list" item="vo" separator="union all">
+				(
+					select stockNo,(select pointAmount from pointshopgoodsinfo where goodsid=#{vo.goodsId}) orderPoint,goodsId from(
+	            		(select rownum rnum,stockNo,goodsId from pointshopstock where goodsid=#{vo.goodsId} and stockState='판매중' order by stockNo)     
+	        		)where <![CDATA[ rnum <= #{vo.amount} ]]>
+	        		
+        		)
+			</foreach>
+			)
+	</select>
+	
+	<!-- 주문 등록 -->
+	<insert id="write">	
+		insert into pointShopOrder(pointShopOrderNo,stockNo,orderPoint,id)		
+		<foreach collection="values" item="vo" separator="union all">
+			select #{vo.pointShopOrderNo},#{vo.stockNo},#{vo.orderPoint},#{id} from dual
+		</foreach>		
+	</insert>
+	
+	<!-- 해당 재고 상태 수정 -->
+	<update id="stockStateUpdate">
+		update pointShopStock set stockState = '판매완료'
+		where stockNo in(
+			<foreach collection="array" item="no" separator=",">
+				#{no}
+			</foreach>
+		)
+		
+	</update>
+	
+</mapper>
