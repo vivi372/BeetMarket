@@ -28,8 +28,16 @@ public class ReviewServiceImpl implements ReviewService {
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
 		return mapper.list(pageObject);
 	}
-	
-	
+    
+    
+    
+	// 리뷰수 & 평점
+	@Override
+    public Long getTotalRow(PageObject pageObject) {
+        return mapper.getTotalRow(pageObject);
+    }
+
+
 	
 	// 등록
 	@Override
@@ -46,5 +54,13 @@ public class ReviewServiceImpl implements ReviewService {
 		log.info(vo);
 		return mapper.update(vo);
 	}
-
+	
+	
+	// 삭제
+	@Override
+	public Integer delete(ReviewVO vo) {
+		log.info(vo);
+		return mapper.delete(vo);
+	}
+    
 }

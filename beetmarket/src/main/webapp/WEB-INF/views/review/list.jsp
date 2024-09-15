@@ -10,38 +10,70 @@
 <title>리뷰</title>
 
 <style type="text/css">
-.dataRow>.card-header{
-	background: #e0e0e0
+.dataRow>.card-header {
+	background: #e0e0e0;
 }
-.dataRow:hover{
+.dataRow:hover {
 	border-color: orange;
 	cursor: pointer;
+}
+.imageDiv {
+    width: 100%;
+    text-align: center;
+    overflow: hidden;
+}
+
+.imageDiv img {
+    width: 80%;
+    height: 200px;
+    object-fit: cover;
+}
+.starscore {
+    color: gold;
+    font-size: 20px;
 }
 </style>
 
 <script type="text/javascript">
-$(function(){
-	
-	// 이벤트 처리
-	
-	// 모달창
-	$("#reviewWriteBtn").click(function(){
+$(function() {
+
+	// 리뷰 등록 모달창
+	$("#reviewWriteBtn").click(function() {
 		$("#reviewModal").modal("show");
 	});
-	
+
+	// 리뷰 수정 모달창
+	$("#reviewUpdateBtn").click(function() {
+		$("#reviewUpdateModal").modal("show");
+	});
+
+	// 리뷰 삭제 처리
+	$(".deleteBtn").click(function() {
+		let reviewNo = $(this).data("reviewno");
+		if (confirm("리뷰를 삭제하시겠습니까?")) {
+			$.ajax({
+				type: "POST",
+				url: "delete.do",
+				data: { reviewNo: reviewNo },
+				success: function(result) {
+					alert("리뷰가 삭제되었습니다.");
+					location.reload(); // 삭제 후 페이지를 새로고침
+				},
+				error: function() {
+					alert("리뷰 삭제 중 오류가 발생했습니다.");
+				}
+			});
+		}
+	});
+
 	// perPageNum 처리
-	$("#perPageNum").change(function(){
-		// alert("change perPageNum");
-		// page는 1페이지 + 검색 데이터를 전부 보낸다.
+	$("#perPageNum").change(function() {
 		$("#searchForm").submit();
 	});
-	
+
 	// 검색 데이터 세팅
 	$("#key").val('${(empty pageObject.key)?"t":pageObject.key}');
-	// perPageNum 세팅
-	$("#perPageNum")
-	.val('${(empty pageObject.perPageNum)?"10":pageObject.perPageNum}');
-	
+	$("#perPageNum").val('${(empty pageObject.perPageNum)?"10":pageObject.perPageNum}');
 });
 </script>
 
@@ -49,88 +81,98 @@ $(function(){
 <body>
 <div class="container">
 	<div class="card">
-	  <div class="card-header"><h2>리뷰</h2></div>
-	  <div class="card-body">
-	  	<div id="searchDiv">
-	  	  <form action="list.do" id="searchForm">
-		  	<input name="page" value="1" type="hidden">
-			  <div class="row">
-			  	<div class="col-md-8">
-			  		<div class="input-group mb-3">
-					  <div class="input-group-prepend">
-					      <select name="key" id="key" class="form-control">
-					      	<option value="t">제목</option>
-					      	<option value="c">내용</option>
-					      	<option value="w">작성자</option>
-					      	<option value="tc">제목/내용</option>
-					      	<option value="tw">제목/작성자</option>
-					      	<option value="cw">내용/작성자</option>
-					      	<option value="tcw">모두</option>
-					      </select>
-					  </div>
-					  <input type="text" class="form-control" placeholder="검색"
-					   id="word" name="word" value="${pageObject.word }">
-					  <div class="input-group-append">
-					      <button class="btn btn-outline-primary">
-					      	<i class="fa fa-search"></i>
-					      </button>
-					  </div>
+		<div class="card-header">
+			<h2>리뷰</h2>
+			<!-- 총 리뷰 개수 및 평균 평점 표시 추가 -->
+			<h4>전체 리뷰 개수: ${totalReviewCount}</h4> <!-- 주석: 총 리뷰 개수 표시 -->
+			<h4>평균 평점: ${averageRating} / 5</h4> <!-- 주석: 평균 평점 표시 -->
+		</div>
+		<div class="card-body">
+			<div id="searchDiv">
+				<form action="list.do" id="searchForm">
+					<input name="page" value="1" type="hidden">
+					<div class="row">
+						<div class="col-md-8">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<select name="key" id="key" class="form-control">
+										<option value="t">제목</option>
+										<option value="c">내용</option>
+										<option value="w">작성자</option>
+										<option value="tc">제목/내용</option>
+										<option value="tw">제목/작성자</option>
+										<option value="cw">내용/작성자</option>
+										<option value="tcw">모두</option>
+									</select>
+								</div>
+								<input type="text" class="form-control" placeholder="검색" id="word" name="word" value="${pageObject.word}">
+								<div class="input-group-append">
+									<button class="btn btn-outline-primary">
+										<i class="fa fa-search"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div style="width: 200px;" class="float-right">
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text">Rows/Page</span>
+									</div>
+									<select id="perPageNum" name="perPageNum" class="form-control">
+										<option>10</option>
+										<option>15</option>
+										<option>20</option>
+										<option>25</option>
+									</select>
+								</div>
+							</div>
+						</div>
 					</div>
-			  	</div>
-			  	<!-- col-md-8의 끝 : 검색 -->
-			  	<div class="col-md-4">
-			  		<!-- 너비를 조정하기 위한 div 추가. float-right : 오른쪽 정렬 -->
-			  		<div style="width: 200px;" class="float-right">
-					  <div class="input-group mb-3">
-					    <div class="input-group-prepend">
-					      <span class="input-group-text">Rows/Page</span>
-					    </div>
-					    <select id="perPageNum" name="perPageNum" class="form-control">
-					    	<option>10</option>
-					    	<option>15</option>
-					    	<option>20</option>
-					    	<option>25</option>
-					    </select>
-					  </div>
-				  </div>
-			  	</div>
-			  	<!-- col-md-4의 끝 : 한페이지당 표시 데이터 개수 -->
-			  </div>
-		  </form>
-	  	
-	  	</div>
-	  	<c:forEach items="${list }" var="vo">
-			<div class="card dataRow">
-			  <div class="card-header">
-			  ${vo.id }
-		  	<input type="hidden" value="${vo.reviewNo }" >
-			  </div>
-			  <div class="card-body">
-			  	<pre>${vo.reviewContent }</pre>
-			  </div>
-			  <div class="card-footer">
-			  	<span class="float-right">
-			  		<fmt:formatDate value="${vo.writeDate }"
-			  		 pattern="yyyy-MM-dd"/>
-			  	</span>
-			  </div>
+				</form>
 			</div>
-	  	</c:forEach>
-	  </div>
-	  <div class="card-footer">
-	  	<div>
-	  		<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
-	  	</div>
-	  <!-- 리뷰 등록 버튼 -->
-	  <button type="button" class="btn btn-primary" id="reviewWriteBtn">
-	    리뷰 등록
-	  </button>
-	  
-	  <button class="btn btn-primary" id="updateBtn">수정</button>
-	  
-	  </div>
+
+			<c:forEach items="${list }" var="vo">
+				<div class="card dataRow">
+					<div class="card-header">
+						작성자: ${vo.id }
+						<input type="hidden" value="${vo.reviewNo}">
+					</div>
+					<div class="card-body">
+						<pre>${vo.reviewContent }</pre>
+						<!-- 리뷰 평점 추가 -->
+						<div class="starscore">
+							평점: ${vo.starscore} / 5 <!-- 주석: 각 리뷰의 평점 표시 -->
+						</div>
+						<div class="imageDiv text-center align-content-center">
+                            <img class="card-img-top" src="${pageContext.request.contextPath}${vo.reviewImage}" alt="image">
+                        </div>
+					</div>
+					<div class="card-footer">
+						<span class="float-right">
+							<fmt:formatDate value="${vo.writeDate }" pattern="yyyy-MM-dd"/>
+						</span>
+						<!-- 삭제 버튼 추가 -->
+						<button type="button" class="btn btn-danger deleteBtn" data-reviewno="${vo.reviewNo}">
+							삭제
+						</button>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+
+		<div class="card-footer">
+			<div>
+				<pageNav:pageNav listURI="list.do" pageObject="${pageObject }" />
+			</div>
+			<button type="button" class="button btn-primary" id="reviewWriteBtn">리뷰 등록</button>
+			<button type="button" class="button btn-primary" id="reviewUpdateBtn">수정</button>
+		</div>
 	</div>
+
 	<jsp:include page="writeForm.jsp" />
+	<jsp:include page="updateForm.jsp" />
 </div>
+
 </body>
 </html>
