@@ -37,14 +37,6 @@
 		and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
 	
-
-	<!-- 회원관리 글보기 조회수 1 증가 -->
-	<!-- # {obj} 1. 변수의 이름, 2. vo의 getter 이름, 3. Map의 key -->
-	<update id="increase">
-		update member set hit = hit + 1
-		where no = #{no}
-	</update>
-
 	<!-- 회원관리 등급 수정 -->
 	<update id="changeGrade">
 	<![CDATA[
