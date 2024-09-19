@@ -42,12 +42,12 @@ public class ShowdownController {
 	@GetMapping("/writeForm.do")
 	public String writeForm (Model model, Long no){
 		log.info("writeForm.do");
-		return "notice/writeForm";
+		return "showdown/writeForm";
 	}
 	@PostMapping("/write.do")
 	public String write (ShowdownVO vo, RedirectAttributes rttr){
 		service.write(vo);
-		rttr.addFlashAttribute("msg", "공지사항 글등록이 되었습니다.");
+		rttr.addFlashAttribute("msg", "이벤트 발표 글등록이 되었습니다.");
 		return "redirect:list.do";
 	}
 	@GetMapping("/updateForm.do")
@@ -55,17 +55,22 @@ public class ShowdownController {
 		Long[] hi = new Long[] {no};
 		ShowdownVO vo = service.view(hi);
 		model.addAttribute("vo", vo);
-		return "notice/updateForm";
+		return "showdown/updateForm";
 	}
 	@PostMapping("/update.do")
 	public String update(ShowdownVO vo, RedirectAttributes rttr){
 		Long no = vo.getNo();
-		rttr.addFlashAttribute("msg", "공지사항 글등록이 되었습니다.");
+		rttr.addFlashAttribute("msg", "이벤트 발표 글등록이 되었습니다.");
 		return "redirect:view.do?no="+no;
 	}
 	@PostMapping("/delete.do")
 	public String delete(ShowdownVO vo, RedirectAttributes rttr){
-		rttr.addFlashAttribute("msg", "공지사항이 삭제 되었습니다.");
-		return "redirect:list.do";
+		if(service.delete(vo)==1) {
+			rttr.addFlashAttribute("msg", "이벤트 발표이 삭제 되었습니다.");
+			return "redirect:list.do";
+		}
+		else
+			rttr.addFlashAttribute("msg", "이벤트 발표이 삭제가 되지 않았습니다." + "이벤트 발표 번호나 비밀번호가 맞지 않습니다. 다시 확인해주세요");
+			return "redirect:view.do?no="+vo.getNo();
 	}	
 }

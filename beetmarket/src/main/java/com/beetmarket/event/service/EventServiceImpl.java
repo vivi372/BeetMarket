@@ -19,7 +19,7 @@ public class EventServiceImpl implements EventService{
 	@Inject
 	public EventMapper mapper;
 	public List<EventVO> list(PageObject pageObject){
-		pageObject.setTotalRow(mapper.getTotal(pageObject));
+		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
 		return mapper.list(pageObject);
 	}
 	public EventVO view(Long[] in) {

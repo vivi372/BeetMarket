@@ -10,7 +10,7 @@ public interface EventMapper {
 	// 이벤트 리스트
 	public List<EventVO> list(PageObject pageObject);
 	// 이벤트 리스트 페이지 처리를 위한 젠체 데이터 개수
-	public Long getTotal(PageObject pageObject);
+	public Long getTotalRow(PageObject pageObject);
 	// 이벤트 상세보기
 	public EventVO view(Long no);
 	// 이벤트 등록

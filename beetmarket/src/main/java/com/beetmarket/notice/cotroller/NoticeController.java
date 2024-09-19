@@ -72,8 +72,12 @@ public class NoticeController {
 	}
 	@PostMapping("/delete.do")
 	public String delete(NoticeVO vo, RedirectAttributes rttr){
-		service.delete(vo);
-		rttr.addFlashAttribute("msg", "공지사항이 삭제 되었습니다.");
-		return "redirect:list.do";
+		if(service.delete(vo)==1) {
+			rttr.addFlashAttribute("msg", "공지사항이 삭제 되었습니다.");
+			return "redirect:list.do";
+		}
+		else
+			rttr.addFlashAttribute("msg", "공지사항이 삭제가 되지 않았습니다." + "공지사항 번호나 비밀번호가 맞지 않습니다. 다시 확인해주세요");
+			return "redirect:view.do?no="+vo.getNo();
 	}	
 }
