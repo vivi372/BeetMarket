@@ -7,12 +7,14 @@
   <!-- 장바구니 리스트 -->
   <select id="basketList" resultType="com.beetmarket.basket.vo.BasketVO">
   		select b.basketNo, b.goodsNo,
+
   		 g.goodsName, s.store_name, s.free_ship_limit,s.merchant_delivery, g.goodsmainImage,g.goodsPrice,
   		 bo.goodsoptNo optNo, go.goodsoptName optName,go.goodsoptPrice optPrice, bo.amount ,
 		(select max(bm.basketNo) from basket bm, goods gm where gm.sell_no=g.sell_no and (bm.goodsNo = gm.goodsNo)) maxNo
 		from basket b, goods g, goodsOption go, basketOpt bo , seller_hub s
 		where (b.id=#{id}) and (b.goodsNo = g.goodsNo) 
 		and (go.goodsoptNo(+) = bo.goodsoptNo) and (b.basketNo = bo.basketNo) and (g.sell_no = s.sell_no) order by maxno desc,b.basketNo desc
+
 	
   </select>  
   

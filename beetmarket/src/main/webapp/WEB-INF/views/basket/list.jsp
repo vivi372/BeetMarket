@@ -131,6 +131,7 @@ $(function() {
 						<c:if test="${vs.index == 0 }">
 							<c:set var="isFirst" value="true"/>
 						</c:if>
+
 						<c:if test="${vs.index != 0 && vo.store_name != list[vs.index-1].store_name }">
 							${"</ul>"}
 							${"<ul class='list-group mt-3 sellerUl'>"}
@@ -200,6 +201,7 @@ $(function() {
 							</div>							
 				  		</li>
 						<c:if test="${vo.store_name != list[vs.index+1].store_name }">
+
 							<li class="list-group-item sellerItem">
 								<div class="text-center">
 									<span class="freedelivery">${vo.free_ship_limit }</span>원 이상 구매시 배송비 무료

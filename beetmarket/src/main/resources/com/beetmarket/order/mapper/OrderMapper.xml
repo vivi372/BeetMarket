@@ -76,6 +76,7 @@
 		where goodsoptNo in(
 			<foreach collection="optNos" item="optNo" separator=",">				
 				#{optNo,jdbcType=BIGINT}
+
 			</foreach>
 			)
 	</select>

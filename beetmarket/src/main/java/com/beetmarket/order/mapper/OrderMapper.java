@@ -19,7 +19,9 @@ public interface OrderMapper {
 	//주문 전체 수 구하기
 	public Long totalRow(@Param("pageObject") PageObject pageObject,@Param("searchVO") SearchVO searchVO);
 	//writeForm 상품의 데이터 가져오는 쿼리 
+
 	public List<OrderVO> getGoodsList(@Param("goodsNos") Long[] goodsNos);
+
 	//writeForm 옵션의 데이터 가져오는 쿼리 
 	public List<OrderOptVO> getOptList(@Param("optNos") Long[] optNos);
 	//주문 등록

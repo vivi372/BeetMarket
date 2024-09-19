@@ -50,6 +50,7 @@
 			//판매자의 상품들의 가격을 전부 더 해 totalPrice에 저장한다.
 			let totalSellerPrice = 0;
 			$(this).find(".orderPricePrint").each(function() {
+<<<<<<< main
 				totalSellerPrice += (+$(this).text())*(+$(this).closest(".orderListItem").find("#amount").val());
 			});
 			//모든 상품 가격이 배송비 무료 조건보다 비싸면 배송비를 0원으로 출력
@@ -235,6 +236,7 @@
 				  				<!-- 결제 금액 -->
 				  				<h5><b class="mt-3"><span class="orderPricePrint">${vo.goodsPrice + ((empty opt.optPrice)?0:opt.optPrice) }</span><span class="won">원</span></b></h5>	    
 				  				<input type="hidden" class="orderPriceInput" name="orderPrice" value="${vo.goodsPrice + ((empty opt.optPrice)?0:opt.optPrice) }">				
+
 				  				<input type="hidden" class="dlvyChargeInput" name="dlvyCharge" value="">
 							</div>				
 						</div>				

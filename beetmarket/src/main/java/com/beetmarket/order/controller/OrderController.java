@@ -100,6 +100,7 @@ public class OrderController {
 		@SuppressWarnings("unchecked")
 		List<OrderOptVO> optList = (List<OrderOptVO>) map.get("optList");
 		
+
 		
 		for(int i=0;i<goodsNo.length;i++) {
 			OrderOptVO optVO = null;
@@ -125,6 +126,8 @@ public class OrderController {
 		model.addAttribute("goodsList", map.get("goodsList"));
 		model.addAttribute("optList", optList);
 		model.addAttribute("basketNo", basketNo);
+
+
 		
 		return "order/writeForm";
 	}
