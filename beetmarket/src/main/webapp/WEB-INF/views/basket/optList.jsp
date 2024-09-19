@@ -151,7 +151,7 @@ function getJsonListData(item,jsonList) {
 <c:if test="${empty list[0].optNo }">
 	<div class="optListItem">
 		<!-- 옵션 번호, 옵션 이름 및 관련 주문을 숨김 필드로 설정 -->
-		<input type="hidden" name="optNo"> 		
+		<input type="hidden" name="optNo" value="0"> 		
 		<div class="optPrice" style="display: none"></div>
 		<!-- 수량 선택 인터페이스 (숫자 증가/감소 버튼과 입력 필드) -->
 		<div class="input-group mb-3 optAmount" style="width: 150px;">

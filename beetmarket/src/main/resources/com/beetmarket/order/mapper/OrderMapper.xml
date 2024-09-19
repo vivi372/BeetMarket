@@ -60,21 +60,22 @@
 	</sql>
 	
 	<!-- writeForm 상품의 데이터 가져오는 쿼리 -->
-	<select id="getGoodsList" resultType="com.beetmarket.goods.vo.GoodsVO">
-		select goodsNo,goodsTitle,goodsImage,goodsPublicher,goodsPrice,goodsCost,freedelivery from goods
+	<select id="getGoodsList" resultType="com.beetmarket.order.vo.OrderVO">
+		select goodsNo,goodsName,goodsMainImage,s.store_name,goodsPrice,s.merchant_delivery,s.free_ship_limit 
+   			from goods g, seller_hub s
 		where goodsNo in(
 			<foreach collection="goodsNos" item="goodsNo" separator=",">
 				#{goodsNo}
 			</foreach>
-			)
+			) and (g.sell_no = s.sell_no)
 	</select>
 	
 	<!-- writeForm 상품의 데이터 가져오는 쿼리 -->
 	<select id="getOptList" resultType="com.beetmarket.order.vo.OrderOptVO">
-		select optNo,optName,optPrice,goodsNo from goodsOption
-		where optNo in(
-			<foreach collection="optNos" item="optNo" separator=",">
-				#{optNo}
+		select goodsoptNo optNo,goodsoptName optName,goodsoptPrice optPrice,goodsNo from goodsOption
+		where goodsoptNo in(
+			<foreach collection="optNos" item="optNo" separator=",">				
+				#{optNo,jdbcType=BIGINT}
 			</foreach>
 			)
 	</select>

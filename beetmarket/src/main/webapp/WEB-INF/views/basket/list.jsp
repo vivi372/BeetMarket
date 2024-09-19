@@ -131,7 +131,7 @@ $(function() {
 						<c:if test="${vs.index == 0 }">
 							<c:set var="isFirst" value="true"/>
 						</c:if>
-						<c:if test="${vs.index != 0 && vo.name != list[vs.index-1].name }">
+						<c:if test="${vs.index != 0 && vo.store_name != list[vs.index-1].store_name }">
 							${"</ul>"}
 							${"<ul class='list-group mt-3 sellerUl'>"}
 							<c:set var="isFirst" value="true"/>
@@ -143,7 +143,7 @@ $(function() {
 				  			<input type="hidden" value="${vs.count }" name="order" class="orderData"> 			
 				  			<!-- 이미지와 상품 정보칸 옵션칸을 나누기 위해 그리드 시스템 사용 -->
 				  			<c:if test="${ isFirst == 'true'}">
-				  				<h5>${vo.name }</h5>
+				  				<h5><b>${vo.store_name }</b></h5>
 				  				<hr>
 				  				<c:set var="isFirst" value="false"/>
 				  			</c:if>
@@ -199,7 +199,7 @@ $(function() {
 								<button type="button" class="btn btn-outline-dark mr-1 w-25 orderWriteBtn">주문 하기</button>								
 							</div>							
 				  		</li>
-						<c:if test="${vo.name != list[vs.index+1].name }">
+						<c:if test="${vo.store_name != list[vs.index+1].store_name }">
 							<li class="list-group-item sellerItem">
 								<div class="text-center">
 									<span class="freedelivery">${vo.free_ship_limit }</span>원 이상 구매시 배송비 무료

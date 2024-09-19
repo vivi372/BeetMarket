@@ -27,9 +27,12 @@ public class OrderVO {
 	private String addr;
 	private String addrDetail;
 	private long goodsNo;
-	private String goodsTitle;
-	private String goodsImage;
-	private String goodsPublicher;
+	private String goodsName;
+	private String goodsMainImage;
+	private String store_name;
+	private Long goodsPrice;
+	private Integer merchant_delivery;
+	private Integer free_ship_limit;
 	private long orderOptNo;
 	private String optName;
 	private long optNo;

@@ -100,16 +100,31 @@ public class OrderController {
 		@SuppressWarnings("unchecked")
 		List<OrderOptVO> optList = (List<OrderOptVO>) map.get("optList");
 		
-		for(int i=0;i<optList.size();i++) {
-			optList.get(i).setAmount(amount[i]);
+		
+		for(int i=0;i<goodsNo.length;i++) {
+			OrderOptVO optVO = null;
+			try {
+				//옵션이 없으면 옵션 리스트의 길이가 상품 번호 배열의 길이보다 적어 예외 발생
+				optVO = optList.get(i);					
+			} catch (Exception e) {
+				optVO = new OrderOptVO();
+			}
+			if(optVO.getGoodsNo() == goodsNo[i])
+				optVO.setAmount(amount[i]);
+			else {
+				optVO.setAmount(amount[i]);
+				optVO.setGoodsNo(goodsNo[i]);
+				optList.add(i,optVO);
+			}
 		}
+		
 		
 		log.info(map.get("goodsList"));
 		log.info(optList);
 		
 		model.addAttribute("goodsList", map.get("goodsList"));
 		model.addAttribute("optList", optList);
-		model.addAttribute("basketNos", basketNo);
+		model.addAttribute("basketNo", basketNo);
 		
 		return "order/writeForm";
 	}

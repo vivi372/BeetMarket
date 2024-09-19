@@ -50,7 +50,7 @@
 			//판매자의 상품들의 가격을 전부 더 해 totalPrice에 저장한다.
 			let totalSellerPrice = 0;
 			$(this).find(".orderPricePrint").each(function() {
-				totalSellerPrice += (+$(this).text());
+				totalSellerPrice += (+$(this).text())*(+$(this).closest(".orderListItem").find("#amount").val());
 			});
 			//모든 상품 가격이 배송비 무료 조건보다 비싸면 배송비를 0원으로 출력
 			//console.log(totalPrice);
@@ -146,8 +146,8 @@
 	<form id="writeForm">	
 	
 		<!-- 결제후 장바구니 삭제를 위한 장바구니 번호 데이터 -->
-		<c:forEach items="${basketNos }" var="vo">
-			<input type="hidden" id="basketNo" name="basketNo" value="${vo.basketNo }">
+		<c:forEach items="${basketNo }" var="no">
+			<input type="hidden" id="basketNo" name="basketNo" value="${no }">
 		</c:forEach>
 		<i class="material-icons float-right backBtn" onclick="history.back()" style="font-size:36px">arrow_back</i>		
 		<h3><b>배송지</b></h3>
@@ -179,7 +179,7 @@
 					<c:forEach items="${optList }" var="opt">
 						<c:forEach items="${goodsList }" var="vo">
 							<c:if test="${opt.goodsNo == vo.goodsNo }">
-							${vo.goodsTitle } (${opt.optName })				
+							${vo.goodsName } (${opt.optName })				
 				  			<input type="text" class="form-control my-3 eachDlvyMemo" name="dlvyMemo" maxlength="100" placeholder="배송 메모를 입력해주세요.">			  			
 		  					</c:if>
 		  				</c:forEach>
@@ -192,20 +192,20 @@
 		
 		<br>
 		<h3><b>주문상품</b></h3>
-		<div class="border rounded p-3 mb-2 bg-white text-dark shadow-sm sellerListItem" data-freedelivery="${ goodsList[0].freedelivery}" data-goodscost="${ goodsList[0].goodsCost}">
+		<div class="border rounded p-3 mb-2 bg-white text-dark shadow-sm sellerListItem" data-freedelivery="${ goodsList[0].free_ship_limit}" data-goodscost="${ goodsList[0].merchant_delivery}">
 		<!-- 배송비 -->
 		<span class="float-right text-secondary">배송비 : <span class="dlvyChargePrint"></span><span class="won">원</span></span> 		
-		<h5>${ goodsList[0].goodsPublicher}</h5>
+		<h5>${ goodsList[0].store_name}</h5>
 		<hr>
 			
 		<c:forEach items="${optList }" var="opt" varStatus="vs">
 			<c:forEach items="${goodsList }" var="vo">
 				<c:if test="${opt.goodsNo == vo.goodsNo }">
-					<c:if test="${vs.index != 0 && vo.goodsPublicher != goodsList[vs.index-1].goodsPublicher}">
+					<c:if test="${vs.index != 0 && vo.store_name != goodsList[vs.index-1].store_name}">
 						${"</div>" }
-						${"<div class='border rounded p-3 mb-2 bg-white text-dark shadow-sm sellerListItem' data-freedelivery='vo.freedelivery' data-goodscost='${ vo.goodsCost}'>" }
+						${"<div class='border rounded p-3 mb-2 bg-white text-dark shadow-sm sellerListItem' data-freedelivery='vo.free_ship_limit' data-goodscost='${ vo.merchant_delivery}'>" }
 						${"<span class='float-right text-secondary'배송비 : <span class='dlvyChargePrint'></span><span class='won'>원</span></span>" }
-						${"<h5>${ vo.goodsPublicher}</h5>" }
+						${"<h5>${ vo.store_name}</h5>" }
 						${"<hr>" }
 						${"<input type='hidden' id='dlvyCharge' name='dlvyCharge' value=''>" }
 					</c:if>
@@ -217,23 +217,24 @@
 						<div class="row">
 							<div class="col-2">
 								<!-- 상품 이미지 -->
-								<img class="rounded img-fluid dataRow" src="${vo.goodsImage }" alt="상품 사진" width="150" height="150">
+								<img class="rounded img-fluid dataRow" src="${vo.goodsMainImage }" alt="상품 사진" width="150" height="150">
 							</div>
 							<div class="col-10"> 										
 				  				<!-- 상품 이름 -->
-				  				<h5><b class="dataRow text-truncate goodsTitle">${vo.goodsTitle }</b></h5>			  							
+				  				<h5><b class="dataRow text-truncate goodsTitle">${vo.goodsName }</b></h5>			  							
 				  				
 				  									
 				  				<input type="hidden" id="optNo" name="optNo" value="${opt.optNo }">
-				  				<!-- 옵션 이름 -->
-								<h5><span class="badge badge-pill badge-secondary">수량</span> ${opt.optName}</h5>	 					
+				  				<c:if test="${!empty opt.optName}">
+					  				<!-- 옵션 이름 -->
+									<h5><span class="badge badge-pill badge-secondary">옵션</span> ${opt.optName}</h5>
+								</c:if>	 					
 								<!-- 수량 -->
 								<h5><span class="badge badge-pill badge-secondary">수량</span> ${opt.amount}개</h5>
-				  				<input type="hidden" id="amount" name="amount" value="${opt.amount}">
-				  				
+				  				<input type="hidden" id="amount" name="amount" value="${opt.amount}">				  				
 				  				<!-- 결제 금액 -->
-				  				<h5><b class="mt-3"><span class="orderPricePrint">${vo.goodsPrice + opt.optPrice }</span><span class="won">원</span></b></h5>	    
-				  				<input type="hidden" class="orderPriceInput" name="orderPrice" value="${vo.goodsPrice + opt.optPrice }">				
+				  				<h5><b class="mt-3"><span class="orderPricePrint">${vo.goodsPrice + ((empty opt.optPrice)?0:opt.optPrice) }</span><span class="won">원</span></b></h5>	    
+				  				<input type="hidden" class="orderPriceInput" name="orderPrice" value="${vo.goodsPrice + ((empty opt.optPrice)?0:opt.optPrice) }">				
 				  				<input type="hidden" class="dlvyChargeInput" name="dlvyCharge" value="">
 							</div>				
 						</div>				
