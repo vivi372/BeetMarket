@@ -1,6 +1,8 @@
 package com.beetmarket.pointshoporder.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -9,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.beetmarket.pointshoporder.mapper.PointShopOrderMapper;
 import com.beetmarket.pointshoporder.vo.PointShopOrderVO;
+import com.beetmarket.pointshoporder.vo.SearchVO;
+import com.webjjang.util.page.PageObject;
 
 import lombok.Setter;
 
@@ -18,6 +22,15 @@ public class PointShopOrderServiceImpl implements PointShopOrderService {
 	
 	@Setter(onMethod_ = @Autowired)
 	PointShopOrderMapper mapper;
+	
+	//주문 리스트 가져오기
+	@Override
+	public List<PointShopOrderVO> list(PageObject pageObject,SearchVO searchVO,Integer admin) {
+		
+		pageObject.setTotalRow(mapper.totalRow(pageObject,searchVO,admin));
+		
+		return mapper.list(pageObject,searchVO,admin);
+	}
 	
 	//포인트샵 주문 등록
 	@Override
@@ -53,6 +66,25 @@ public class PointShopOrderServiceImpl implements PointShopOrderService {
 		}
 		
 		return outOfStock;
+	}
+	
+	
+	//구매 상품 삭제
+	@Override
+	public Integer delete(Long stockNo) {
+		return mapper.delete(stockNo);
+	}
+	
+	//상품 환불
+	@Override
+	@Transactional
+	public Integer refund(Long pointShopOrderNo) {
+		//포인트 환불
+		
+		//주문 삭제
+		mapper.refundDelete(pointShopOrderNo);
+		//상품 환불
+		return mapper.refund(pointShopOrderNo);
 	}
 
 }
