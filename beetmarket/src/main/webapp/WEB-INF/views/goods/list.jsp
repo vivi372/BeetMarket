@@ -89,8 +89,8 @@
 							// 글번호 필요 - 수집
 							let goodsNo = $(this).find(".goodsNo").text();
 							console.log("goodsNo = " + goodsNo);
-							location = "view.do?goodsNo=" + goodsNo
-									+ "&inc=1" + "&${pageObject.pageQuery}"
+							location = "view.do?goodsNo=" + goodsNo + "&inc=1"
+									+ "&${pageObject.pageQuery}"
 									+ "&${searchVO.query}";
 						});
 
@@ -116,17 +116,17 @@
 					//alert("검색");
 					// 검색 내용이 없으면 검색으로 가지 않는다.
 					if ($("#cateHighNo").val() == 0
-							&& $("#goodsName").val().trim() == ""
+							&& $("#goodsName").val().trim() == "") {
 						// alert("검색 - 안 넘어감");
 						return false;
 					}
 
-					// return false;
 				});
 
 		// 검색 데이터 세팅
 		$("#cateHighNo").val("${searchVO.cateHighNo}");
 		$("#cateMidNo").val("${searchVO.cateMidNo}");
+		$("#cateLowNo").val("${searchVO.cateLowNo}");
 		$("#goodsName").val("${searchVO.goodsName}");
 	});
 </script>
@@ -160,6 +160,13 @@
 							<label for="cateMidNo">중분류</label>
 							<select class="form-control" name="cateMidNo" id="cateMidNo" style="margin: 0 10px;">
 								<option value="0">중분류 선택</option>
+								<!-- ajax를 이용한 중분류 option 로딩하기 -->
+							</select>
+						</div>
+						<div class="form-group mb-2">
+							<label for="cateLowNo">소분류</label>
+							<select class="form-control" name="cateLowNo" id="cateLowNo" style="margin: 0 10px;">
+								<option value="0">소분류 선택</option>
 								<!-- ajax를 이용한 중분류 option 로딩하기 -->
 							</select>
 						</div>
@@ -219,17 +226,9 @@
 									상품 번호 : <span class="goodsNo">${vo.goodsNo }</span>
 								</div>
 								<div>
-									정가 :
-									<fmt:formatNumber value="${vo.goodsOriPrice }" />
-									원</span>
-								</div>
-								<div>
 									판매가 :
 									<fmt:formatNumber value="${vo.goodsPrice }" />
-									원</span>
-								</div>
-								<div>
-									적립금 : ${vo.goodsSaveRate }%</span>
+									원
 								</div>
 								</p>
 							</div>
