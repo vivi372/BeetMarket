@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.beetmarket.member.mapper.MemberMapper;
 import com.beetmarket.member.vo.LoginVO;
 import com.beetmarket.member.vo.MemberVO;
+import com.beetmarket.member.vo.PointVO;
 import com.webjjang.util.page.PageObject;
 
 import lombok.extern.log4j.Log4j;
@@ -29,19 +30,19 @@ public class MemberServiceImpl implements MemberService{
 	}
 	// 회원 리스트
 	@Override
-	public List<MemberVO> list(PageObject pageObject) {
+	public List<MemberVO> list(PageObject pageObject ,String id) {
 		log.info("list() 실행");
 		// 전체 데이터 개수 구하기
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
-		return mapper.list(pageObject);
+		return mapper.list(pageObject , id);
 	}
 	// 회원 리스트
 	@Override
-	public List<MemberVO> pointList(PageObject pageObject) {
+	public List<PointVO> pointList(PageObject pageObject, String id) {
 		log.info("list() 실행asdasd");
 		// 전체 데이터 개수 구하기
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
-		return mapper.pointList(pageObject);
+		return mapper.pointList(pageObject,id);
 	}
 	// 회원 등급변경
 	@Override
@@ -80,5 +81,15 @@ public class MemberServiceImpl implements MemberService{
 	public MemberVO myView(String id) {
 		log.info("view() 실행");
 		return mapper.myView(id);
+	}
+	@Override
+	public PointVO pointWrite(PointVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.pointWrite(vo);
+	}
+	@Override
+	public Integer update(MemberVO vo) {
+		// TODO Auto-generated method stub
+		return mapper.update(vo);
 	}
 }

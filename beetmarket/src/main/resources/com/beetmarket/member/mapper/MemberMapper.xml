@@ -19,7 +19,7 @@
 					
 					where (
 					1=1
-					)
+					) and (id != #{id})
 					and (
 					m.gradeNo = g.gradeNo and m.shipNo=s.shipNo	
 					)
@@ -73,7 +73,7 @@
 
 	<!-- 회원관리 글보기 -->
 	<select id="view" resultType="com.beetmarket.member.vo.MemberVO">
-		select m.id,m.name,m.tel,to_date(m.birth,'yyyy-mm-dd') birth,m.regDate,m.photo,m.conDate,
+		select m.id,m.name,m.tel,to_date(m.birth,'yyyy-mm-dd') birth,m.regDate,m.photo,m.conDate,m.regDate,
 		m.email,m.gender,m.status,g.gradeName,s.shipName , g.gradeNo , s.shipNo
 		from member m , grade g , memberShip s
 		where id = #{id} and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
@@ -92,7 +92,7 @@
 
 
 	<!-- 회원관리 리스트 -->
-	<select id="pointList" resultType="com.beetmarket.member.vo.MemberVO">
+	<select id="pointList" resultType="com.beetmarket.member.vo.PointVO">
 	select  id, pointlist_no,point_entity , point_delta ,redeemed_date
 		from (
 			select rownum rnum, id, pointlist_no,point_entity , point_delta ,redeemed_date
@@ -112,6 +112,51 @@
 			)	
 		where rnum between #{pageObject.startRow} and #{pageObject.endRow}
 	</select>
+
+	<!-- 회원 포인트 증감 -->
+	<insert id="pointWrite">
+		<!-- 먼저 MemberVO의 no에 setter를 이용해서 시퀀스에서 받아온 번호를 세팅해 준다. -->
+		<selectKey keyProperty="pointlist_no" resultType="Long" order="BEFORE">
+			select point_seq.nextval from dual
+		</selectKey>
+		insert into pointList(pointlist_no,point_entity , point_delta ,redeemed_date,id)
+		values(#{pointlist_no},#{point_entity} , #{point_delta} ,#{redeemed_date},#{id})
+	</insert>
+
+
+	<!-- 회원관리 로그인 -->
+	<select id="login" resultType="com.beetmarket.member.vo.LoginVO">
+		select
+		    m.id, m.name, m.photo, m.newMsgCnt, m.gradeNo, g.gradeName , s.shipNo ,s.shipName , m.email
+		from member m, grade g , membership s 
+		where
+		    (id = #{id} and pw = #{pw} and m.status='정상')
+		    and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo )
+	</select>
+
+	<!-- 회원관리 수정 -->
+	<update id="update">
+	<![CDATA[
+		update member
+		set name = #{name}, email = #{email},pw = #{pw}, birth = #{birth},tel = #{tel}
+		where id = #{id} and pw = #{pw}
+	]]>
+	</update>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -136,14 +181,6 @@
 	
 	
 	
-	<!-- 회원관리 수정 -->
-	<update id="update">
-	<![CDATA[
-		update member
-		set title = #{title}, content = #{content}, writer = #{writer}
-		where no = ${no} and pw = #{pw}
-	]]>
-	</update>
 
 	<!-- 회원관리 탈퇴 -->
 	<delete id="delete">
@@ -153,16 +190,6 @@
 	]]>
 	</delete>
 
-
-	<!-- 회원관리 로그인 -->
-	<select id="login" resultType="com.beetmarket.member.vo.LoginVO">
-		select
-		    m.id, m.name, m.photo, m.newMsgCnt, m.gradeNo, g.gradeName , s.shipNo ,s.shipName , m.email
-		from member m, grade g , membership s 
-		where
-		    (id = #{id} and pw = #{pw})
-		    and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
-	</select>
 
 
 </mapper>

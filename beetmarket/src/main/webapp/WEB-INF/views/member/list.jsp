@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>회원리스트</title>
+<jsp:include page="Msg.jsp"></jsp:include>
 <style type="text/css">
 .dataRow:hover{
 	background: #e0e0e0;
@@ -21,7 +22,6 @@ $(function(){
 	
 	// 회원 한줄을 클릭하면 회원 정보보기로 이동 시키는 처리
 	function dataRowClick(id){
-		console.log(id);
 		location = "view.do?id="+id;
 	}
 	

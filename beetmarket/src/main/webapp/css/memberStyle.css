@@ -52,9 +52,11 @@
     margin-left: 100px;
 }
 .centered-content2 {
-    margin-top: 10px;
+	margin-top:20px;
     width: 150px; /* 너비 설정 */
     height: 150px; /* 높이 설정 */
+    text-align: right; /* 텍스트를 가운데 정렬 */
+    font-weight: bold; /* 두꺼운 글자 */
     background-color: #f0f0f0; /* 배경색 */
 }
 .thick-line {

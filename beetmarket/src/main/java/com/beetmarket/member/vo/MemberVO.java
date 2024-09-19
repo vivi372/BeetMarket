@@ -14,7 +14,7 @@ public class MemberVO {
 	private String pw;
 	private String name;
 	private String gender;
-	private Date birth;
+	private String birth;
 	private String tel;
 	private String email;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -35,6 +35,5 @@ public class MemberVO {
 	private String point_entity; 
 	private Long point_delta; 
 	private String redeemed_date; // 포인트 차감/등록 날짜
-	
 	
 }

@@ -5,6 +5,7 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인 폼</title>
+<jsp:include page="Msg.jsp"></jsp:include>
 </head>
 <body>
 <div class="container">
