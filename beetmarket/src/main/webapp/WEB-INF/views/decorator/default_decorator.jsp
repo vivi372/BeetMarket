@@ -116,7 +116,7 @@
 
 
 			<!--포인트샵 -->
-			<li class="nav-item"><a class="nav-link" id="pointshop-btn">
+			<li class="nav-item"><a class="nav-link" id="pointshop-btn" style="color:white;">
 					<span>포인트샵</span>
 			</a></li>
 
@@ -321,7 +321,7 @@
 			<footer class="sticky-footer bg-white">
 				<div class="container my-auto">
 					<div class="copyright text-center my-auto">
-						<span>Copyright &copy; Your Website 2021</span>
+						<span>bit market 2024</span>
 					</div>
 				</div>
 			</footer>

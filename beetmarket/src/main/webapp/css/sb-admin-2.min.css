@@ -8,14 +8,14 @@
  * Copyright 2011-2021 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */:root{--blue:#4e73df;-
- -indigo:#6610f2;-
- -purple:#6f42c1;-
- -pink:#e83e8c;-
- -red:#e74a3b;-
- -orange:#fd7e14;-
- -yellow:#f6c23e;-
- -green:#1cc88a;-
- -teal:#20c9a6; -
+ 	-indigo:#6610f2;-
+ 	-purple:#6f42c1;-
+ 	-pink:#e83e8c;-
+ 	-red:#e74a3b;-
+ 	-orange:#fd7e14;-
+ 	-yellow:#f6c23e;-
+ 	-green:#1cc88a;-
+ 	-teal:#20c9a6; -
 	-cyan: #36b9cc; -
 	-white: #fff; -
 	-gray: #858796; -
@@ -2321,8 +2321,8 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-primary {
 	color: #fff;
-	background-color: #4e73df;
-	border-color: #4e73df
+	background-color: #000000;
+	border-color: #000000
 }
 
 .btn-primary:hover {
@@ -2890,7 +2890,7 @@ a.btn.disabled, fieldset:disabled a.btn {
 
 .btn-link {
 	font-weight: 400;
-	color: #4e73df;
+	color: #000000;
 	text-decoration: none
 }
 
@@ -9559,8 +9559,8 @@ opacity
 }
 
 .bg-gradient-primary {
-  background-color: #32CD32; /* 진한 보라색 */
-  background-image: linear-gradient(180deg, #32CD32 10%, #800080 100%);
+  background-color: #800080; /* 진한 보라색 */
+  background-image: linear-gradient(180deg, #800080 10%, #FF69B4 100%); /* 보라색에서 핑크색으로 그라데이션 */
   background-size: cover;
 }
 

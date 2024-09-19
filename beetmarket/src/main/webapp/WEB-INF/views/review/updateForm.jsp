@@ -40,10 +40,22 @@
             
 
             <!-- 별점 입력 -->
-            <div class="form-group">
-              <label for="starscore">별점</label>
-              <input type="number" class="form-control" id="starscore" name="starscore" max="5" min="1" required>
-            </div>
+				<link href="${pageContext.request.contextPath}/css/reviewStyle.css" rel="stylesheet"/>
+				<div class="form-group">
+				    <label for="starscore">상품은 만족하셨나요?</label>
+				    <div class="star-rating">
+				        <input type="radio" name="starscore" value="5" id="rate1">
+				        <label for="rate1">★</label>
+				        <input type="radio" name="starscore" value="4" id="rate2">
+				        <label for="rate2">★</label>
+				        <input type="radio" name="starscore" value="3" id="rate3">
+				        <label for="rate3">★</label>
+				        <input type="radio" name="starscore" value="2" id="rate4">
+				        <label for="rate4">★</label>
+				        <input type="radio" name="starscore" value="1" id="rate5">
+				        <label for="rate5">★</label>
+				    </div>
+				</div>
 
 
 

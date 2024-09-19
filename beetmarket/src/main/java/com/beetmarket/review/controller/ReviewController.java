@@ -82,7 +82,8 @@ public class ReviewController {
 	
 	// 리뷰 등록처리
 	@PostMapping("/write.do")
-	public String write(ReviewVO vo, HttpServletRequest request, RedirectAttributes rttr, MultipartFile reviewFile ) throws Exception {
+	public String write(ReviewVO vo, HttpServletRequest request, 
+			RedirectAttributes rttr, MultipartFile reviewFile ) throws Exception {
 		log.info("<<<----- 이미지 처리 ----------------->>");
 		// 대표 이미지 처리
 		vo.setReviewImage(FileUtil.upload(path, reviewFile, request));
@@ -121,7 +122,7 @@ public class ReviewController {
 		else
 			rttr.addFlashAttribute("업데이트가 되지 않았습니다");
 		
-		return "redirect:list.do?reivewreviewNo=" + vo.getReviewNo();
+		return "redirect:list.do?reviewNo=" + vo.getReviewNo();
 	}
 	
 	
