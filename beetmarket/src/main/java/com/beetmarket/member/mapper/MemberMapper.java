@@ -15,6 +15,7 @@ public interface MemberMapper {
 	public LoginVO login(LoginVO vo);
 	// 회원관리 리스트
 	public List<MemberVO> list(@Param("pageObject") PageObject pageObject);
+	public List<MemberVO> pointList(@Param("pageObject") PageObject pageObject);
 	
 	// 회원관리 리스트 페이지 처리를 위한 전체 데이터 개수
 	public Long getTotalRow(@Param("pageObject") PageObject pageObject);

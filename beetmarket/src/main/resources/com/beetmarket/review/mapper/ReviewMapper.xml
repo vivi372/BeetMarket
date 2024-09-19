@@ -36,12 +36,37 @@
 
 
 
+<!-- 리뷰 수 조회 -->
+<select id="getCommentCount" resultType="int">
+    SELECT COUNT(*) FROM comments
+    WHERE reviewNo = #{reviewNo}
+</select>
+
+
 <!-- 등록 -->
 <insert id="write">
 	<selectKey keyProperty="reviewNo" resultType="Long" order="BEFORE">
 		select review_seq.nextval from dual
 	</selectKey>
-		insert into review(reviewNo, reviewContent, reviewImage, goodsNo, starscore, orderNo )
-		values(#{reviewNo}, #{reviewContent}, #{reviewImage}, #{goodsNo}, #{starscore}, #{orderNo},;
+		insert into review(reviewNo, reviewContent, reviewImage, starscore, orderNo )
+		values(#{reviewNo}, #{reviewContent}, #{reviewImage}, #{starscore}, #{orderNo})
 </insert>
+
+
+
+<!-- 수정 -->
+<update id="update">
+<![CDATA[
+	update review
+	set reviewContent = #{reviewContent}, starscore = #{starscore}
+	where reviewNo = #{reviewNo}
+]]>
+</update>
+
+
+<!-- 삭제 -->
+<delete id="delete" parameterType="long">
+    DELETE FROM review WHERE reviewNo = #{reviewNo}
+</delete>
+
 </mapper>

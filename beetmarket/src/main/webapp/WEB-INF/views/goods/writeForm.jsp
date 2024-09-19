@@ -171,7 +171,7 @@ $(function(){ // HTML 문서가 로딩이 다 되면 실행해 주세요.
 				<select class="form-control" name="cate_code1" 
 				 id="cate_code1" style="margin: 0 10px;">
 					<c:forEach items="${bigList }" var="vo">
-						<option value="${vo.cate_code1 }">${vo.cate_name }</option>
+						<option value="${vo.cateHighNo }">${vo.categoryName }</option>
 					</c:forEach>
 				</select>
 			</div>
@@ -226,7 +226,7 @@ $(function(){ // HTML 문서가 로딩이 다 되면 실행해 주세요.
 	<!-- p-# : padding 상대적인 설정 -->
 	 <fieldset class="border p-4">
 		<!-- px-# : padding 왼쪽 오른쪽 상대적인 설정 (참고:pl-#,pr-#,pt-#,pb-#,py-#) -->
-	 	<legend class="w-auto px-2"><b style="font-size: 14pt;">[상품 가격 정보 입력]</b></legend>
+	 	<legend class="w-auto px-2"><b style="font-size: 14pt;">[상품 정보 입력]</b></legend>
 		<!-- 가격 정보 입력 시작 -->
 		<div class="form-group">
 			<label for="price">정가</label>

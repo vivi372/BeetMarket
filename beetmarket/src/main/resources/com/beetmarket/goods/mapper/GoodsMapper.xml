@@ -9,25 +9,27 @@
 		<!-- 상품 코드, 상품명, 대표이미지, 최종판매가, 조회수 -->
 		select
 		goodsNo, goodsName, goodsMainImage, goodsPrice, goodsHit
-			from (
-				select
-				rownum rnum, goodsNo, goodsName, goodsMainImage, goodsPrice, goodsHit
-					from (
-						select
-						goodsNo,	goodsName, goodsMainImage, goodsPrice, goodsHit
-						from
-						goods
-						where
-						( 1=1
-							<!-- 검색을 달아야 한다. -->
-							<include refid="search" />
-						)
-						order by goodsNo desc
-					)
-			)
-			where rnum between
-			#{pageObject.startRow} and
-			#{pageObject.endRow}
+		from (
+		select
+		rownum rnum, goodsNo, goodsName, goodsMainImage, goodsPrice,
+		goodsHit
+		from (
+		select
+		goodsNo, goodsName, goodsMainImage, goodsPrice,
+		goodsHit
+		from
+		goods
+		where
+		( 1=1
+		<!-- 검색을 달아야 한다. -->
+		<include refid="search" />
+		)
+		order by goodsNo desc
+		)
+		)
+		where rnum between
+		#{pageObject.startRow} and
+		#{pageObject.endRow}
 	</select>
 
 	<!-- 상품 리스트 페이지 처리를 위한 전체 데이터 개수 가져오기 -->
@@ -67,6 +69,168 @@
 			)
 		</if>
 	</sql>
+
+	<!-- 상품 보기 조회수 1 증가 -->
+	<!-- # {obj} 1. 변수의 이름, 2. vo의 getter 이름, 3. Map의 key -->
+	<update id="increase">
+		update goods set goodsHit = goodsHit + 1
+		where goodsNo =
+		#{goodsNo}
+	</update>
+
+	<!-- 상품 정보 보기 -->
+	<select id="view" resultType="com.beetmarket.goods.vo.GoodsVO">
+		select
+		<!-- // category -->
+		g.cateHighNo,
+		g.cateMidNo,
+		g.cateLowNo,
+		c.categoryName,
+
+		<!-- // goods -->
+		g.goodsNo,
+		g.goodsName,
+		g.goodsMainImage,
+		g.goodsConImage,
+		g.goodsContent,
+		g.goodsHit,
+		g.goodsOriPrice,
+		g.goodsDiscRate,
+		g.goodsDiscount,
+		g.goodsPrice,
+		g.goodsSavings,
+		g.goodsSaveRate,
+
+		<!-- // goodsOption -->
+		o.goodsOptPrice,
+		o.goodsOptName,
+
+		<!-- // goodsInfo -->
+		i.goodsInfoName,
+		i.goodsInfoCon,
+
+		<!-- // goodsStatus -->
+		s.goodsStatusName
+
+		<!-- from 뒤에 사용할 수 있는 것 : 1. table, 2. select 쿼리, 3. view table -->
+		<!-- 불러와야 하는 테이블 : 1. goods, 2. goodsOption, 3. category, 4. goodsInfo, 
+			5. goodsStatus -->
+		from goods g, goodsOption o, category c, goodsInfo i, goodsStatus s
+		where (g.goodsNo = #{goodsNo})
+		and
+		(g.goodsNo = o.goodsNo
+		and
+		g.cateHighNo = c.cateHighNo and g.cateMidNo = c.cateMidNo and
+		g.cateLowNo = c.cateLowNo
+		and g.goodsNo = i.goodsNo
+		and g.goodsStatusNo
+		= s.goodsStatusNo)
+	</select>
+
+	<!-- 상품 이미지 리스트 -->
+	<select id="imageList"
+		resultType="com.beetmarket.goods.vo.GoodsImageVO">
+		select
+		goodsImageNo, goodsNo, goodsImageName
+		<!-- from 뒤에 사용할 수 있는 것 : 1. table, 2. select 쿼리, 3. view table -->
+		from goodsImage
+		where (goodsNo = #{goodsNo})
+	</select>
+	<!-- 상품 옵션 리스트 -->
+	<select id="optionList"
+		resultType="com.beetmarket.goods.vo.GoodsOptionVO">
+		select
+		goodsOptNo, goodsNo, goodsOptName, goodsOptPrice
+		<!-- from 뒤에 사용할 수 있는 것 : 1. table, 2. select 쿼리, 3. view table -->
+		from goodsOption
+		where (goodsNo = #{goodsNo})
+	</select>
+	<!-- 상품 정보 리스트 -->
+	<select id="infoList"
+		resultType="com.beetmarket.goods.vo.GoodsInfoVO">
+		select
+		goodsInfoNo, goodsNo, goodsInfoName, goodsInfoCon
+		<!-- from 뒤에 사용할 수 있는 것 : 1. table, 2. select 쿼리, 3. view table -->
+		from goodsInfo
+		where (goodsNo = #{goodsNo})
+	</select>
+	
+	<!-- 1. 상품 정보 등록 -->
+	<insert id="write">
+		<!-- 먼저 GoodsVO의 no에 setter를 이용해서 시퀀스에서 받아온 번호를 세팅해 준다. -->
+		<selectKey keyProperty="goodsNo" resultType="Long"
+			order="BEFORE">
+			select goods_seq.nextval from dual
+		</selectKey>
+		INSERT INTO goods(goodsNo, cateHighNo, cateMidNo, cateLowNo,
+		goodsName,
+		goodsStatusNo, goodsMainImage, goodsConImage, goodsContent,
+		goodsOriPrice, goodsDiscRate, goodsDiscount, goodsPrice, goodsSavings,
+		goodsSaveRate)
+		VALUES
+		(#{goodsNo}, #{cateHighNo}, #{cateMidNo},
+		#{cateLowNo},
+		1,
+		#{goodsMainImage, jdbcType=VARCHAR},
+		#{goodsConImage,
+		jdbcType=VARCHAR},
+		#{goodsContent}, #{goodsOriPrice},
+		#{goodsDiscRate},
+		#{goodsDiscount}, #{goodsPrice}, #{goodsSavings},
+		#{goodsSaveRate}
+		<!-- 지원되는 JDBC 타입 - Null 처리가 됨. VARCHAR: 문자열, INTEGER: 정수, BIGINT: 큰 정수, 
+			DOUBLE: 실수, DATE: 날짜, TIMESTAMP: 타임스탬프, BOOLEAN: 논리형 -->
+		)
+	</insert>
+
+	<!-- 2. 상품 추가 이미지 등록 -->
+	<insert id="writeImage" parameterType="java.util.List">
+		<!-- 먼저 GoodsVO의 goods_no를 가져와서 세팅해 준다. -->
+		INSERT INTO goodsImage(goodsImageNo, goodsNo, goodsImageName)
+		select
+		goodsImage_seq.nextval, goodsNo, goodsImageName from (
+		<foreach collection="list" item="vo" separator=" union all ">
+			select
+			#{vo.goodsNo} goodsNo, #{vo.goodsImageName} goodsImageName
+			from dual
+		</foreach>
+		)
+	</insert>
+
+	<!-- 3. 상품 옵션 등록 -->
+	<insert id="writeOption">
+		<!-- 먼저 GoodsVO의 goods_no를 가져와서 세팅해 준다. -->
+		INSERT INTO goodsOption(goodsOptNo, goodsNo,
+		goodsOptName,
+		goodsOptPrice)
+		select
+		goodsOptNo_seq.nextval, goodsNo, goodsOptName,
+		goodsOptPrice from (
+		<foreach collection="list" item="vo" separator=" union all ">
+			select
+			#{vo.goodsNo} goodsNo, #{vo.goodsOptName} goodsOptName,
+			#{vo.goodsOptPrice} goodsOptPrice
+			from dual
+		</foreach>
+		)
+	</insert>
+
+	<!-- 4. 상품 정보 등록 -->
+	<insert id="writeInfo">
+		<!-- 먼저 GoodsVO의 goods_no를 가져와서 세팅해 준다. -->
+		INSERT INTO goodsInfo(goodsInfoNo, goodsNo,
+		goodsInfoName,
+		goodsInfoCon)
+		select
+		goodsInfo_seq.nextval, goodsNo, goodsInfoName,
+		goodsInfoCon from (
+		<foreach collection="list" item="vo" separator=" union all ">
+			select
+			#{vo.goodsNo} goodsNo, #{vo.goodsInfoName} goodsInfoName,
+			#{vo.goodsInfoCon} goodsInfoCon from dual
+		</foreach>
+		)
+	</insert>
 
 </mapper>
 

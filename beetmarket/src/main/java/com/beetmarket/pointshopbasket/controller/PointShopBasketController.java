@@ -48,12 +48,33 @@ public class PointShopBasketController {
 		log.info(vo);				
 		
 		service.write(vo);
-		if(vo.getPointShopBasketno() != 0)
+		if(vo.getPointShopBasketNo() != 0)
 			return new ResponseEntity<String>("해당 상품 장바구니의 수량이 1 증가 되었습니다.", HttpStatus.OK);
 		else
 			return new ResponseEntity<String>("해당 상품이 장바구니에 등록되었습니다.", HttpStatus.OK);
 	}
 	
+	@PostMapping(value = "/update.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> update(PointShopBasketVO vo) {
+		log.info(vo);				
+		
+		service.update(vo);
+		
+		return new ResponseEntity<String>("장바구니의 수량이 수정되었습니다.", HttpStatus.OK);
+	}
+	
+
+
+	@GetMapping(value = "/delete.do", produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> delete(Long pointShopBasketNo) {
+		log.info(pointShopBasketNo);				
+		
+		
+		service.delete(new Long[] {pointShopBasketNo});
+		
+		return new ResponseEntity<String>("장바구니가 삭제되었습니다.", HttpStatus.OK);
+	}
+
 	
 	
 }

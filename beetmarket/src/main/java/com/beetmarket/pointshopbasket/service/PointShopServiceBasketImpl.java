@@ -32,6 +32,24 @@ public class PointShopServiceBasketImpl implements PointShopBasketService {
 	public Integer write(PointShopBasketVO vo) {
 		
 		return mapper.write(vo);
+	}
+	
+	//장바구니 수정
+	@Override
+	public Integer update(PointShopBasketVO vo) {
+		
+		return mapper.update(vo);
+
+
+	}
+	
+	//장바구니 삭제
+	@Override
+	public Integer delete(Long[] pointShopBasketNos) {
+		
+		return mapper.delete(pointShopBasketNos);
+
+
 	}	
 	
 	

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style>
 
 
@@ -120,6 +120,50 @@
 	height: 250px;
 }
 
+#pointShopModal .modal-main .card-title {
+	word-break: break-all;
+	line-height: 1.2; /* 줄 높이 조절 */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+#pointShopModal .modal-main .card-text {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* 기본 카드 스타일 */
+#pointShopModal .goodsCard {
+	border: 3px solid #ccc !important;	
+	border-radius: 10px; /* 카드 모서리를 살짝 둥글게 */
+	transition: all 0.3s ease; /* 호버 시 부드러운 효과 */
+}
+
+/* 브론즈 등급 */
+#pointShopModal .bronze-border .goodsCard {
+  border-color: #cd7f32 !important; /* 청동색 */
+}
+
+/* 골드 등급 */
+#pointShopModal .gold-border .goodsCard {
+  border-color: #ffd700 !important; /* 금색 */
+}
+
+/* 다이아 등급 */
+#pointShopModal .diamond-border .goodsCard {
+  border-color: #b9f2ff !important; /* 다이아몬드처럼 연한 파란색 */
+}
+
+/* 카드에 호버 시 약간 어두워지는 효과 */
+#pointShopModal .goodsCard:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px); /* 호버 시 살짝 위로 올라가는 효과 */
+}
+
+
 #pointShopModal .card {
 	position: relative; /* 부모 요소에 상대적인 위치 설정 */
 }
@@ -136,7 +180,7 @@
 	z-index: 1; /* 버튼을 이미지보다 위로 배치 */
 }
 
-#pointShopModal .deleteBtn {
+#pointShopModal .stopSaleBtn {
 	position: absolute;
 	top: 5;
 	right: 5;
@@ -169,6 +213,36 @@
 	height: 80px;
 }
 
+#pointShopModal .modal-right-sidebar .basketDeleteBtn {
+	cursor: pointer;
+}
+
+#pointShopModal .modal-right-sidebar .pointShopBasketItem h5 {
+	word-break: break-all;
+	line-height: 1.5; /* 줄 높이 조절 */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+#pointShopModal .modal-right-sidebar .pointShopBasketItem p {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+#pointShopModal .modal-right-sidebar .media {
+	display: flex;
+	flex-direction: column; /* 기본적으로 세로 방향으로 배치 */
+	
+	@media (min-width: 700px) { /* 화면 너비가 768px 이상일 때 */
+		flex-direction: row; /* 가로 방향으로 배치 */
+	}
+}
+#pointShopModal .modal-right-sidebar ..media-body {
+	order: 2; /* 이미지 다음에 배치 */
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
@@ -184,18 +258,32 @@
 	let service = new pointShopService();
 	let basketService = new pointShopBasketService();
 	
+	let retryCount = 0; //이미지 로드 카운트
+	let maxRetries = 20;  // 최대 5번 재시도
+	
+	let pointShopId = "";
+	let pointShopGradeNo = 0;
+	let pointShopShipNo = 0;
+	
+				
+	if(${!empty login}) {
+		pointShopId = "${login.id}";
+		pointShopGradeNo = "${login.gradeNo}";
+		pointShopShipNo = "${login.shipNo}";				
+	} 
+	
 	
 	
 	$(function() {	
 		
 		$("#pointshop-btn").on("click", function() {
-			let pointShopId = 'test';
-			let pointShopGradeNo = 9;
+			
 			service.id = pointShopId;
 			basketService.id = pointShopId;
 			service.gradeNo = pointShopGradeNo;
-			service.gradeNo = pointShopGradeNo;
-			
+			basketService.gradeNo = pointShopGradeNo;
+			basketService.shipNo = pointShopShipNo;
+	
 			
 			$("#pointShopModal").modal({backdrop: 'static', keyboard: false});	
 			$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
@@ -210,6 +298,7 @@
 		window.addEventListener("resize", function() {			
 			
 			$("#pointShopModal .modal-sidebar,#pointShopModal .modal-right-sidebar,#pointShopModal .modal-main").css("height", $("#pointShopModal .modal-content").height()-80);
+			
 		
 		});
 		
@@ -254,8 +343,10 @@
 				</div>
 				
 				<div class="mx-auto" style="font-size: 20px;">
-					<i class="fa fa-bitcoin"></i>
-					<span class="text-primary"><b><span id="pointShopPoint">1000</span>pt</b></span>
+					<c:if test="${!empty login }">
+						<i class="fa fa-bitcoin"></i>
+						<span class="text-primary"><b><span id="pointShopPoint">1000</span>BP</b></span>
+					</c:if>
 				</div>
 				
 				<button type="button" class="close ml-auto" data-dismiss="modal">&times;</button>
@@ -265,22 +356,34 @@
 				<!-- 왼쪽 20% 사이드바 -->
 	        	<div class="modal-sidebar">
 	        		<div class="ml-1 my-3 py-2 cateActive category" data-category="">
-	          			<h4><b>전체</b></h4>	        		
+	          			<h4>
+	          				<b>전체</b>
+	          				<i class="fa fa-list-ul" style="display: none"></i>
+	          			</h4>	        		
 	        		</div> 
 	        		<div class="ml-1 my-3 py-2 category" data-category="쿠폰">
-	          			<h4><b>쿠폰</b></h4>	        		
+	          			<h4>
+	          				<b>쿠폰</b>
+	          				<i class="fa fa-ticket" style="display: none"></i>
+	          			</h4>	        		
 	        		</div> 
 	        		<div class="ml-1 my-3 py-2 category" data-category="상품권">
-	          			<h4><b>상품권</b></h4>	        		
+	          			<h4>
+	          				<b>상품권</b>
+	          				<i class="fa fa-gift" style="display: none"></i>
+	          			</h4>	        		
 	        		</div> 
 	        		<div class="ml-1 my-3 py-2 category" data-category="음식">
-	          			<h4><b>음식</b></h4>	        		
+	          			<h4>
+	          				<b>음식</b>
+	          				<i class="fa fa-mobile" style="display: none"></i>
+	          			</h4>	        		
 	        		</div>  
 	        		
 	        		<div class="mt-auto">
 	        			<button type="button" id="basketBtn" class="btn btn-primary btn-block">
 	        				<i class="fa fa-shopping-cart"></i>
-	        				&emsp;장바구니
+	        				<span>&emsp;장바구니</span>
 	        			</button>
 	        		</div>	          			          		
 	        	</div>
@@ -288,19 +391,16 @@
 	        	
 			
 	        	<div class="modal-main">
-	        		<button class="btn btn-primary" id="goodsWriteBtn">add</button>
+	        		<c:if test="${!empty login && login.gradeNo == 9}">
+	        			<button class="btn btn-primary" id="goodsWriteBtn">add</button>
+	        		</c:if>
+	        		
 	        		<!-- 상품 데이터가 출력 -->
 	        		<div id="goodsListDiv">
 						<div class="row">
 							<div class="col-md-3">
 							
-								<div class="card shadow-sm m-2" data-goodsid="1">
-									<img class="card-img-top" src="/upload/pointshop/c1.jpg" alt="Card image">
-									<div class="card-body">
-										<h4 class="card-title">10% 할인 쿠폰</h4>
-										<p class="card-text">10000pt(2개 남음)</p>									
-								  	</div>
-								</div>
+								
 								
 							</div>
 						</div>
@@ -321,7 +421,7 @@
 				            <div class="col-md-3">총 가격</div>
 				            <div class="col-md-9 text-primary font-weight-bold" id="pointShopBasketTotalPoint"></div>
 				        </div>
-				        <button class="btn btn-primary btn-block mt-3">구매하기</button>
+				        <button class="btn btn-primary btn-block mt-3" id="pointShopOrderBtn">구매하기</button>
 				    </div>
 				</div>
 	        	

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.beetmarket.order.mapper.OrderMapper"> 
+
+	<select id="orderList" resultType="com.beetmarket.order.vo.OrderVO">
+		select orderNo,goodsNo,orderState,orderDate,confirmDate,
+		goodsTitle,goodsImage,orderPrice,dlvyCharge,optNo,optName,amount 
+		from(
+			select rowNum rnum,orderNo,goodsNo,orderState,orderDate,confirmDate,goodsTitle,
+			goodsImage,orderPrice,dlvyCharge,optNo,optName,amount
+			from(
+				select 
+					o.orderNo, o.goodsNo, o.orderState, o.orderDate,o.confirmDate,
+					g.goodsTitle, g.goodsImage,o.orderPrice, o.dlvyCharge,
+					g.optNo, go.optName, g.amount
+				from orders o, goods g, goodsOption go
+				where (id=#{pageObject.accepter}) <!-- 일반 조건 -->
+				<!-- 검색 조건 -->
+				<include refid="goodsTitleSearch"/>
+				<include refid="orderDateSearch"/>
+				<include refid="orderStateSearch"/>
+				
+				<!-- 조인 조건 -->
+				and (o.goodsNo = g.goodsNo) and (go.optNo = g.optNo)
+				order by orderNo desc		
+			)
+		)
+		where rnum between #{pageObject.startRow} and #{pageObject.endRow} 	
+	</select>  
+	
+	<select id="totalRow" resultType="Long">
+		select count(*) from orders o, goods g 
+		where id=#{pageObject.accepter} <!-- 일반 조건 -->
+		<!-- 검색 조건 -->
+		<include refid="goodsTitleSearch"/>
+		<include refid="orderDateSearch"/>
+		<include refid="orderStateSearch"/>
+		and (o.goodsNo = g.goodsNo)
+	</select>
+	
+	<!-- 상품 이름 검색 쿼리 -->
+	<sql id="goodsTitleSearch">
+		<if test="searchVO.goodsTitle != null and searchVO.goodsTitle != ''.toString()">
+			and (goodsTitle like '%' || #{searchVO.goodsTitle} || '%')
+		</if>
+	</sql>
+	
+	<!-- 상품 이름 검색 쿼리 -->
+	<sql id="orderDateSearch">		
+		and (orderDate between #{searchVO.minDate} and #{searchVO.maxDate})		
+	</sql>
+	
+	<!-- 상품 이름 검색 쿼리 -->
+	<sql id="orderStateSearch">	
+		<if test="searchVO.orderState != null and searchVO.orderState != ''.toString()">	
+			and (orderState = #{searchVO.orderState})	
+		</if>	
+	</sql>
+	
+	<!-- writeForm 상품의 데이터 가져오는 쿼리 -->
+	<select id="getGoodsList" resultType="com.beetmarket.order.vo.OrderVO">
+		select goodsNo,goodsName,goodsMainImage,s.store_name,goodsPrice,s.merchant_delivery,s.free_ship_limit 
+   			from goods g, seller_hub s
+		where goodsNo in(
+			<foreach collection="goodsNos" item="goodsNo" separator=",">
+				#{goodsNo}
+			</foreach>
+			) and (g.sell_no = s.sell_no)
+	</select>
+	
+	<!-- writeForm 상품의 데이터 가져오는 쿼리 -->
+	<select id="getOptList" resultType="com.beetmarket.order.vo.OrderOptVO">
+		select goodsoptNo optNo,goodsoptName optName,goodsoptPrice optPrice,goodsNo from goodsOption
+		where goodsoptNo in(
+			<foreach collection="optNos" item="optNo" separator=",">				
+				#{optNo,jdbcType=BIGINT}
+
+			</foreach>
+			)
+	</select>
+	
+	<!-- 주문 등록 -->
+	<insert id="write">
+		insert into orders(orderNo,dlvyName,recipient,tel,addr,addrDetail,postNo,dlvyMemo,orderPrice,dlvyCharge,payWay,payDetail,id,goodsNo,optNo,amount,PAYMENTKEY)
+		select orders_seq.nextval,dlvy.*,value.* from
+			(
+				 select
+				 	dlvyName,recipient,tel,addr,addrDetail,postNo 
+				 	from dlvyaddr
+				 	where dlvyaddrNo = #{list[0].dlvyAddrNo}
+			) dlvy
+			,(
+			<foreach collection="list" item="vo" separator="union all">
+				select 					
+					#{vo.dlvyMemo,jdbcType=CHAR},#{vo.orderPrice},#{vo.dlvyCharge},
+					#{vo.payWay},#{vo.payDetail,jdbcType=CHAR},#{vo.id},
+					#{vo.goodsNo},#{vo.optNo,jdbcType=BIGINT},#{vo.amount},
+					#{vo.paymentKey,jdbcType=CHAR} 
+				from dual
+			</foreach>
+		) value		
+	</insert>
+	
+	
+	
+	
+</mapper>

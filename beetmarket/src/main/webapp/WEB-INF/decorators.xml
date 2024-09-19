@@ -23,6 +23,11 @@
 		<pattern>/showdown/*</pattern>	
 		<pattern>/stock/*</pattern>	
 		<pattern>/review/*</pattern>	
+		<pattern>/pointShopOrder/*</pattern>	
+		<pattern>/basket/*</pattern>	
+		<pattern>/order/*</pattern>	
+		<pattern>/faq/*</pattern>
+		<pattern>/chatbot/*</pattern>	
 			
 
 	</decorator>

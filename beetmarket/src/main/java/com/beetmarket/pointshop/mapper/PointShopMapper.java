@@ -24,6 +24,8 @@ public interface PointShopMapper {
 	public Integer deleteStock(PointShopVO vo);
 	//포인트샵 판매 중지
 	public Integer delete(PointShopVO vo);
+	//포인트샵 판매 중지
+	public Integer realDelete(Long goodsId);
 	
 
 }

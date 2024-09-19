@@ -27,13 +27,21 @@ public class MemberServiceImpl implements MemberService{
 		// TODO Auto-generated method stub
 		return mapper.login(vo);
 	}
-
+	// 회원 리스트
 	@Override
 	public List<MemberVO> list(PageObject pageObject) {
 		log.info("list() 실행");
 		// 전체 데이터 개수 구하기
 		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
 		return mapper.list(pageObject);
+	}
+	// 회원 리스트
+	@Override
+	public List<MemberVO> pointList(PageObject pageObject) {
+		log.info("list() 실행asdasd");
+		// 전체 데이터 개수 구하기
+		pageObject.setTotalRow(mapper.getTotalRow(pageObject));
+		return mapper.pointList(pageObject);
 	}
 	// 회원 등급변경
 	@Override

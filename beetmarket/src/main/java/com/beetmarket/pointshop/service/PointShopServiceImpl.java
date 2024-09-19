@@ -90,6 +90,11 @@ public class PointShopServiceImpl implements PointShopService {
 		
 		return mapper.delete(vo);
 	}
+	@Override
+	public Integer realDelete(Long goodsId) {
+		
+		return mapper.realDelete(goodsId);
+	}
 	
 	
 

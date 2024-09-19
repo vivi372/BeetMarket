@@ -12,11 +12,23 @@ public interface ReviewMapper {
 	
 	
 	
-	// 1-2. 리스트 전체 개수
+	// 1-2. 리스트 전체 개수 & 평점
 	public Long getTotalRow(PageObject pageObject);
-	
+
 	
 	
 	// 2. 등록
 	public Integer write(ReviewVO vo);
+	
+	
+	
+	// 3.글수정
+	public Integer update(ReviewVO vo);
+	
+	
+	
+	// 4.삭제
+	public Integer delete(ReviewVO vo);
+
+
 }

@@ -37,14 +37,6 @@
 		and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
 	
-
-	<!-- 회원관리 글보기 조회수 1 증가 -->
-	<!-- # {obj} 1. 변수의 이름, 2. vo의 getter 이름, 3. Map의 key -->
-	<update id="increase">
-		update member set hit = hit + 1
-		where no = #{no}
-	</update>
-
 	<!-- 회원관리 등급 수정 -->
 	<update id="changeGrade">
 	<![CDATA[
@@ -86,6 +78,7 @@
 		from member m , grade g , memberShip s
 		where id = #{id} and (m.gradeNo = g.gradeNo and m.shipNo=s.shipNo)
 	</select>
+	<!-- 나의 정보보기  -->
 	<select id="myView" resultType="com.beetmarket.member.vo.MemberVO">
 		SELECT m.id, m.name, m.photo, p.point_delta
 		FROM member m
@@ -97,6 +90,32 @@
 		WHERE m.id = #{id}
 	</select>
 
+
+	<!-- 회원관리 리스트 -->
+	<select id="pointList" resultType="com.beetmarket.member.vo.MemberVO">
+	select  id, pointlist_no,point_entity , point_delta ,redeemed_date
+		from (
+			select rownum rnum, id, pointlist_no,point_entity , point_delta ,redeemed_date
+			from (
+				select
+					m.id, p.pointlist_no,p.point_entity , p.point_delta ,p.redeemed_date
+				from
+					pointList p , member m
+					where (
+					m.id=#{id}
+					)
+					and (
+					m.id = p.id
+					)
+				order by id desc
+				)
+			)	
+		where rnum between #{pageObject.startRow} and #{pageObject.endRow}
+	</select>
+
+
+
+
 	<!-- 회원관리 가입 -->
 	<insert id="write">
 		<!-- 먼저 MemberVO의 no에 setter를 이용해서 시퀀스에서 받아온 번호를 세팅해 준다. -->
@@ -106,6 +125,16 @@
 		insert into member(no, title, content, writer, pw)
 		values(#{no}, #{title}, #{content}, #{writer}, #{pw})
 	</insert>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	<!-- 회원관리 수정 -->
 	<update id="update">

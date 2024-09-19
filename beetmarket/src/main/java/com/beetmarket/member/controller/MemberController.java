@@ -29,6 +29,10 @@ public class MemberController {
 	@Qualifier("memberServiceImpl")
 	private MemberService service; 
 	
+	
+	
+	
+	
 	//--- 회원 관리 리스트 ------------------------------------
 	@GetMapping("/list.do")
 	public String list(Model model, HttpServletRequest request , HttpSession session)
@@ -37,6 +41,13 @@ public class MemberController {
 		
 		// 페이지 처리를 위한 객체 생겅
 		PageObject pageObject = PageObject.getInstance(request);
+
+		String id = null;
+		session = request.getSession();
+		LoginVO loginId = (LoginVO) session.getAttribute("login");
+		if(loginId != null)  id = loginId.getId();
+		
+		pageObject.setAccepter(id);
 		
 		// model에 담으로 request에 자동을 담기게 된다. - 처리된 데이터를 Model에 저장
 		model.addAttribute("list", service.list(pageObject));
@@ -139,7 +150,7 @@ public class MemberController {
 		rttr.addAttribute("msg","로그인 완료");
 		 
 		
-		return "member/list";
+		return "redirect:list.do";
 	}
 	
 	// 로그아웃
@@ -149,6 +160,6 @@ public class MemberController {
 		session.removeAttribute("login");
 		
 		rttr.addAttribute("msg","로그아웃 완료");
-	return "member/list";	
+		return "redirect:list.do";
 	}
 }
