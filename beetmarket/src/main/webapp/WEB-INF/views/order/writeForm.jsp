@@ -50,7 +50,7 @@
 			//판매자의 상품들의 가격을 전부 더 해 totalPrice에 저장한다.
 			let totalSellerPrice = 0;
 			$(this).find(".orderPricePrint").each(function() {
-<<<<<<< main
+
 				totalSellerPrice += (+$(this).text())*(+$(this).closest(".orderListItem").find("#amount").val());
 			});
 			//모든 상품 가격이 배송비 무료 조건보다 비싸면 배송비를 0원으로 출력
@@ -135,7 +135,7 @@
 		
 	});
 	
-	
+	 
 </script>
 
 </head>
